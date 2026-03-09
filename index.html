@@ -678,16 +678,16 @@
   <div class="section-sub">Look up a business by phone number via Gemini, or type their industry below to check if they qualify.</div>
 
   <div class="script-block" style="margin-bottom:22px">
-    <div class="script-block-header"><span class="step-badge"><i class="fas fa-phone" style="margin-right:5px"></i>Phone Lookup</span><span class="script-block-title">Look Up Business Info via Gemini</span></div>
+    <div class="script-block-header"><span class="step-badge"><i class="fas fa-search" style="margin-right:5px"></i>Phone Lookup</span><span class="script-block-title">Look Up Business Info — Google AI</span></div>
     <div class="script-block-body">
-      <p style="font-size:0.83rem;color:var(--muted2);margin-bottom:14px;line-height:1.55;">Enter the caller's phone number and click <strong style="color:white">Check</strong>. Gemini will open and search for the business name, owner name, address, and email tied to that number.</p>
+      <p style="font-size:0.83rem;color:var(--muted2);margin-bottom:14px;line-height:1.55;">Enter the caller's phone number or business name — opens <strong style="color:white">Google AI</strong> in a new tab with the business name, owner, address, and email.</p>
       <div class="phone-row">
-        <input class="lookup-input" id="phoneInput" type="tel" placeholder="Enter phone number e.g. 3051234567" autocomplete="off" onkeydown="if(event.key==='Enter')openGemini()">
-        <button class="check-btn" onclick="openGemini()"><i class="fas fa-arrow-up-right-from-square" style="margin-right:7px"></i>Check</button>
+        <input class="lookup-input" id="phoneInput" type="text" placeholder="e.g. (305) 123-4567 or Business Name..." autocomplete="off" onkeydown="if(event.key==='Enter')openGemini()">
+        <button class="check-btn" onclick="openGemini()"><i class="fab fa-google" style="margin-right:7px"></i>Search</button>
       </div>
       <div class="gemini-note">
         <i class="fab fa-google"></i>
-        <span>Opens <strong style="color:white">Google Gemini</strong> with a pre-filled prompt: <em>What is the business name, owner name, address, and email for this phone number?</em></span>
+        <span>Opens <strong style="color:white">Google AI</strong> — asks for business name, owner, address &amp; email for that number.</span>
       </div>
     </div>
   </div>
@@ -1125,20 +1125,25 @@
   }
 
   // ===== GEMINI =====
+  function isPhoneNum(q) {
+    return /^[\d\s\-\(\)\+\.]+$/.test(q) && q.replace(/\D/g,'').length >= 7;
+  }
+  function buildLookupQuery(q) {
+    if (isPhoneNum(q)) return 'For the phone number ' + q + ', give me: the business name, the name of the owner, the address, and email if possible';
+    return 'For the business "' + q + '", give me: the business name, the name of the owner, the address, and email if possible';
+  }
   function openGemini() {
-    const phone = document.getElementById('phoneInput').value.trim();
-    if (!phone) {
-      document.getElementById('phoneInput').focus();
-      document.getElementById('phoneInput').style.borderColor = '#f43f5e';
-      document.getElementById('phoneInput').placeholder = 'Enter a phone number first!';
-      setTimeout(() => {
-        document.getElementById('phoneInput').style.borderColor = '';
-        document.getElementById('phoneInput').placeholder = 'Enter phone number e.g. 3051234567';
-      }, 2000);
+    const input = document.getElementById('phoneInput');
+    const q = input.value.trim();
+    if (!q) {
+      input.focus();
+      input.style.borderColor = '#f43f5e';
+      input.placeholder = 'Enter a phone number first!';
+      setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Enter phone number e.g. 3051234567'; }, 2000);
       return;
     }
-    const prompt = `What is the business name, owner name, address, and email for the phone number ${phone}? Please search and provide all available business information associated with this number.`;
-    const url = 'https://gemini.google.com/app?q=' + encodeURIComponent(prompt);
+    const query = buildLookupQuery(q);
+    const url = 'https://www.google.com/search?q=' + encodeURIComponent(query) + '&udm=50';
     window.open(url, '_blank', 'noopener');
   }
 
