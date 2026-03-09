@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATLeads | Business Loan Playbook</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>ATLeads Business Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800;1,900&family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
   :root {
-    --bg: #06090f;
-    --surface: #0d1117;
-    --surface2: #141b25;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.12);
-    --accent: #2563eb;
-    --accent2: #3b82f6;
-    --green: #10b981;
-    --red: #ef4444;
-    --amber: #f59e0b;
-    --teal: #14b8a6;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --muted2: #94a3b8;
+    --bg: #07050f;
+    --surface: #0f0b1a;
+    --surface2: #181226;
+    --border: rgba(168,85,247,0.1);
+    --border2: rgba(168,85,247,0.2);
+    --accent: #7c3aed;
+    --accent2: #a855f7;
+    --accent3: #c084fc;
+    --green: #22c55e;
+    --red: #f43f5e;
+    --amber: #fb923c;
+    --text: #ede9fe;
+    --muted: #6b7280;
+    --muted2: #a78bfa;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -31,788 +31,726 @@
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 15% 0%, rgba(124,58,237,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 100%, rgba(168,85,247,0.06) 0%, transparent 50%);
   }
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(6,9,15,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 60px;
+  /* ===== HERO HEADER ===== */
+  .hero-header {
+    background: #07050f;
+    border-bottom: 1px solid rgba(168,85,247,0.18);
+    padding: 28px 20px 20px;
+    text-align: center;
   }
-  .nav-brand {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 1rem;
-    letter-spacing: 0.05em;
-    color: white;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .nav-brand-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%; background: var(--accent2);
-    box-shadow: 0 0 10px var(--accent2);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
-  .nav-tabs {
-    display: flex; gap: 4px;
-  }
-  .nav-tab {
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.78rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.2s; background: none;
-  }
-  .nav-tab:hover { color: var(--text); background: var(--surface2); }
-  .nav-tab.active {
-    color: white;
-    background: rgba(37,99,235,0.15);
-    border-color: rgba(37,99,235,0.4);
-  }
-
-  /* LAYOUT */
-  .page { display: none; padding: 28px 20px; max-width: 800px; margin: 0 auto; }
-  .page.active { display: block; }
-
-  /* SECTION HEADERS */
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.2em;
-    color: var(--accent2); margin-bottom: 10px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-label::after {
-    content: ''; flex: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(59,130,246,0.3), transparent);
-  }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 1.5rem;
-    color: white; margin-bottom: 6px;
-  }
-  .section-sub {
-    color: var(--muted2); font-size: 0.88rem;
-    margin-bottom: 24px; line-height: 1.5;
-  }
-
-  /* SCRIPT CARDS */
-  .script-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-  .script-block-header {
-    padding: 14px 20px;
-    display: flex; align-items: center; gap: 12px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-  .step-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 700;
-    padding: 3px 10px; border-radius: 20px;
-    background: rgba(37,99,235,0.2);
-    border: 1px solid rgba(37,99,235,0.35);
-    color: var(--accent2); white-space: nowrap;
-  }
-  .step-badge.green { background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.3); color:var(--green); }
-  .step-badge.amber { background:rgba(245,158,11,0.15); border-color:rgba(245,158,11,0.3); color:var(--amber); }
-  .step-badge.red { background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:var(--red); }
-  .script-block-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700; font-size: 0.88rem; color: white;
-  }
-  .script-block-body { padding: 18px 20px; }
-  .script-line {
-    font-size: 0.93rem; line-height: 1.7;
-    color: var(--text);
-  }
-  .script-line strong { color: white; font-weight: 700; }
-  .script-line em { color: var(--muted2); font-style: italic; }
-
-  .branch-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-    margin-top: 14px;
-  }
-  .branch {
-    border-radius: 12px; padding: 14px 16px;
-  }
-  .branch.yes { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); }
-  .branch.no  { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.25); }
-  .branch-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.12em;
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(2.4rem, 8vw, 5rem);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    background: linear-gradient(90deg, #a855f7 0%, #c084fc 40%, #e879f9 70%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 22px rgba(168,85,247,0.55));
     margin-bottom: 6px;
   }
-  .branch.yes .branch-label { color: var(--green); }
-  .branch.no  .branch-label { color: var(--red); }
-  .branch-text { font-size: 0.84rem; line-height: 1.55; color: var(--muted2); }
-
-  .qual-questions { margin-top: 4px; }
-  .qual-q {
-    display: flex; gap: 14px; align-items: flex-start;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
+  .hero-agent-row {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 20px;
   }
-  .qual-q:last-child { border-bottom: none; }
-  .qual-num {
-    width: 24px; height: 24px; border-radius: 50%;
-    background: rgba(37,99,235,0.2);
-    border: 1px solid rgba(37,99,235,0.35);
-    color: var(--accent2);
+  .hero-agent-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; margin-top: 2px;
-  }
-  .qual-q-text { font-size: 0.9rem; line-height: 1.55; color: var(--text); flex: 1; }
-  .qual-note {
-    font-size: 0.78rem; color: var(--red); margin-top: 4px;
-    font-family: 'JetBrains Mono', monospace; font-weight: 700;
-  }
-  .qual-note.amber { color: var(--amber); }
-
-  .disqualified-box {
-    background: rgba(239,68,68,0.08);
-    border: 1px solid rgba(239,68,68,0.25);
-    border-radius: 12px; padding: 14px 16px; margin-top: 12px;
-    display: flex; align-items: flex-start; gap: 10px;
-  }
-  .disqualified-box i { color: var(--red); margin-top: 2px; flex-shrink: 0; }
-  .disqualified-box p { font-size: 0.84rem; color: var(--muted2); line-height: 1.5; }
-
-  .handoff-box {
-    background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(37,99,235,0.08));
-    border: 1px solid rgba(16,185,129,0.25);
-    border-radius: 12px; padding: 16px 18px; margin-top: 12px;
-  }
-  .handoff-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem; font-weight: 700;
-    color: var(--green); text-transform: uppercase;
-    letter-spacing: 0.12em; margin-bottom: 8px;
-  }
-  .handoff-text { font-size: 0.88rem; line-height: 1.65; color: var(--text); }
-
-  /* INDUSTRY LOOKUP */
-  .lookup-wrap { margin-bottom: 24px; }
-  .lookup-row {
-    display: flex; gap: 10px; align-items: stretch;
-  }
-  .lookup-input {
-    flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    color: white; font-size: 0.95rem;
-    padding: 14px 18px;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .lookup-input:focus {
-    border-color: var(--accent2);
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
-  }
-  .lookup-input::placeholder { color: var(--muted); }
-  .lookup-btn {
-    padding: 14px 22px;
-    background: var(--accent);
-    color: white; border: none; border-radius: 12px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 0.82rem;
-    letter-spacing: 0.05em;
-    cursor: pointer; transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .lookup-btn:hover { background: var(--accent2); transform: translateY(-1px); }
-
-  .industry-result {
-    margin-top: 14px;
-    border-radius: 14px; padding: 16px 18px;
-    display: none; animation: fadeIn 0.3s ease;
-  }
-  .industry-result.show { display: flex; align-items: flex-start; gap: 14px; }
-  .industry-result.approved {
-    background: rgba(16,185,129,0.08);
-    border: 1px solid rgba(16,185,129,0.3);
-  }
-  .industry-result.denied {
-    background: rgba(239,68,68,0.08);
-    border: 1px solid rgba(239,68,68,0.3);
-  }
-  .industry-result-icon {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; flex-shrink: 0;
-  }
-  .approved .industry-result-icon { background: rgba(16,185,129,0.2); color: var(--green); }
-  .denied .industry-result-icon { background: rgba(239,68,68,0.2); color: var(--red); }
-  .industry-result-text strong {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 0.95rem;
-    display: block; margin-bottom: 4px;
-  }
-  .approved .industry-result-text strong { color: var(--green); }
-  .denied .industry-result-text strong { color: var(--red); }
-  .industry-result-text p { font-size: 0.84rem; color: var(--muted2); line-height: 1.5; }
-
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-
-  /* REBUTTAL */
-  .rebuttal-grid { display: flex; flex-direction: column; gap: 10px; }
-  .rebuttal-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px; overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .rebuttal-card:hover { border-color: rgba(20,184,166,0.3); }
-  .rebuttal-header {
-    padding: 16px 20px;
-    cursor: pointer; user-select: none;
-    display: flex; align-items: center; justify-content: space-between;
-    transition: background 0.2s;
-  }
-  .rebuttal-header:hover { background: rgba(255,255,255,0.02); }
-  .rebuttal-objection {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700; font-size: 0.9rem; color: white;
-    flex: 1;
-  }
-  .rebuttal-tag {
     font-size: 0.68rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .hero-agent-name {
     font-family: 'JetBrains Mono', monospace;
-    padding: 3px 9px; border-radius: 20px; margin-right: 12px;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    background: rgba(20,184,166,0.12);
-    border: 1px solid rgba(20,184,166,0.25);
-    color: var(--teal);
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent2);
+    cursor: pointer;
+    border-bottom: 1px dashed rgba(168,85,247,0.4);
+    padding-bottom: 1px;
+    transition: color 0.2s;
   }
-  .rebuttal-arrow {
-    color: var(--muted); font-size: 0.75rem;
-    transition: transform 0.3s, color 0.2s;
+  .hero-agent-name:hover { color: var(--accent3); }
+  .hero-agent-edit {
+    display: none; background: var(--surface2);
+    border: 1px solid var(--border2); border-radius: 8px;
+    color: var(--accent2); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.15em; padding: 4px 10px; outline: none;
+    width: 160px; text-align: center;
   }
-  .rebuttal-arrow.open { transform: rotate(180deg); color: var(--teal); }
-  .rebuttal-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-  .rebuttal-body.open { max-height: 600px; }
-  .rebuttal-inner { padding: 0 20px 18px; }
-  .rebuttal-script {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--teal);
-    border-radius: 10px; padding: 14px 16px;
-    font-size: 0.88rem; line-height: 1.7; color: var(--text);
-    margin-bottom: 10px;
-  }
-  .rebuttal-tip {
-    font-size: 0.78rem; color: var(--muted2);
-    display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
-  }
-  .rebuttal-tip i { color: var(--amber); flex-shrink: 0; margin-top: 2px; }
+  .hero-agent-edit:focus { border-color: var(--accent2); }
 
-  /* QUICK REF */
-  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .quick-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px; padding: 18px;
+  /* CLOCKS */
+  .clocks-row {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    flex-wrap: wrap;
   }
-  .quick-card-label {
+  .clock-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface2);
+    border: 1px solid rgba(168,85,247,0.2);
+    border-radius: 14px; padding: 12px 22px;
+    min-width: 180px;
+  }
+  .clock-flag {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(168,85,247,0.15);
+    border: 1px solid rgba(168,85,247,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; font-weight: 900;
+    color: var(--accent2); letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .clock-info { text-align: left; }
+  .clock-region {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--muted); margin-bottom: 2px;
+  }
+  .clock-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-style: italic; font-weight: 800;
+    font-size: 1.45rem; letter-spacing: 0.03em;
+    line-height: 1;
+  }
+  .clock-time.gy { color: #fb923c; text-shadow: 0 0 14px rgba(251,146,60,0.5); }
+  .clock-time.us { color: #a855f7; text-shadow: 0 0 14px rgba(168,85,247,0.5); }
+  .clock-sep {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    padding: 0 2px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  /* NAV GRID */
+  .nav-row {
+    background: rgba(7,5,15,0.96);
+    border-bottom: 1px solid rgba(168,85,247,0.1);
+    padding: 16px 20px;
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(16px);
+  }
+  .nav-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    max-width: 860px; margin: 0 auto;
+  }
+  .nav-tab {
+    padding: 14px 10px;
+    font-size: 0.72rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--muted); cursor: pointer;
+    border: 1px solid rgba(168,85,247,0.15);
+    background: rgba(168,85,247,0.04);
+    border-radius: 12px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .nav-tab:hover { color: var(--accent3); border-color: rgba(168,85,247,0.35); background: rgba(168,85,247,0.09); }
+  .nav-tab.active {
+    color: white;
+    background: rgba(124,58,237,0.25);
+    border-color: var(--accent2);
+    box-shadow: 0 0 16px rgba(168,85,247,0.2);
+  }
+  .nav-tab.prank {
+    color: #f43f5e;
+    border-color: rgba(244,63,94,0.25);
+    background: rgba(244,63,94,0.05);
+  }
+  .nav-tab.prank:hover { background: rgba(244,63,94,0.1); border-color: rgba(244,63,94,0.4); }
+  .nav-tab.prank.active { background: rgba(244,63,94,0.18); border-color: #f43f5e; box-shadow: 0 0 16px rgba(244,63,94,0.2); color: white; }
+  .nav-wide { grid-column: 1 / -1; }
+
+  /* PAGES */
+  .page { display: none; padding: 28px 20px; max-width: 860px; margin: 0 auto; }
+  .page.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  .section-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.62rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--muted); margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.22em;
+    color: var(--accent2); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .quick-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.84rem; line-height: 1.45;
-  }
-  .quick-item:last-child { border-bottom: none; }
-  .quick-item i { flex-shrink: 0; margin-top: 2px; font-size: 0.8rem; }
-  .quick-item.pass i { color: var(--green); }
-  .quick-item.fail i { color: var(--red); }
-  .quick-item.pass { color: var(--text); }
-  .quick-item.fail { color: var(--muted2); }
-  .submit-reminder {
-    background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(37,99,235,0.05));
-    border: 1px solid rgba(37,99,235,0.25);
-    border-radius: 14px; padding: 18px 20px;
-    display: flex; gap: 14px; align-items: flex-start;
-    margin-bottom: 16px;
-  }
-  .submit-reminder i { color: var(--accent2); font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
-  .submit-reminder-text h4 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    color: white; margin-bottom: 4px;
-  }
-  .submit-reminder-text p { font-size: 0.84rem; color: var(--muted2); line-height: 1.5; }
+  .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(168,85,247,0.4),transparent); }
+  .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:white; margin-bottom:6px; }
+  .section-sub { color:var(--muted2); font-size:0.88rem; margin-bottom:24px; line-height:1.5; }
 
-  /* MOBILE */
+  /* SCRIPT BLOCKS */
+  .script-block { background:var(--surface); border:1px solid var(--border); border-radius:16px; margin-bottom:14px; overflow:hidden; }
+  .script-block-header { padding:13px 20px; display:flex; align-items:center; gap:12px; background:var(--surface2); border-bottom:1px solid var(--border); }
+  .step-badge { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; padding:3px 10px; border-radius:20px; background:rgba(124,58,237,0.2); border:1px solid rgba(168,85,247,0.35); color:var(--accent2); white-space:nowrap; }
+  .step-badge.green { background:rgba(34,197,94,0.12); border-color:rgba(34,197,94,0.3); color:var(--green); }
+  .step-badge.amber { background:rgba(251,146,60,0.12); border-color:rgba(251,146,60,0.3); color:var(--amber); }
+  .step-badge.red   { background:rgba(244,63,94,0.12);  border-color:rgba(244,63,94,0.3);  color:var(--red); }
+  .script-block-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:white; }
+  .script-block-body { padding:18px 20px; }
+  .script-line { font-size:0.92rem; line-height:1.75; color:var(--text); }
+  .script-line strong { color:white; font-weight:700; }
+  .script-line em { color:#c4b5fd; font-style:italic; }
+
+  .branch-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+  .branch { border-radius:12px; padding:14px 16px; }
+  .branch.yes { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); }
+  .branch.no  { background:rgba(244,63,94,0.07);  border:1px solid rgba(244,63,94,0.2); }
+  .branch-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:6px; }
+  .branch.yes .branch-label { color:var(--green); }
+  .branch.no  .branch-label { color:var(--red); }
+  .branch-text { font-size:0.83rem; line-height:1.55; color:var(--muted2); }
+
+  .qual-q { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--border); }
+  .qual-q:last-child { border-bottom:none; }
+  .qual-num { width:24px; height:24px; border-radius:50%; background:rgba(124,58,237,0.2); border:1px solid rgba(168,85,247,0.35); color:var(--accent2); font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+  .qual-q-text { font-size:0.9rem; line-height:1.55; color:var(--text); flex:1; }
+  .qual-note { font-size:0.75rem; color:var(--red); margin-top:4px; font-family:'JetBrains Mono',monospace; font-weight:700; }
+  .qual-note.amber { color:var(--amber); }
+
+  .disq-box { background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.2); border-radius:12px; padding:13px 16px; margin-top:12px; display:flex; align-items:flex-start; gap:10px; }
+  .disq-box i { color:var(--red); margin-top:2px; flex-shrink:0; }
+  .disq-box p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
+
+  .handoff-box { background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(124,58,237,0.07)); border:1px solid rgba(34,197,94,0.22); border-radius:12px; padding:16px 18px; margin-top:12px; }
+  .handoff-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  .handoff-text { font-size:0.88rem; line-height:1.7; color:var(--text); }
+
+  /* LOOKUP */
+  .lookup-input { width:100%; background:var(--surface); border:1px solid var(--border2); border-radius:12px; color:white; font-size:0.95rem; padding:14px 18px; outline:none; font-family:'DM Sans',sans-serif; transition:border-color 0.2s,box-shadow 0.2s; }
+  .lookup-input:focus { border-color:var(--accent2); box-shadow:0 0 0 3px rgba(168,85,247,0.12); }
+  .lookup-input::placeholder { color:var(--muted); }
+
+  .phone-row { display:flex; gap:10px; align-items:stretch; margin-bottom:10px; }
+  .phone-row .lookup-input { flex:1; }
+  .check-btn { padding:14px 22px; background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; border:none; border-radius:12px; font-family:'Syne',sans-serif; font-weight:800; font-size:0.82rem; letter-spacing:0.05em; cursor:pointer; transition:all 0.2s; white-space:nowrap; box-shadow:0 0 20px rgba(168,85,247,0.25); }
+  .check-btn:hover { opacity:0.9; transform:translateY(-1px); box-shadow:0 0 28px rgba(168,85,247,0.45); }
+
+  .gemini-note { background:rgba(124,58,237,0.08); border:1px solid rgba(168,85,247,0.18); border-radius:10px; padding:11px 16px; font-size:0.78rem; color:var(--muted2); display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+  .gemini-note i { color:var(--accent2); flex-shrink:0; font-size:0.95rem; }
+
+  .industry-result { margin-top:14px; border-radius:14px; padding:14px 18px; display:none; }
+  .industry-result.show { display:flex; align-items:flex-start; gap:14px; animation:fadeIn 0.3s ease; }
+  .industry-result.approved { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.25); }
+  .industry-result.denied   { background:rgba(244,63,94,0.07);  border:1px solid rgba(244,63,94,0.25); }
+  .industry-result.unknown  { background:rgba(251,146,60,0.07); border:1px solid rgba(251,146,60,0.2); }
+  .ind-icon { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+  .approved .ind-icon { background:rgba(34,197,94,0.18); color:var(--green); }
+  .denied   .ind-icon { background:rgba(244,63,94,0.18); color:var(--red); }
+  .unknown  .ind-icon { background:rgba(251,146,60,0.18); color:var(--amber); }
+  .ind-text strong { font-family:'Syne',sans-serif; font-weight:700; font-size:0.92rem; display:block; margin-bottom:4px; }
+  .approved .ind-text strong { color:var(--green); }
+  .denied   .ind-text strong { color:var(--red); }
+  .unknown  .ind-text strong { color:var(--amber); }
+  .ind-text p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
+
+  /* CHIPS */
+  .chip-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
+  .chip { border-radius:10px; padding:8px 14px; font-size:0.79rem; display:flex; align-items:center; gap:7px; }
+  .chip.deny  { background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.2); color:var(--muted2); }
+  .chip.deny  i { color:var(--red); }
+  .chip.allow { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); color:var(--muted2); }
+  .chip.allow i { color:var(--green); }
+
+  /* REBUTTALS */
+  .rebuttal-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color 0.2s; margin-bottom:10px; }
+  .rebuttal-card:hover { border-color:rgba(168,85,247,0.3); }
+  .rebuttal-header { padding:15px 20px; cursor:pointer; user-select:none; display:flex; align-items:center; justify-content:space-between; transition:background 0.2s; }
+  .rebuttal-header:hover { background:rgba(168,85,247,0.04); }
+  .rebuttal-objection { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:white; flex:1; }
+  .rebuttal-tag { font-size:0.64rem; font-weight:700; font-family:'JetBrains Mono',monospace; padding:3px 9px; border-radius:20px; margin-right:12px; text-transform:uppercase; letter-spacing:0.08em; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); color:var(--accent3); }
+  .rebuttal-arrow { color:var(--muted); font-size:0.75rem; transition:transform 0.3s,color 0.2s; flex-shrink:0; }
+  .rebuttal-arrow.open { transform:rotate(180deg); color:var(--accent2); }
+  .rebuttal-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+  .rebuttal-body.open { max-height:600px; }
+  .rebuttal-inner { padding:0 20px 18px; }
+  .rebuttal-script { background:var(--surface2); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:10px; padding:14px 16px; font-size:0.87rem; line-height:1.72; color:var(--text); margin-bottom:10px; }
+  .rebuttal-tip { font-size:0.77rem; color:var(--muted2); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
+  .rebuttal-tip i { color:var(--amber); flex-shrink:0; margin-top:2px; }
+
+  /* QUICK REF */
+  .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .quick-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; }
+  .quick-card-label { font-family:'JetBrains Mono',monospace; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--muted); margin-bottom:10px; }
+  .quick-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.83rem; line-height:1.45; }
+  .quick-item:last-child { border-bottom:none; }
+  .quick-item i { flex-shrink:0; margin-top:2px; font-size:0.78rem; }
+  .quick-item.pass i { color:var(--green); } .quick-item.pass { color:var(--text); }
+  .quick-item.fail i { color:var(--red); }   .quick-item.fail { color:var(--muted2); }
+  .submit-reminder { background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(124,58,237,0.05)); border:1px solid rgba(168,85,247,0.25); border-radius:14px; padding:17px 20px; display:flex; gap:14px; align-items:flex-start; margin-bottom:16px; }
+  .submit-reminder i { color:var(--accent2); font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+  .submit-reminder h4 { font-family:'Syne',sans-serif; font-weight:700; color:white; margin-bottom:4px; }
+  .submit-reminder p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
+
   @media(max-width:600px){
-    .branch-row { grid-template-columns: 1fr; }
-    .quick-grid { grid-template-columns: 1fr; }
-    .nav-tabs { gap: 2px; }
-    .nav-tab { padding: 5px 10px; font-size: 0.7rem; }
-    .page { padding: 20px 14px; }
+    .branch-row { grid-template-columns:1fr; }
+    .quick-grid { grid-template-columns:1fr; }
+    .nav-tab { padding:11px 11px; font-size:0.68rem; }
+    .page { padding:18px 14px; }
+    .phone-row { flex-direction:column; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-brand">
-    <div class="nav-brand-dot"></div>
-    ATLEADS · BIZ LOANS
+<div class="hero-header">
+  <div class="hero-title">ATLeads Business Dashboard</div>
+  <div class="hero-agent-row">
+    <span class="hero-agent-label">Agent:</span>
+    <span class="hero-agent-name" id="agentDisplay" onclick="editName()">Click to set your name</span>
+    <input class="hero-agent-edit" id="agentInput" type="text" placeholder="YOUR NAME" maxlength="24" onblur="saveName()" onkeydown="if(event.key==='Enter')saveName()">
   </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('script')"><i class="fas fa-scroll" style="margin-right:5px"></i>Script</button>
-    <button class="nav-tab" onclick="showPage('lookup')"><i class="fas fa-search" style="margin-right:5px"></i>Industry</button>
-    <button class="nav-tab" onclick="showPage('rebuttals')"><i class="fas fa-comments" style="margin-right:5px"></i>Rebuttals</button>
-    <button class="nav-tab" onclick="showPage('quickref')"><i class="fas fa-bolt" style="margin-right:5px"></i>Quick Ref</button>
+  <div class="clocks-row">
+    <div class="clock-card">
+      <div class="clock-flag">GY</div>
+      <div class="clock-info">
+        <div class="clock-region">Guyana</div>
+        <div class="clock-time gy" id="clock-gy">--:-- --</div>
+      </div>
+    </div>
+    <div class="clock-sep">·</div>
+    <div class="clock-card">
+      <div class="clock-flag">US</div>
+      <div class="clock-info">
+        <div class="clock-region">California</div>
+        <div class="clock-time us" id="clock-us">--:-- --</div>
+      </div>
+    </div>
   </div>
-</nav>
+</div>
 
-<!-- ====== SCRIPT PAGE ====== -->
+<div class="nav-row">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="showPage('script',this)"><i class="fas fa-scroll"></i>Script</button>
+    <button class="nav-tab" onclick="showPage('lookup',this)"><i class="fas fa-search"></i>Industry</button>
+    <button class="nav-tab" onclick="showPage('rebuttals',this)"><i class="fas fa-comments"></i>Rebuttals</button>
+    <button class="nav-tab" onclick="showPage('quickref',this)"><i class="fas fa-bolt"></i>Quick Ref</button>
+    <button class="nav-tab prank" onclick="showPage('prank',this)"><i class="fas fa-fire"></i>Prank</button>
+    <button class="nav-tab nav-wide" onclick="showPage('playbook',this)"><i class="fas fa-book-open"></i>Playbook</button>
+  </div>
+</div>
+
+<!-- PLAYBOOK PAGE (alias for script, just a pointer) -->
+<div id="page-playbook" class="page">
+  <div class="section-label">Full Playbook</div>
+  <div class="section-title">Call Playbook</div>
+  <div class="section-sub">This is your full A–Z guide. Follow each step precisely.</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;color:var(--muted2);font-size:0.88rem;">
+    <i class="fas fa-arrow-left" style="color:var(--accent2);margin-right:8px"></i>Use the <strong style="color:white">Script</strong> tab for the full step-by-step call playbook.
+  </div>
+</div>
+
+<!-- PRANK PAGE -->
+<div id="page-prank" class="page">
+  <div class="section-label" style="color:var(--red)">Fun Zone</div>
+  <div class="section-title" style="color:var(--red)">🔥 Prank List</div>
+  <div class="section-sub">The four. That's it.</div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🎸</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Fan</div>
+        <div style="font-size:0.82rem;color:var(--muted2);">The devoted follower prank</div>
+      </div>
+    </div>
+    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">⭐</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Justin</div>
+        <div style="font-size:0.82rem;color:var(--muted2);">The Justin prank</div>
+      </div>
+    </div>
+    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">💰</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Money Laundering</div>
+        <div style="font-size:0.82rem;color:var(--muted2);">The dirty money prank</div>
+      </div>
+    </div>
+    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🌮</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Mexico Funds</div>
+        <div style="font-size:0.82rem;color:var(--muted2);">The Mexico funds prank</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT -->
 <div id="page-script" class="page active">
   <div class="section-label">Playbook</div>
   <div class="section-title">Call Script</div>
-  <div class="section-sub">Follow each step in order. Hi, I'm <strong style="color:white">Rose</strong> — Business Loan Division.</div>
+  <div class="section-sub">Follow each step in order. You are <strong style="color:white" id="scriptAgentName">your name</strong> from the Business Loan Division.</div>
 
-  <!-- STEP 1: OPENER -->
   <div class="script-block">
-    <div class="script-block-header">
-      <span class="step-badge">Step 1</span>
-      <span class="script-block-title">Opening — Confirm Owner</span>
-    </div>
+    <div class="script-block-header"><span class="step-badge">Step 1</span><span class="script-block-title">Opening — Confirm Owner</span></div>
     <div class="script-block-body">
-      <p class="script-line">
-        <em>"Hi, this is <strong>Rose</strong> from the <strong>Business Loan Division</strong>. Am I speaking with the business owner?"</em>
-      </p>
+      <p class="script-line"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> from the <strong>Business Loan Division</strong>. Am I speaking with the business owner?"</em></p>
       <div class="branch-row">
         <div class="branch yes">
-          <div class="branch-label"><i class="fas fa-check-circle" style="margin-right:5px"></i>Yes / Owner is on the line</div>
-          <div class="branch-text">Proceed to Step 2 — deliver the pre-qual opener below.</div>
+          <div class="branch-label"><i class="fas fa-check-circle" style="margin-right:5px"></i>Yes / Owner on line</div>
+          <div class="branch-text">Proceed to Step 2 — deliver the pre-qual opener.</div>
         </div>
         <div class="branch no">
           <div class="branch-label"><i class="fas fa-times-circle" style="margin-right:5px"></i>Not the owner</div>
-          <div class="branch-text"><em>"Can I please speak with the owner or the managing partner — I'll hold."</em><br><br>When asked who's calling: <em>"Again I'm Rose, and I am calling in regard to a personal business matter."</em></div>
+          <div class="branch-text"><em>"Can I please speak with the owner or the managing partner — I'll hold."</em><br><br>If asked who's calling: <em>"Again I'm <span class="agent-name-ref">your name</span>, calling in regard to a personal business matter."</em></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- STEP 2: PRE-QUAL PITCH -->
   <div class="script-block">
-    <div class="script-block-header">
-      <span class="step-badge">Step 2</span>
-      <span class="script-block-title">Pre-Qual Opener</span>
-    </div>
+    <div class="script-block-header"><span class="step-badge">Step 2</span><span class="script-block-title">Pre-Qual Opener</span></div>
     <div class="script-block-body">
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was already on the line:</p>
-      <p class="script-line" style="margin-bottom:16px">
-        <em>"Perfect, I'll be quick. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified for this."</em>
-      </p>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was transferred to you:</p>
-      <p class="script-line">
-        <em>"Hi, this is <strong>Rose</strong> from the Business Loan Division. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified for this."</em>
-      </p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was already on the line:</p>
+      <p class="script-line" style="margin-bottom:16px"><em>"Perfect, I'll be quick. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified for this."</em></p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was transferred:</p>
+      <p class="script-line"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> from the Business Loan Division. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified."</em></p>
     </div>
   </div>
 
-  <!-- STEP 3: QUALIFICATION -->
   <div class="script-block">
-    <div class="script-block-header">
-      <span class="step-badge amber">Step 3</span>
-      <span class="script-block-title">Qualification Questions</span>
-    </div>
+    <div class="script-block-header"><span class="step-badge amber">Step 3</span><span class="script-block-title">Qualification Questions</span></div>
     <div class="script-block-body">
-      <div class="qual-questions">
-        <div class="qual-q">
-          <div class="qual-num">1</div>
-          <div class="qual-q-text">
-            <strong>"Have you been in business for at least 1 year?"</strong>
-            <div class="qual-note">MUST BE 1 YEAR+ — if not, does not qualify.</div>
-          </div>
-        </div>
-        <div class="qual-q">
-          <div class="qual-num">2</div>
-          <div class="qual-q-text">
-            <strong>"What type of industry are you in?"</strong>
-            <div class="qual-note amber">❌ No Attorneys / Lawyers · Banking · Lending · Mortgage · Church · Non-Profit</div>
-          </div>
-        </div>
-        <div class="qual-q">
-          <div class="qual-num">3</div>
-          <div class="qual-q-text">
-            <strong>"Are you 100% owner, or do you have partners? If partners — do you own at least 50%?"</strong>
-            <div class="qual-note amber">Must own at least 50%.</div>
-            <div style="margin-top:8px;font-size:0.82rem;color:var(--muted2);line-height:1.55;">
-              If less than 50%: <em style="color:var(--text)">"Is there a time we can get the majority partner on the line?"</em> — set a callback.
-            </div>
-          </div>
-        </div>
-        <div class="qual-q">
-          <div class="qual-num">4</div>
-          <div class="qual-q-text">
-            <strong>"Does your business average at least $20,000 per month or more in deposits?"</strong>
-            <div class="qual-note">MUST BE YES — nothing under $240K/year.</div>
-          </div>
+      <div class="qual-q">
+        <div class="qual-num">1</div>
+        <div class="qual-q-text"><strong>"Have you been in business for at least 1 year?"</strong><div class="qual-note">MUST BE 1 YEAR+ — if no, does not qualify.</div></div>
+      </div>
+      <div class="qual-q">
+        <div class="qual-num">2</div>
+        <div class="qual-q-text"><strong>"What type of industry are you in?"</strong><div class="qual-note amber">❌ No Attorneys · Lawyers · Banking · Lending · Mortgage · Church · Non-Profit</div></div>
+      </div>
+      <div class="qual-q">
+        <div class="qual-num">3</div>
+        <div class="qual-q-text">
+          <strong>"Are you 100% owner, or do you have partners? If partners — do you own at least 50%?"</strong>
+          <div class="qual-note amber">Must own at least 50%.</div>
+          <div style="margin-top:7px;font-size:0.81rem;color:var(--muted2);line-height:1.55;">If less than 50%: <em style="color:var(--text)">"Is there a time we can get the majority partner on the line?"</em> — set a callback.</div>
         </div>
       </div>
-      <div class="disqualified-box">
-        <i class="fas fa-ban"></i>
-        <p>If ANY disqualifying answer is given — politely end the call. They do not qualify at this time.</p>
+      <div class="qual-q">
+        <div class="qual-num">4</div>
+        <div class="qual-q-text"><strong>"Does your business average at least $20,000 per month or more in deposits?"</strong><div class="qual-note">MUST BE YES — nothing under $240K/year.</div></div>
       </div>
+      <div class="disq-box"><i class="fas fa-ban"></i><p>If ANY disqualifying answer is given — politely end the call. They do not qualify at this time.</p></div>
     </div>
   </div>
 
-  <!-- STEP 4: QUALIFIED + HANDOFF -->
   <div class="script-block">
-    <div class="script-block-header">
-      <span class="step-badge green">Step 4</span>
-      <span class="script-block-title">Qualified — Warm Handoff</span>
-    </div>
+    <div class="script-block-header"><span class="step-badge green">Step 4</span><span class="script-block-title">Qualified — Warm Handoff</span></div>
     <div class="script-block-body">
-      <p class="script-line" style="margin-bottom:14px">
-        When all 4 questions pass, say: <em>"<strong>Great!</strong> It looks like you meet the pre-qualification criteria. I'm going to connect you with a senior advisor who will go over your funding options. Just hang on one moment — I'm going to stay on the line with you during the handoff. I'll introduce you first when they answer."</em>
-      </p>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">
-        ✅ Submit the form BEFORE the handoff
-      </p>
+      <p class="script-line" style="margin-bottom:14px"><em>"<strong>Great!</strong> It looks like you meet the pre-qualification criteria. I'm going to connect you with a senior advisor who will go over your funding options. Just hang on one moment — I'm going to stay on the line with you during the handoff. I'll introduce you first when they answer."</em></p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">✅ Submit the form BEFORE the handoff</p>
       <div class="handoff-box">
-        <div class="handoff-label">🤝 Handoff Script (Slowly · Smoothly · Clearly)</div>
-        <div class="handoff-text">
-          <em>"Hi, this is <strong>Rose</strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em>
-        </div>
+        <div class="handoff-label">🤝 Handoff Script — Slowly · Smoothly · Clearly</div>
+        <div class="handoff-text"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ====== INDUSTRY LOOKUP PAGE ====== -->
+<!-- INDUSTRY LOOKUP -->
 <div id="page-lookup" class="page">
-  <div class="section-label">Industry Check</div>
+  <div class="section-label">Business Check</div>
   <div class="section-title">Industry Lookup</div>
-  <div class="section-sub">Type the industry the business is in to instantly check if they qualify.</div>
+  <div class="section-sub">Look up a business by phone number via Gemini, or type their industry below to check if they qualify.</div>
 
-  <div class="lookup-wrap">
-    <div class="lookup-row">
-      <input class="lookup-input" id="industryInput" type="text" placeholder="e.g. restaurant, trucking, salon..." autocomplete="off" oninput="checkIndustry()" onkeydown="if(event.key==='Enter')checkIndustry()">
-      <button class="lookup-btn" onclick="checkIndustry()"><i class="fas fa-search" style="margin-right:7px"></i>Check</button>
-    </div>
-    <div class="industry-result" id="industryResult">
-      <div class="industry-result-icon"><i id="resultIcon" class="fas fa-check"></i></div>
-      <div class="industry-result-text">
-        <strong id="resultTitle">—</strong>
-        <p id="resultDesc">—</p>
+  <div class="script-block" style="margin-bottom:22px">
+    <div class="script-block-header"><span class="step-badge"><i class="fas fa-phone" style="margin-right:5px"></i>Phone Lookup</span><span class="script-block-title">Look Up Business Info via Gemini</span></div>
+    <div class="script-block-body">
+      <p style="font-size:0.83rem;color:var(--muted2);margin-bottom:14px;line-height:1.55;">Enter the caller's phone number and click <strong style="color:white">Check</strong>. Gemini will open and search for the business name, owner name, address, and email tied to that number.</p>
+      <div class="phone-row">
+        <input class="lookup-input" id="phoneInput" type="tel" placeholder="Enter phone number e.g. 3051234567" autocomplete="off">
+        <button class="check-btn" onclick="openGemini()"><i class="fas fa-arrow-up-right-from-square" style="margin-right:7px"></i>Check</button>
+      </div>
+      <div class="gemini-note">
+        <i class="fab fa-google"></i>
+        <span>Opens <strong style="color:white">Google Gemini</strong> with a pre-filled prompt: <em>What is the business name, owner name, address, and email for this phone number?</em></span>
       </div>
     </div>
   </div>
 
-  <div class="section-label" style="margin-top:30px">Disqualified Industries</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:28px;">
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Attorneys / Lawyers</div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Banking</div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Lending</div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Mortgage</div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Church</div>
-    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-times-circle" style="color:var(--red)"></i>Non-Profit</div>
+  <div class="section-label">Industry Check</div>
+  <div style="margin-bottom:24px">
+    <input class="lookup-input" id="industryInput" type="text" placeholder="Type industry e.g. restaurant, trucking, salon..." autocomplete="off" oninput="checkIndustry()">
+    <div class="industry-result" id="industryResult">
+      <div class="ind-icon"><i id="resultIcon" class="fas fa-check"></i></div>
+      <div class="ind-text"><strong id="resultTitle">—</strong><p id="resultDesc">—</p></div>
+    </div>
   </div>
 
-  <div class="section-label">Approved Industry Examples</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;">
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Restaurant</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Trucking / Logistics</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Retail</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Construction</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Healthcare / Medical</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Auto Repair</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Beauty / Salon</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Staffing</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Cleaning Services</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>IT / Tech Services</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Landscaping</div>
-    <div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:10px;padding:10px 14px;font-size:0.82rem;color:var(--muted2);display:flex;align-items:center;gap:8px;"><i class="fas fa-check-circle" style="color:var(--green)"></i>Manufacturing</div>
+  <div class="section-label">Disqualified Industries</div>
+  <div class="chip-list">
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Attorneys / Lawyers</div>
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Banking</div>
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Lending</div>
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Mortgage</div>
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Church</div>
+    <div class="chip deny"><i class="fas fa-times-circle"></i>Non-Profit</div>
+  </div>
+
+  <div class="section-label">Approved Examples</div>
+  <div class="chip-list">
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Restaurant / Food</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Trucking / Logistics</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Retail</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Construction</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Healthcare / Medical</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Auto Repair</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Beauty / Salon</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Staffing</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Cleaning Services</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>IT / Tech Services</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Landscaping</div>
+    <div class="chip allow"><i class="fas fa-check-circle"></i>Manufacturing</div>
   </div>
 </div>
 
-<!-- ====== REBUTTALS PAGE ====== -->
+<!-- REBUTTALS -->
 <div id="page-rebuttals" class="page">
   <div class="section-label">Objection Handling</div>
   <div class="section-title">Rebuttals</div>
-  <div class="section-sub">Click any objection to see the exact response. Stay calm, stay warm, keep moving.</div>
+  <div class="section-sub">Tap any objection to see the exact response. Stay calm, stay warm, keep moving.</div>
 
-  <div class="rebuttal-grid">
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Timing</span>
-        <span class="rebuttal-objection">"I'm not interested."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "I completely understand — and I appreciate your honesty. I'm not here to sell you anything today. We're just verifying a few details because your business was flagged as <strong>pre-qualified</strong>. It literally takes 60 seconds and there's zero obligation. Can I ask just one quick question before I let you go?"
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Keep your tone light and curious — not pushy. Frame it as confirming something they already have.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Skepticism</span>
-        <span class="rebuttal-objection">"Is this a scam?" / "How did you get my number?"</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "That's a completely fair question, and I respect you for asking. We're <strong>ATLeads, Business Loan Division</strong>. Your business information was submitted through a funding inquiry which is how you came up as pre-qualified. I'm not pulling any credit or asking for sensitive information — just a few qualifying questions. We work with real businesses every day."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Be confident, not defensive. Validate their concern and immediately re-anchor to the pre-qual angle.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Timing</span>
-        <span class="rebuttal-objection">"I'm busy right now."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "No problem at all — I only need 60 seconds. This is specifically about funding that's already been set aside for your business. If now truly isn't good, when is a better time I can reach back out to you — later today or tomorrow morning?"
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Always offer a specific callback time — don't leave it open-ended. Get a commitment.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Financial</span>
-        <span class="rebuttal-objection">"I don't need a loan / I have enough money."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "That's actually the best time to look at working capital — when you don't need it. Smart business owners use funding to <strong>scale, hire, or take on bigger contracts</strong> without touching their own cash. It costs nothing to hear the options and you're under no obligation whatsoever."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Reframe — funding isn't a sign of need, it's a tool for growth. The best time to get money is when you don't need it.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Credit</span>
-        <span class="rebuttal-objection">"I have bad credit."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "That's not necessarily a disqualifier. These are <strong>business-based funding options</strong> — we're looking at your business revenue and deposits, not just personal credit. A lot of business owners in your position have still been approved. Let me ask you a couple of quick questions to see where you stand."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Immediately transition to the qualifying questions — keep momentum going.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Already Have</span>
-        <span class="rebuttal-objection">"I already have a loan / I'm working with someone else."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "That's great that you're already set up — we're not here to replace anyone. What we offer is <strong>working capital on top of existing funding</strong>, and many business owners use multiple sources. It's worth a quick conversation to see if there's something additional available. It's completely free to check."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Don't compete — position it as additive, not a replacement.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Gatekeeper</span>
-        <span class="rebuttal-objection">"Send me an email / Send information."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "Absolutely, I can do that. But just so I can send you the <strong>right information</strong> specific to your business, let me ask you just two quick questions first — it'll take less than a minute and I'll make sure whatever I send is actually relevant to what you qualify for."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Use email as a bridge to qualify first. Get Q1 and Q4 in before agreeing to send anything.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Revenue</span>
-        <span class="rebuttal-objection">"We don't make $20K a month." (Doesn't qualify)</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately at this time the minimum threshold for this program is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier — it wastes both your time.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rebuttal-card">
-      <div class="rebuttal-header" onclick="toggleRebuttal(this)">
-        <span class="rebuttal-tag">Decision</span>
-        <span class="rebuttal-objection">"I need to talk to my partner / spouse first."</span>
-        <i class="fas fa-chevron-down rebuttal-arrow"></i>
-      </div>
-      <div class="rebuttal-body">
-        <div class="rebuttal-inner">
-          <div class="rebuttal-script">
-            "That makes total sense — major decisions are a team effort. Is there a time I can get both of you on the line together? Or I can call back at whatever time works best for you both. I just want to make sure you have all the information when you have that conversation."
-          </div>
-          <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Set a specific callback with both decision-makers on the line. Don't let it die in a "I'll call you back."</div>
-        </div>
-      </div>
-    </div>
-
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Timing</span><span class="rebuttal-objection">"I'm not interested."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"I completely understand — and I appreciate your honesty. I'm not here to sell you anything today. We're just verifying a few details because your business was flagged as <strong>pre-qualified</strong>. It literally takes 60 seconds and there's zero obligation. Can I ask just one quick question before I let you go?"</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Keep your tone light and curious — not pushy. Frame it as confirming something they already have.</div>
+    </div></div>
   </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Skepticism</span><span class="rebuttal-objection">"Is this a scam?" / "How did you get my number?"</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"That's a completely fair question, and I respect you for asking. We're <strong>ATLeads, Business Loan Division</strong>. Your business information was submitted through a funding inquiry which is how you came up as pre-qualified. I'm not pulling any credit or asking for sensitive information — just a few qualifying questions. We work with real businesses every day."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Be confident, not defensive. Validate their concern and immediately re-anchor to the pre-qual angle.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Timing</span><span class="rebuttal-objection">"I'm busy right now."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"No problem at all — I only need 60 seconds. This is specifically about funding that's already been set aside for your business. If now truly isn't good, when is a better time — later today or tomorrow morning?"</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Always offer a specific callback time — don't leave it open-ended. Get a commitment.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Financial</span><span class="rebuttal-objection">"I don't need a loan / I have enough money."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"That's actually the best time to look at working capital — when you don't need it. Smart business owners use funding to <strong>scale, hire, or take on bigger contracts</strong> without touching their own cash. It costs nothing to hear the options and you're under no obligation whatsoever."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Reframe — funding isn't a sign of need, it's a tool for growth.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Credit</span><span class="rebuttal-objection">"I have bad credit."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"That's not necessarily a disqualifier. These are <strong>business-based funding options</strong> — we're looking at your business revenue and deposits, not just personal credit. A lot of business owners in your position have still been approved. Let me ask you a couple of quick questions to see where you stand."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Immediately transition to qualifying questions — keep momentum.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Already Have</span><span class="rebuttal-objection">"I already have a loan / working with someone else."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"That's great that you're already set up — we're not here to replace anyone. What we offer is <strong>working capital on top of existing funding</strong>, and many business owners use multiple sources. It's worth a quick conversation to see if there's something additional available. It's completely free to check."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Don't compete — position it as additive, not a replacement.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Gatekeeper</span><span class="rebuttal-objection">"Send me an email / Send information."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"Absolutely, I can do that. But just so I can send you the <strong>right information</strong> specific to your business, let me ask you just two quick questions first — it'll take less than a minute and I'll make sure whatever I send is actually relevant to what you qualify for."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Use email as a bridge to qualify first. Get Q1 and Q4 answered before agreeing to send anything.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Revenue</span><span class="rebuttal-objection">"We don't make $20K a month."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately the minimum threshold is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier.</div>
+    </div></div>
+  </div>
+
+  <div class="rebuttal-card">
+    <div class="rebuttal-header" onclick="toggleR(this)"><span class="rebuttal-tag">Decision</span><span class="rebuttal-objection">"I need to talk to my partner / spouse first."</span><i class="fas fa-chevron-down rebuttal-arrow"></i></div>
+    <div class="rebuttal-body"><div class="rebuttal-inner">
+      <div class="rebuttal-script">"That makes total sense — major decisions are a team effort. Is there a time I can get both of you on the line together? Or I can call back at whatever time works best. I just want to make sure you have all the info when you have that conversation."</div>
+      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Set a specific callback with both decision-makers on the line.</div>
+    </div></div>
+  </div>
+
 </div>
 
-<!-- ====== QUICK REF PAGE ====== -->
+<!-- QUICK REF -->
 <div id="page-quickref" class="page">
   <div class="section-label">At a Glance</div>
   <div class="section-title">Quick Reference</div>
-  <div class="section-sub">The essential checklist — everything that qualifies or disqualifies.</div>
+  <div class="section-sub">Everything that qualifies or disqualifies — at a glance.</div>
 
   <div class="quick-grid">
     <div class="quick-card">
-      <div class="quick-card-label"><i class="fas fa-check" style="color:var(--green);margin-right:6px"></i>Must Have (All 4)</div>
+      <div class="quick-card-label"><i class="fas fa-check" style="color:var(--green);margin-right:6px"></i>Must Have — All 4</div>
       <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>In business <strong>1+ year</strong></span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Approved industry (see Industry tab)</span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Owns <strong>50%+</strong> of the business</span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span><strong>$20K+/month</strong> in deposits ($240K+ /yr)</span></div>
+      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Approved industry</span></div>
+      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Owns <strong>50%+</strong> of business</span></div>
+      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span><strong>$20K+/month</strong> deposits</span></div>
     </div>
     <div class="quick-card">
       <div class="quick-card-label"><i class="fas fa-times" style="color:var(--red);margin-right:6px"></i>Instant Disqualifiers</div>
       <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Less than 1 year in business</span></div>
       <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Attorney, bank, lender, mortgage, church, non-profit</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Owns less than 50% (set callback for majority partner)</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Under $20K/month in deposits</span></div>
+      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Owns less than 50%</span></div>
+      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Under $20K/month deposits</span></div>
     </div>
   </div>
 
   <div class="submit-reminder">
     <i class="fas fa-paper-plane"></i>
-    <div class="submit-reminder-text">
+    <div>
       <h4>Submit the form BEFORE the handoff</h4>
-      <p>Once all 4 qualifiers are confirmed — submit the form first, then begin the warm handoff to the senior advisor.</p>
+      <p>Once all 4 qualifiers are confirmed — submit first, then begin the warm handoff to the senior advisor.</p>
     </div>
   </div>
 
   <div class="script-block">
-    <div class="script-block-header">
-      <span class="step-badge green">Handoff</span>
-      <span class="script-block-title">Handoff Script — Word for Word</span>
-    </div>
+    <div class="script-block-header"><span class="step-badge green">Handoff</span><span class="script-block-title">Handoff Script — Word for Word</span></div>
     <div class="script-block-body">
       <div class="handoff-box">
-        <div class="handoff-label">Say this slowly, smoothly, and clearly:</div>
-        <div class="handoff-text">
-          <em>"Hi, this is <strong>Rose</strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em>
-        </div>
+        <div class="handoff-label">Say slowly, smoothly, and clearly:</div>
+        <div class="handoff-text"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em></div>
       </div>
     </div>
   </div>
 
-  <div class="script-block" style="margin-top:16px">
-    <div class="script-block-header">
-      <span class="step-badge amber">Callback</span>
-      <span class="script-block-title">Partner Under 50% — Callback Script</span>
-    </div>
+  <div class="script-block" style="margin-top:14px">
+    <div class="script-block-header"><span class="step-badge amber">Callback</span><span class="script-block-title">Partner Under 50% — Callback</span></div>
     <div class="script-block-body">
-      <p class="script-line">
-        <em>"Is there a time we can get the <strong>majority partner</strong> on the line?"</em> — get a specific date and time. Log it and call back.
-      </p>
+      <p class="script-line"><em>"Is there a time we can get the <strong>majority partner</strong> on the line?"</em> — get a specific date and time. Log it and call back.</p>
     </div>
   </div>
 </div>
 
 <script>
-  function showPage(name) {
+  // ===== AGENT NAME =====
+  const DEFAULT_NAME = 'Click to set your name';
+  let agentName = localStorage.getItem('atleads_agent') || '';
+
+  function renderName() {
+    const display = document.getElementById('agentDisplay');
+    const refs = document.querySelectorAll('.agent-name-ref');
+    const scriptName = document.getElementById('scriptAgentName');
+    const n = agentName || DEFAULT_NAME;
+    display.textContent = n;
+    display.style.color = agentName ? 'var(--accent2)' : 'var(--muted)';
+    refs.forEach(el => el.textContent = agentName || 'your name');
+    if (scriptName) scriptName.textContent = agentName || 'your name';
+  }
+
+  function editName() {
+    const display = document.getElementById('agentDisplay');
+    const input = document.getElementById('agentInput');
+    display.style.display = 'none';
+    input.style.display = 'inline-block';
+    input.value = agentName;
+    input.focus(); input.select();
+  }
+
+  function saveName() {
+    const input = document.getElementById('agentInput');
+    const display = document.getElementById('agentDisplay');
+    agentName = input.value.trim();
+    localStorage.setItem('atleads_agent', agentName);
+    input.style.display = 'none';
+    display.style.display = 'inline';
+    renderName();
+  }
+
+  renderName();
+
+  // ===== CLOCKS =====
+  function formatTime(date, tz) {
+    return date.toLocaleTimeString('en-US', {
+      timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+    });
+  }
+  function tickClocks() {
+    const now = new Date();
+    document.getElementById('clock-gy').textContent = formatTime(now, 'America/Guyana');
+    document.getElementById('clock-us').textContent = formatTime(now, 'America/Los_Angeles');
+  }
+  tickClocks();
+  setInterval(tickClocks, 1000);
+
+  // ===== NAV =====
+  function showPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
+    btn.classList.add('active');
   }
 
+  // ===== GEMINI =====
+  function openGemini() {
+    const phone = document.getElementById('phoneInput').value.trim();
+    const prompt = `What is the business name, owner name, address, and email for the phone number ${phone || '[phone number]'}? Please search and provide all available business information associated with this number.`;
+    window.open('https://gemini.google.com/app?q=' + encodeURIComponent(prompt), '_blank');
+  }
+
+  // ===== INDUSTRY CHECK =====
   const DENIED = ['attorney','lawyer','banking','bank','lending','lender','mortgage','church','non-profit','nonprofit','non profit','charity','foundation'];
-  const APPROVED = ['restaurant','food','cafe','catering','trucking','logistics','freight','hauling','retail','store','shop','boutique','construction','contractor','builder','plumbing','electrical','roofing','hvac','medical','healthcare','clinic','dental','chiro','therapy','auto','mechanic','car','vehicle','salon','beauty','barber','nail','spa','staffing','employment','cleaning','janitorial','it ','tech','software','landscaping','lawn','garden','manufacturing','warehouse','distribution','daycare','childcare','fitness','gym','hotel','motel','hospitality','security','printing','marketing','agency','media','accounting','tax','bookkeeping','insurance','real estate','property'];
+  const APPROVED = ['restaurant','food','cafe','catering','trucking','logistics','freight','hauling','retail','store','shop','boutique','construction','contractor','builder','plumbing','electrical','roofing','hvac','medical','healthcare','clinic','dental','chiro','therapy','auto','mechanic','car','vehicle','salon','beauty','barber','nail','spa','staffing','employment','cleaning','janitorial','tech','software','landscaping','lawn','garden','manufacturing','warehouse','distribution','daycare','childcare','fitness','gym','hotel','motel','hospitality','security','printing','marketing','agency','media','accounting','tax','bookkeeping','insurance','real estate','property'];
 
   function checkIndustry() {
     const val = document.getElementById('industryInput').value.trim().toLowerCase();
-    const result = document.getElementById('industryResult');
-    const title = document.getElementById('resultTitle');
-    const desc = document.getElementById('resultDesc');
-    const icon = document.getElementById('resultIcon');
-
-    if (!val) { result.classList.remove('show','approved','denied'); return; }
-
+    const el = document.getElementById('industryResult');
+    if (!val) { el.className = 'industry-result'; return; }
     const isDenied = DENIED.some(d => val.includes(d));
     const isApproved = APPROVED.some(a => val.includes(a));
-
-    result.classList.remove('approved','denied');
-    result.classList.add('show');
-
+    el.className = 'industry-result show';
     if (isDenied) {
-      result.classList.add('denied');
-      icon.className = 'fas fa-ban';
-      title.textContent = '❌ Does Not Qualify';
-      desc.textContent = 'This industry is on the disqualified list. Politely end the call — they do not meet the criteria for this program.';
+      el.classList.add('denied');
+      document.getElementById('resultIcon').className = 'fas fa-ban';
+      document.getElementById('resultTitle').textContent = '❌ Does Not Qualify';
+      document.getElementById('resultDesc').textContent = 'This industry is on the disqualified list. Politely end the call — they do not meet the criteria for this program.';
     } else if (isApproved) {
-      result.classList.add('approved');
-      icon.className = 'fas fa-check';
-      title.textContent = '✅ Looks Good — Continue';
-      desc.textContent = 'This industry appears to be approved. Proceed with the remaining qualification questions.';
+      el.classList.add('approved');
+      document.getElementById('resultIcon').className = 'fas fa-check';
+      document.getElementById('resultTitle').textContent = '✅ Looks Good — Continue';
+      document.getElementById('resultDesc').textContent = 'This industry appears to be approved. Proceed with the remaining qualification questions.';
     } else {
-      result.classList.add('approved');
-      icon.className = 'fas fa-circle-question';
-      title.textContent = '⚠️ Not Listed — Use Judgment';
-      desc.textContent = 'This industry isn\'t on the blocked list. It\'s likely okay — but if unsure, note it and check with your team. Continue with the other qualifiers.';
+      el.classList.add('unknown');
+      document.getElementById('resultIcon').className = 'fas fa-circle-question';
+      document.getElementById('resultTitle').textContent = '⚠️ Not Listed — Use Judgment';
+      document.getElementById('resultDesc').textContent = "Not on the blocked list — likely okay. If unsure, check with your team and continue with the other qualifiers.";
     }
   }
 
-  function toggleRebuttal(header) {
+  // ===== REBUTTALS =====
+  function toggleR(header) {
     const body = header.nextElementSibling;
     const arrow = header.querySelector('.rebuttal-arrow');
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open', !isOpen);
-    arrow.classList.toggle('open', !isOpen);
+    const open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    arrow.classList.toggle('open', !open);
   }
 </script>
 </body>
