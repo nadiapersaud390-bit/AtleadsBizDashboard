@@ -682,7 +682,7 @@
     <div class="script-block-body">
       <p style="font-size:0.83rem;color:var(--muted2);margin-bottom:14px;line-height:1.55;">Enter the caller's phone number and click <strong style="color:white">Check</strong>. Gemini will open and search for the business name, owner name, address, and email tied to that number.</p>
       <div class="phone-row">
-        <input class="lookup-input" id="phoneInput" type="tel" placeholder="Enter phone number e.g. 3051234567" autocomplete="off">
+        <input class="lookup-input" id="phoneInput" type="tel" placeholder="Enter phone number e.g. 3051234567" autocomplete="off" onkeydown="if(event.key==='Enter')openGemini()">
         <button class="check-btn" onclick="openGemini()"><i class="fas fa-arrow-up-right-from-square" style="margin-right:7px"></i>Check</button>
       </div>
       <div class="gemini-note">
@@ -1127,8 +1127,19 @@
   // ===== GEMINI =====
   function openGemini() {
     const phone = document.getElementById('phoneInput').value.trim();
-    const prompt = `What is the business name, owner name, address, and email for the phone number ${phone || '[phone number]'}? Please search and provide all available business information associated with this number.`;
-    window.open('https://gemini.google.com/app?q=' + encodeURIComponent(prompt), '_blank');
+    if (!phone) {
+      document.getElementById('phoneInput').focus();
+      document.getElementById('phoneInput').style.borderColor = '#f43f5e';
+      document.getElementById('phoneInput').placeholder = 'Enter a phone number first!';
+      setTimeout(() => {
+        document.getElementById('phoneInput').style.borderColor = '';
+        document.getElementById('phoneInput').placeholder = 'Enter phone number e.g. 3051234567';
+      }, 2000);
+      return;
+    }
+    const prompt = `What is the business name, owner name, address, and email for the phone number ${phone}? Please search and provide all available business information associated with this number.`;
+    const url = 'https://gemini.google.com/app?q=' + encodeURIComponent(prompt);
+    window.open(url, '_blank', 'noopener');
   }
 
   // ===== INDUSTRY CHECK =====
