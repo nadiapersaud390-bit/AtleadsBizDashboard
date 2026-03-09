@@ -143,13 +143,13 @@
   }
   .nav-inner {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
     max-width: 860px; margin: 0 auto;
   }
   .nav-tab {
-    padding: 14px 10px;
-    font-size: 0.72rem; font-weight: 900;
+    padding: 13px 8px;
+    font-size: 0.74rem; font-weight: 900;
     text-transform: uppercase; letter-spacing: 0.12em;
     color: var(--muted); cursor: pointer;
     border: 1px solid rgba(168,85,247,0.15);
@@ -189,8 +189,8 @@
     display: flex; align-items: center; gap: 10px;
   }
   .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(168,85,247,0.4),transparent); }
-  .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.5rem; color:white; margin-bottom:6px; }
-  .section-sub { color:var(--muted2); font-size:0.88rem; margin-bottom:24px; line-height:1.5; }
+  .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.7rem; color:white; margin-bottom:6px; }
+  .section-sub { color:var(--muted2); font-size:0.95rem; margin-bottom:24px; line-height:1.5; }
 
   /* SCRIPT BLOCKS */
   .script-block { background:var(--surface); border:1px solid var(--border); border-radius:16px; margin-bottom:14px; overflow:hidden; }
@@ -201,7 +201,7 @@
   .step-badge.red   { background:rgba(244,63,94,0.12);  border-color:rgba(244,63,94,0.3);  color:var(--red); }
   .script-block-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:white; }
   .script-block-body { padding:18px 20px; }
-  .script-line { font-size:0.92rem; line-height:1.75; color:var(--text); }
+  .script-line { font-size:1rem; line-height:1.75; color:var(--text); }
   .script-line strong { color:white; font-weight:700; }
   .script-line em { color:#c4b5fd; font-style:italic; }
 
@@ -217,7 +217,7 @@
   .qual-q { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--border); }
   .qual-q:last-child { border-bottom:none; }
   .qual-num { width:24px; height:24px; border-radius:50%; background:rgba(124,58,237,0.2); border:1px solid rgba(168,85,247,0.35); color:var(--accent2); font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
-  .qual-q-text { font-size:0.9rem; line-height:1.55; color:var(--text); flex:1; }
+  .qual-q-text { font-size:0.98rem; line-height:1.6; color:var(--text); flex:1; }
   .qual-note { font-size:0.75rem; color:var(--red); margin-top:4px; font-family:'JetBrains Mono',monospace; font-weight:700; }
   .qual-note.amber { color:var(--amber); }
 
@@ -270,22 +270,24 @@
   .rebuttal-card:hover { border-color:rgba(168,85,247,0.3); }
   .rebuttal-header { padding:15px 20px; cursor:pointer; user-select:none; display:flex; align-items:center; justify-content:space-between; transition:background 0.2s; }
   .rebuttal-header:hover { background:rgba(168,85,247,0.04); }
-  .rebuttal-objection { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:white; flex:1; }
+  .rebuttal-objection { font-family:'Syne',sans-serif; font-weight:700; font-size:0.96rem; color:white; flex:1; }
   .rebuttal-tag { font-size:0.64rem; font-weight:700; font-family:'JetBrains Mono',monospace; padding:3px 9px; border-radius:20px; margin-right:12px; text-transform:uppercase; letter-spacing:0.08em; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); color:var(--accent3); }
   .rebuttal-arrow { color:var(--muted); font-size:0.75rem; transition:transform 0.3s,color 0.2s; flex-shrink:0; }
   .rebuttal-arrow.open { transform:rotate(180deg); color:var(--accent2); }
   .rebuttal-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
   .rebuttal-body.open { max-height:600px; }
+  .prank-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease; }
+  .prank-body.open { max-height:1000px; }
   .rebuttal-inner { padding:0 20px 18px; }
-  .rebuttal-script { background:var(--surface2); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:10px; padding:14px 16px; font-size:0.87rem; line-height:1.72; color:var(--text); margin-bottom:10px; }
-  .rebuttal-tip { font-size:0.77rem; color:var(--muted2); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
+  .rebuttal-script { background:var(--surface2); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:10px; padding:14px 16px; font-size:0.95rem; line-height:1.72; color:var(--text); margin-bottom:10px; }
+  .rebuttal-tip { font-size:0.84rem; color:var(--muted2); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
   .rebuttal-tip i { color:var(--amber); flex-shrink:0; margin-top:2px; }
 
   /* QUICK REF */
   .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
   .quick-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; }
   .quick-card-label { font-family:'JetBrains Mono',monospace; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--muted); margin-bottom:10px; }
-  .quick-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.83rem; line-height:1.45; }
+  .quick-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.92rem; line-height:1.5; }
   .quick-item:last-child { border-bottom:none; }
   .quick-item i { flex-shrink:0; margin-top:2px; font-size:0.78rem; }
   .quick-item.pass i { color:var(--green); } .quick-item.pass { color:var(--text); }
@@ -298,7 +300,9 @@
   @media(max-width:600px){
     .branch-row { grid-template-columns:1fr; }
     .quick-grid { grid-template-columns:1fr; }
-    .nav-tab { padding:11px 11px; font-size:0.68rem; }
+    .nav-inner { grid-template-columns: repeat(5,1fr); gap:5px; }
+    .nav-tab { padding:10px 4px; font-size:0.6rem; gap:4px; }
+    .nav-tab i { display:none; }
     .page { padding:18px 14px; }
     .phone-row { flex-direction:column; }
   }
@@ -354,101 +358,245 @@
     <div class="quick-card">
       <div class="quick-card-label"><i class="fas fa-times" style="color:var(--red);margin-right:6px"></i>Instant Disqualifiers</div>
       <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Less than 1 year in business</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Attorney, bank, lender, mortgage, church, non-profit</span></div>
+      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Bank, lender, mortgage, church, non-profit</span></div>
       <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Owns less than 50%</span></div>
       <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Under $20K/month deposits</span></div>
     </div>
   </div>
 
-  <div class="rebuttal-card" style="border-left:4px solid #f43f5e;margin-top:12px;">
-    <div class="rebuttal-header" onclick="toggleR(this)" style="padding:14px 16px;">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-gavel" style="color:#f43f5e;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">Attorney / Lawyer — Drill Down</div><div style="font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Tap to see how to handle</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <p style="font-size:0.83rem;color:var(--muted2);line-height:1.55;margin-bottom:10px;">If they say they're a lawyer or attorney — <strong style="color:white">ask if they own a separate business</strong> outside of their legal practice.</p>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;">
-        <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:5px;">Ask:</div>
-        <p style="font-size:0.9rem;font-weight:700;color:white;font-style:italic;line-height:1.6;">"Do you own any other businesses outside of your law practice?"</p>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25);border-radius:9px;padding:10px 13px;">
-          <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--green);letter-spacing:0.08em;margin-bottom:4px;">✓ Yes — Other Business</div>
-          <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Qualify them on <strong>that business</strong> instead. Proceed with the 4 questions using the other business.</p>
-        </div>
-        <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:9px;padding:10px 13px;">
-          <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--red);letter-spacing:0.08em;margin-bottom:4px;">✗ No — Law Only</div>
-          <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Disqualify. End the call gracefully — the legal practice itself is a hard no.</p>
-        </div>
-      </div>
-    </div></div>
-  </div>
-
-  <div class="submit-reminder">
-    <i class="fas fa-paper-plane"></i>
-    <div>
-      <h4>Submit the form BEFORE the handoff</h4>
-      <p>Once all 4 qualifiers are confirmed — submit first, then begin the warm handoff to the senior advisor.</p>
-    </div>
-  </div>
-
-  <div class="script-block">
-    <div class="script-block-header"><span class="step-badge green">Handoff</span><span class="script-block-title">Handoff Script — Word for Word</span></div>
-    <div class="script-block-body">
-      <div class="handoff-box">
-        <div class="handoff-label">Say slowly, smoothly, and clearly:</div>
-        <div class="handoff-text"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="script-block" style="margin-top:14px">
-    <div class="script-block-header"><span class="step-badge amber">Callback</span><span class="script-block-title">Partner Under 50% — Callback</span></div>
-    <div class="script-block-body">
-      <p class="script-line"><em>"Is there a time we can get the <strong>majority partner</strong> on the line?"</em> — get a specific date and time. Log it and call back.</p>
-    </div>
-  </div>
 </div>
 
 <!-- PRANK PAGE -->
 <div id="page-prank" class="page">
-  <div class="section-label" style="color:var(--red)">Fun Zone</div>
-  <div class="section-title" style="color:var(--red)">🔥 Prank List</div>
-  <div class="section-sub">The four. That's it.</div>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
-      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🎸</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Fan</div>
-        <div style="font-size:0.82rem;color:var(--muted2);">The devoted follower prank</div>
+  <div class="section-label" style="color:var(--red)">Alert System</div>
+  <div class="section-title" style="color:var(--red)">🚨 Active Prank &amp; Scam Alerts</div>
+  <div class="section-sub">Tap any alert to see the full breakdown — what to listen for and how to handle it.</div>
+
+  <!-- 2x2 GRID OF ALERT CARDS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;">
+
+    <!-- Justin Fake Loan Portal -->
+    <div style="background:var(--surface);border:1px solid rgba(244,63,94,0.3);border-top:3px solid #f43f5e;border-radius:14px;overflow:hidden;">
+      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(244,63,94,0.06);">
+        <div>
+          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#f43f5e;margin-bottom:4px;">⚠️ Active Scam Alert</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:white;">"Justin" Fake Loan Portal</div>
+        </div>
+        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
+      </div>
+      <div class="prank-body">
+        <div style="padding:14px 16px;">
+          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:12px;">A customer calls saying <strong style="color:white">"Justin"</strong> told them they have a loan and need to log into a <strong style="color:white">portal</strong> to make a payment or collect funds. This is a scam — no one named Justin works here in that capacity, and we do NOT direct customers to external portals to collect loan funds.</p>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "Justin said I have a loan and need to log in"</div>
+            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "They told me to log into a portal to get my money"</div>
+            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I need to log in to make a payment or receive funds"</div>
+          </div>
+          <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:9px 12px;font-size:0.83rem;font-weight:700;color:white;font-style:italic;margin-bottom:10px;">"I believe you have the wrong number, sir."</div>
+          <div style="font-size:0.75rem;color:#fb923c;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">🔴 If the prank number keeps calling, pass the number to your team leader.</div>
+          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON.</div>
+        </div>
       </div>
     </div>
-    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
-      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">⭐</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Justin</div>
-        <div style="font-size:0.82rem;color:var(--muted2);">The Justin prank</div>
+
+    <!-- Money Laundering -->
+    <div style="background:var(--surface);border:1px solid rgba(168,85,247,0.3);border-top:3px solid #a855f7;border-radius:14px;overflow:hidden;">
+      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(168,85,247,0.06);">
+        <div>
+          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#a855f7;margin-bottom:4px;">🏛️ Criminal Alert</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Money Laundering — Gov. Ties</div>
+        </div>
+        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
+      </div>
+      <div class="prank-body">
+        <div style="padding:14px 16px;">
+          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If a caller claims they have <strong style="color:white">ties with the government</strong>, are moving funds <strong style="color:white">"on behalf of"</strong> an agency, or the situation feels like they're trying to legitimize large suspicious transfers — this is a <strong style="color:#f43f5e">money laundering red flag</strong>. End the call and report it.</p>
+          <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
+            <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#a855f7;letter-spacing:0.08em;margin-bottom:5px;">💡 What Is Money Laundering?</div>
+            <p style="font-size:0.82rem;color:var(--muted2);line-height:1.5;">Money laundering is the process of making illegally obtained money appear legitimate. Criminals run "dirty" money through businesses, loans, or financial systems to disguise its origin. Claiming government ties is a common tactic to make the transaction seem official and bypass scrutiny.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I work with the government / federal agency"</div>
+            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "These funds are authorized / government-backed"</div>
+            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Moving unusually large sums through a new or vague business</div>
+          </div>
+          <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:9px 12px;font-size:0.75rem;font-weight:900;color:#f43f5e;text-transform:uppercase;letter-spacing:0.07em;">🔴 This is a prank. End the call professionally and move on to the next one. If the number keeps coming in, pass it to your team leader.</div>
+          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON.</div>
+        </div>
       </div>
     </div>
-    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
-      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">💰</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Money Laundering</div>
-        <div style="font-size:0.82rem;color:var(--muted2);">The dirty money prank</div>
+
+    <!-- Mexico Fund Transfer -->
+    <div style="background:var(--surface);border:1px solid rgba(251,146,60,0.3);border-top:3px solid #fb923c;border-radius:14px;overflow:hidden;">
+      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(251,146,60,0.06);">
+        <div>
+          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#fb923c;margin-bottom:4px;">🇲🇽 Active Ongoing Scam</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Mexico / Fund Transfer</div>
+        </div>
+        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
+      </div>
+      <div class="prank-body">
+        <div style="padding:14px 16px;">
+          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If anyone <strong style="color:white">mentions Mexico</strong>, asks to <strong style="color:white">send funds to Mexico</strong>, or requests any <strong style="color:white">international transfer</strong> — end the call professionally &amp; move on.</p>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "Can you send the funds to Mexico?"</div>
+            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Mexico as business location or fund destination</div>
+            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Wire transfer or cash to international account</div>
+          </div>
+          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">DO NOT TRANSFER UNDER ANY CIRCUMSTANCES.</div>
+        </div>
       </div>
     </div>
-    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:16px;">
-      <div style="width:38px;height:38px;border-radius:10px;background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🌮</div>
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:white;margin-bottom:2px;">Mexico Funds</div>
-        <div style="font-size:0.82rem;color:var(--muted2);">The Mexico funds prank</div>
+
+    <!-- OnlyFans -->
+    <div style="background:var(--surface);border:1px solid rgba(168,85,247,0.3);border-top:3px solid #a855f7;border-radius:14px;overflow:hidden;">
+      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(168,85,247,0.06);">
+        <div>
+          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#a855f7;margin-bottom:4px;">🔞 Instant Disqualifier</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:white;">OnlyFans = Prank. Full Stop.</div>
+        </div>
+        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
+      </div>
+      <div class="prank-body">
+        <div style="padding:14px 16px;">
+          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If anyone gives <strong style="color:white">"OnlyFans"</strong> as their business name — end the call professionally.</p>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
+            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "My business is OnlyFans"</div>
+            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I'm a content creator on OnlyFans"</div>
+          </div>
+          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON IMMEDIATELY.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRANK CALLER RED FLAGS — always visible below -->
+  <div style="margin-bottom:8px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#f43f5e;margin-bottom:3px;">⚠️ Prank Caller Red Flags</div>
+    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:14px;">Spot these signs early — end the call professionally and move on</div>
+  </div>
+
+  <!-- Red flags 2-col grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">1. YES TO EVERYTHING</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Real owners push back, ask questions, or pause to think. If someone says <strong>"yes"</strong> to every question instantly — they're not real.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: ROBOTIC "YES YES YES," ZERO HESITATION ON EVERY ANSWER</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">2. GENERIC OR FAKE BUSINESS NAME</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Vague names like <strong>"My Company," "Business LLC,"</strong> or names that change when you repeat them back are fake.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "UM… IT'S LIKE… MY BUSINESS," NAME CHANGES WHEN REPEATED</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">3. ASKING FOR MONEY / REVERSING THE SCRIPT</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">If they flip the call — <strong>"So how much will YOU give me?"</strong> before you've even qualified them.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "JUST SEND IT," "HOW FAST CAN I GET IT," "I NEED IT NOW," "I NEED IT TODAY"</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">4. LAUGHING, WHISPERING, OR COACHED</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Giggling, muffled laughter, or someone <strong>whispering answers</strong> in the background means group prank.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: ECHOING, WHISPERING, COVERING THE PHONE, COACHED REPLIES</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">5. INCONSISTENT OR ABSURD DETAILS</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Revenue of <strong>$50 million</strong> but open only <strong>2 months</strong>? Real owners are consistent because they live their business every day.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: CONTRADICTORY INFO, IMPOSSIBLE NUMBERS, CHANGING THEIR STORY</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">6. REFUSES TO STAY ON TOPIC</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Prankers <strong>derail the call</strong> with jokes and random questions.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: TANGENTS, JOKES ABOUT THE CALL, REFUSING TO ANSWER DIRECTLY</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">7. SUSPICIOUS TONE &amp; ENERGY</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Real owners are <strong>slightly guarded, professional, measured</strong>. Prank callers sound <strong>too casual, overly excited, or flat and robotic</strong>.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: GIGGLING, OVERLY EAGER, ROBOTIC MONOTONE, ACTING A ROLE</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">8. "JUSTIN TOLD ME" / ASKS ABOUT PORTAL</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">If a caller says someone named <strong>"Justin"</strong> told them they have a loan and to <strong>log into a portal</strong> — this is a scam script, not a real customer.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "I WAS TOLD TO LOG IN," "WHERE'S THE PORTAL," "JUSTIN SAID I'M APPROVED"</div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;grid-column:1/-1;">
+      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">9. CLAIMS GOVERNMENT OR OFFICIAL TIES</div>
+      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Callers who claim <strong>government connections</strong> or say funds are "federally authorized" to pressure you into bypassing normal process are attempting fraud or <strong>money laundering</strong>.</p>
+      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "FEDERAL AGENCY," "GOVERNMENT AUTHORIZED," "OFFICIAL PROGRAM," "TIES TO [AGENCY]"</div>
+    </div>
+
+  </div>
+
+  <!-- Instant Keywords -->
+  <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:8px;">🔑 Instant Prank Keywords</div>
+  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;">
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Send it to Mexico"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Wire the money"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Give me the cash"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"I need it today"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"How much can you give me?"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Yeah whatever you need"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Just approve me"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Can you skip that part?"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Justin told me I'm approved"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Where's the portal to log in?"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Government authorized"</span>
+    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Federal ties / agency"</span>
+  </div>
+
+  <!-- Tone & Voice Tells -->
+  <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span style="font-size:1rem;">🎙️</span>
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#a855f7;text-transform:uppercase;letter-spacing:0.06em;">Tone &amp; Voice Tells</span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:12px;">REAL OWNER VS. PRANK CALLER — SIDE BY SIDE</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:12px 14px;">
+        <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#22c55e;letter-spacing:0.08em;margin-bottom:8px;">✅ Real Owner Sounds Like</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Slightly busy or distracted</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Asks "what is this for exactly?"</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Pauses to recall their revenue</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• States business name confidently</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Skeptical but willing to listen</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Professional, measured tone</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Asks about process / next steps</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Background sounds like a real workplace</div>
+        </div>
+      </div>
+      <div style="background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.2);border-radius:10px;padding:12px 14px;">
+        <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:8px;">🚨 Prank Caller Sounds Like</div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Too casual or overly excited</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Agrees to everything instantly</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Never hesitates on any answer</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Gives absurd or vague business name</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Giggles or sounds entertained</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Flat robotic tone, reading a script</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Keeps pushing for the money amount</div>
+          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Background sounds like a group or party</div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- End call -->
+  <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.3);border-left:3px solid #f43f5e;border-radius:10px;padding:13px 15px;font-size:0.9rem;font-weight:700;color:white;font-style:italic;line-height:1.65;text-align:center;">
+    END THE CALL: "Thank you for your time, we're not able to proceed. Have a great day."
+  </div>
+
 </div>
+
 
 <!-- SCRIPT -->
 <div id="page-script" class="page active">
@@ -550,6 +698,36 @@
     <div class="industry-result" id="industryResult">
       <div class="ind-icon"><i id="resultIcon" class="fas fa-check"></i></div>
       <div class="ind-text"><strong id="resultTitle">—</strong><p id="resultDesc">—</p></div>
+    </div>
+
+    <!-- Lawyer drill-down — shown only when lawyer/attorney is typed -->
+    <div id="lawyerDrilldown" style="display:none;margin-top:10px;">
+      <div class="rebuttal-card" style="border-left:4px solid #f43f5e;">
+        <div class="rebuttal-header" onclick="toggleR(this)" style="padding:14px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-gavel" style="color:#f43f5e;font-size:11px;"></i></div>
+            <div style="min-width:0;"><div class="rebuttal-objection">Attorney / Lawyer — Drill Down</div><div style="font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Tap to see how to handle</div></div>
+          </div>
+          <i class="fas fa-chevron-down rebuttal-arrow"></i>
+        </div>
+        <div class="rebuttal-body"><div class="rebuttal-inner">
+          <p style="font-size:0.83rem;color:var(--muted2);line-height:1.55;margin-bottom:10px;">If they say they're a lawyer or attorney — <strong style="color:white">ask if they own a separate business</strong> outside of their legal practice.</p>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;">
+            <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:5px;">Ask:</div>
+            <p style="font-size:0.9rem;font-weight:700;color:white;font-style:italic;line-height:1.6;">"Do you own any other businesses outside of your law practice?"</p>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25);border-radius:9px;padding:10px 13px;">
+              <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--green);letter-spacing:0.08em;margin-bottom:4px;">✓ Yes — Other Business</div>
+              <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Qualify them on <strong>that business</strong> instead. Proceed with the 4 questions using the other business.</p>
+            </div>
+            <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:9px;padding:10px 13px;">
+              <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--red);letter-spacing:0.08em;margin-bottom:4px;">✗ No — Law Only</div>
+              <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Disqualify. End the call gracefully — the legal practice itself is a hard no.</p>
+            </div>
+          </div>
+        </div></div>
+      </div>
     </div>
   </div>
 
@@ -960,15 +1138,20 @@
   function checkIndustry() {
     const val = document.getElementById('industryInput').value.trim().toLowerCase();
     const el = document.getElementById('industryResult');
-    if (!val) { el.className = 'industry-result'; return; }
+    const lawyerDD = document.getElementById('lawyerDrilldown');
+    if (!val) { el.className = 'industry-result'; lawyerDD.style.display = 'none'; return; }
+    const isLawyer = ['attorney','lawyer'].some(d => val.includes(d));
     const isDenied = DENIED.some(d => val.includes(d));
     const isApproved = APPROVED.some(a => val.includes(a));
     el.className = 'industry-result show';
+    lawyerDD.style.display = isLawyer ? 'block' : 'none';
     if (isDenied) {
       el.classList.add('denied');
       document.getElementById('resultIcon').className = 'fas fa-ban';
       document.getElementById('resultTitle').textContent = '❌ Does Not Qualify';
-      document.getElementById('resultDesc').textContent = 'This industry is on the disqualified list. Politely end the call — they do not meet the criteria for this program.';
+      document.getElementById('resultDesc').textContent = isLawyer
+        ? 'Legal practice is disqualified — but tap the card below to see if they own another business that may qualify.'
+        : 'This industry is on the disqualified list. Politely end the call — they do not meet the criteria for this program.';
     } else if (isApproved) {
       el.classList.add('approved');
       document.getElementById('resultIcon').className = 'fas fa-check';
@@ -989,6 +1172,15 @@
     const open = body.classList.contains('open');
     body.classList.toggle('open', !open);
     arrow.classList.toggle('open', !open);
+  }
+
+  // ===== PRANK CARDS =====
+  function togglePrank(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('i.fa-chevron-down');
+    const open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
   }
 </script>
 </body>
