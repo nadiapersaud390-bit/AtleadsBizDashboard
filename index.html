@@ -283,6 +283,94 @@
   .rebuttal-tip { font-size:0.84rem; color:var(--muted2); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
   .rebuttal-tip i { color:var(--amber); flex-shrink:0; margin-top:2px; }
 
+  /* REBUTTAL PILLS */
+  .r-pill {
+    background: rgba(168,85,247,0.07);
+    border: 1px solid rgba(168,85,247,0.25);
+    color: var(--muted2);
+    border-radius: 30px;
+    padding: 8px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .r-pill:hover {
+    background: rgba(168,85,247,0.18);
+    border-color: rgba(168,85,247,0.5);
+    color: white;
+  }
+  .r-pill.active {
+    background: rgba(168,85,247,0.28);
+    border-color: var(--accent2);
+    color: white;
+    box-shadow: 0 0 14px rgba(168,85,247,0.3);
+  }
+  .r-pill-red {
+    background: rgba(244,63,94,0.07);
+    border-color: rgba(244,63,94,0.3);
+    color: #f43f5e;
+  }
+  .r-pill-red:hover {
+    background: rgba(244,63,94,0.18);
+    border-color: #f43f5e;
+    color: white;
+  }
+  .r-pill-red.active {
+    background: rgba(244,63,94,0.25);
+    border-color: #f43f5e;
+    color: white;
+    box-shadow: 0 0 14px rgba(244,63,94,0.3);
+  }
+
+  /* REBUTTAL PANEL */
+  .r-panel {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeIn 0.22s ease;
+    margin-bottom: 16px;
+  }
+  .r-panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .r-panel-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: white;
+    line-height: 1.4;
+  }
+  .r-panel-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+  .r-panel-close {
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.25);
+    color: var(--muted2);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .r-panel-close:hover { background: rgba(168,85,247,0.2); color: white; }
+  .r-panel-body { padding: 18px 20px; }
+
   /* QUICK REF */
   .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
   .quick-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; }
@@ -762,342 +850,185 @@
 <div id="page-rebuttals" class="page">
   <div class="section-label">Objection Handling</div>
   <div class="section-title">Rebuttals</div>
-  <div class="section-sub">Tap any objection to reveal your response. Stay calm, stay warm, keep moving.</div>
+  <div class="section-sub">Select an objection below — the full response will appear instantly.</div>
 
-  <!-- helper macro: each card -->
+  <!-- PILL SELECTOR -->
+  <div id="rebuttal-pills" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+    <button class="r-pill" onclick="openRebuttal(1,this)">Which company is this?</button>
+    <button class="r-pill" onclick="openRebuttal(2,this)">Is this a scam?</button>
+    <button class="r-pill" onclick="openRebuttal(3,this)">Email me first</button>
+    <button class="r-pill" onclick="openRebuttal(4,this)">Why calling not emailing?</button>
+    <button class="r-pill" onclick="openRebuttal(5,this)">Are you a bank?</button>
+    <button class="r-pill" onclick="openRebuttal(6,this)">Bad credit</button>
+    <button class="r-pill" onclick="openRebuttal(7,this)">Don't need a loan</button>
+    <button class="r-pill" onclick="openRebuttal(8,this)">Why no info?</button>
+    <button class="r-pill" onclick="openRebuttal(9,this)">Interest rate?</button>
+    <button class="r-pill" onclick="openRebuttal(10,this)">Found cheaper option</button>
+    <button class="r-pill" onclick="openRebuttal(11,this)">How'd you get my info?</button>
+    <button class="r-pill" onclick="openRebuttal(12,this)">What's the company name?</button>
+    <button class="r-pill" onclick="openRebuttal(13,this)">What type of loan?</button>
+    <button class="r-pill" onclick="openRebuttal(14,this)">Already pre-qualified?</button>
+    <button class="r-pill" onclick="openRebuttal(15,this)">I didn't apply</button>
+    <button class="r-pill" onclick="openRebuttal(16,this)">Voicemail said approved</button>
+    <button class="r-pill" onclick="openRebuttal(17,this)">Where are you located?</button>
+    <button class="r-pill" onclick="openRebuttal(18,this)">What's my business name?</button>
+    <button class="r-pill r-pill-red" onclick="openRebuttal(19,this)">Under $20K/month</button>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div id="rebuttal-panel" style="display:none;"></div>
+
+  <!-- ALL REBUTTAL DATA (hidden) -->
+  <div id="rebuttal-data" style="display:none;">
+
+  <!-- ALL REBUTTAL DATA (hidden) -->
+  <div id="rebuttal-data" style="display:none;">
+
   <!-- 1 -->
-  <div class="rebuttal-card" style="border-left:4px solid #14b8a6;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(20,184,166,0.2);border:1px solid rgba(20,184,166,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#14b8a6;flex-shrink:0;font-family:'JetBrains Mono',monospace;">1</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(20,184,166,0.1);border:1px solid rgba(20,184,166,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-building" style="color:#14b8a6;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Which company do you represent?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Identity / Legitimacy</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"We're the Business Loan Division. We help connect business owners to the right lending programs through our partner network."</div>
-    </div></div>
+  <div data-rid="1" data-color="#14b8a6" data-label="Identity / Legitimacy" data-title='"Which company do you represent?"'>
+    <div class="rebuttal-script">"We're the Business Loan Division. We help connect business owners to the right lending programs through our partner network."</div>
   </div>
 
   <!-- 2 -->
-  <div class="rebuttal-card" style="border-left:4px solid #ef4444;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#ef4444;flex-shrink:0;font-family:'JetBrains Mono',monospace;">2</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-shield-alt" style="color:#ef4444;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Is this a scam?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Trust / Skepticism</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"I understand the concern. This is a legitimate outreach from the Business Loan Division in California. We work only with licensed financial institutions."</div>
-    </div></div>
+  <div data-rid="2" data-color="#ef4444" data-label="Trust / Skepticism" data-title='"Is this a scam?"'>
+    <div class="rebuttal-script">"I understand the concern. This is a legitimate outreach from the Business Loan Division in California. We work only with licensed financial institutions."</div>
   </div>
 
   <!-- 3 -->
-  <div class="rebuttal-card" style="border-left:4px solid #f97316;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#f97316;flex-shrink:0;font-family:'JetBrains Mono',monospace;">3</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-envelope" style="color:#f97316;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Can you email me something first?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Delay Tactic</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Once I connect you with the senior advisor, they can send you all the information directly. I just need to confirm your business details first."</div>
-    </div></div>
+  <div data-rid="3" data-color="#f97316" data-label="Delay Tactic" data-title='"Can you email me something first?"'>
+    <div class="rebuttal-script">"Once I connect you with the senior advisor, they can send you all the information directly. I just need to confirm your business details first."</div>
   </div>
 
   <!-- 4 -->
-  <div class="rebuttal-card" style="border-left:4px solid #eab308;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(234,179,8,0.2);border:1px solid rgba(234,179,8,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#eab308;flex-shrink:0;font-family:'JetBrains Mono',monospace;">4</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-phone-slash" style="color:#eab308;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Why are you calling and not emailing?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Channel Objection</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Phone is the quickest way to confirm eligibility and make sure the right person gets connected. It only takes a minute."</div>
-    </div></div>
+  <div data-rid="4" data-color="#eab308" data-label="Channel Objection" data-title='"Why are you calling and not emailing?"'>
+    <div class="rebuttal-script">"Phone is the quickest way to confirm eligibility and make sure the right person gets connected. It only takes a minute."</div>
   </div>
 
   <!-- 5 -->
-  <div class="rebuttal-card" style="border-left:4px solid #3b82f6;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#3b82f6;flex-shrink:0;font-family:'JetBrains Mono',monospace;">5</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-university" style="color:#3b82f6;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Are you a bank?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Entity Clarification</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"No, we're a direct private lender. We work with business-funding programs that provide working capital and lines of credit directly."</div>
-    </div></div>
+  <div data-rid="5" data-color="#3b82f6" data-label="Entity Clarification" data-title='"Are you a bank?"'>
+    <div class="rebuttal-script">"No, we're a direct private lender. We work with business-funding programs that provide working capital and lines of credit directly."</div>
   </div>
 
   <!-- 6 -->
-  <div class="rebuttal-card" style="border-left:4px solid #a855f7;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#a855f7;flex-shrink:0;font-family:'JetBrains Mono',monospace;">6</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-chart-line" style="color:#a855f7;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"My credit score is bad."</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Credit Concern</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Totally understood — but a lower score doesn't disqualify you. We look at your full picture, not just credit. You may still qualify."</div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+  <div data-rid="6" data-color="#a855f7" data-label="Credit Concern" data-title='"My credit score is bad."'>
+    <div class="rebuttal-script">"Totally understood — but a lower score doesn't disqualify you. We look at your full picture, not just credit. You may still qualify."</div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 7 -->
-  <div class="rebuttal-card" style="border-left:4px solid #ec4899;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(236,72,153,0.2);border:1px solid rgba(236,72,153,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#ec4899;flex-shrink:0;font-family:'JetBrains Mono',monospace;">7</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-hand-paper" style="color:#ec4899;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"I don't need a loan."</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Not Interested</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Fair enough. Do you see any cash flow gaps or growth opportunities coming up in the next 3–6 months?"</div>
-      <div class="rebuttal-script" style="margin-top:8px;border-left-color:var(--muted);">"Sometimes it helps to be pre-qualified so the funding is ready when you need it." — <em style="color:var(--muted2);">Wait, let them talk first.</em></div>
-      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> See how they respond before moving on.</div>
-    </div></div>
+  <div data-rid="7" data-color="#ec4899" data-label="Not Interested" data-title='"I don\'t need a loan."'>
+    <div class="rebuttal-script">"Fair enough. Do you see any cash flow gaps or growth opportunities coming up in the next 3–6 months?"</div>
+    <div class="rebuttal-script" style="margin-top:8px;border-left-color:var(--muted);">"Sometimes it helps to be pre-qualified so the funding is ready when you need it." — <em style="color:var(--muted2);">Wait, let them talk first.</em></div>
+    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> See how they respond before moving on.</div>
   </div>
 
   <!-- 8 -->
-  <div class="rebuttal-card" style="border-left:4px solid #06b6d4;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(6,182,212,0.2);border:1px solid rgba(6,182,212,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#06b6d4;flex-shrink:0;font-family:'JetBrains Mono',monospace;">8</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-question-circle" style="color:#06b6d4;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Why don't you have my information?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Data / Verification</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"We pull from multiple sources, but we always verify directly with you to make sure everything is accurate. Once confirmed, we can match you with the right options."</div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+  <div data-rid="8" data-color="#06b6d4" data-label="Data / Verification" data-title='"Why don\'t you have my information?"'>
+    <div class="rebuttal-script">"We pull from multiple sources, but we always verify directly with you to make sure everything is accurate. Once confirmed, we can match you with the right options."</div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 9 -->
-  <div class="rebuttal-card" style="border-left:4px solid #84cc16;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(132,204,22,0.2);border:1px solid rgba(132,204,22,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#84cc16;flex-shrink:0;font-family:'JetBrains Mono',monospace;">9</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(132,204,22,0.1);border:1px solid rgba(132,204,22,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-percent" style="color:#84cc16;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"What is the interest rate?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Rate Question</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Rates depend on your specific risk and credit profile — but the real question is how fast the funding helps your business grow. Our specialist will go over all of that once we confirm you're pre-qualified."</div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+  <div data-rid="9" data-color="#84cc16" data-label="Rate Question" data-title='"What is the interest rate?"'>
+    <div class="rebuttal-script">"Rates depend on your specific risk and credit profile — but the real question is how fast the funding helps your business grow. Our specialist will go over all of that once we confirm you're pre-qualified."</div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 10 -->
-  <div class="rebuttal-card" style="border-left:4px solid #f43f5e;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(244,63,94,0.2);border:1px solid rgba(244,63,94,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#f43f5e;flex-shrink:0;font-family:'JetBrains Mono',monospace;">10</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-tags" style="color:#f43f5e;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"I found a cheaper option elsewhere."</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Competitor / Price</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Smart to shop around. Just know that cheaper on the surface isn't always better — hidden costs and strict terms add up. Our specialist can do a side-by-side so you're truly getting the best deal. Sound fair?"</div>
-      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait for their response.</div>
-    </div></div>
+  <div data-rid="10" data-color="#f43f5e" data-label="Competitor / Price" data-title='"I found a cheaper option elsewhere."'>
+    <div class="rebuttal-script">"Smart to shop around. Just know that cheaper on the surface isn't always better — hidden costs and strict terms add up. Our specialist can do a side-by-side so you're truly getting the best deal. Sound fair?"</div>
+    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait for their response.</div>
   </div>
 
   <!-- 11 -->
-  <div class="rebuttal-card" style="border-left:4px solid #8b5cf6;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#8b5cf6;flex-shrink:0;font-family:'JetBrains Mono',monospace;">11</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-lock" style="color:#8b5cf6;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"How did you get my information?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Privacy Concern</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"Totally fair question. We work with a network of trusted financial partners — if you've ever inquired about business financing, your info may have been shared to match you with the best options. Your privacy is fully protected."</div>
-      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait — then go back to where you left off.</div>
-    </div></div>
+  <div data-rid="11" data-color="#8b5cf6" data-label="Privacy Concern" data-title='"How did you get my information?"'>
+    <div class="rebuttal-script">"Totally fair question. We work with a network of trusted financial partners — if you've ever inquired about business financing, your info may have been shared to match you with the best options. Your privacy is fully protected."</div>
+    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait — then go back to where you left off.</div>
   </div>
 
   <!-- 12 -->
-  <div class="rebuttal-card" style="border-left:4px solid #6366f1;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#6366f1;flex-shrink:0;font-family:'JetBrains Mono',monospace;">12</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-sitemap" style="color:#818cf8;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"What is the name of the company?" — Full Flow</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Company Identity</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="12" data-color="#6366f1" data-label="Company Identity" data-title='"What is the name of the company?" — Full Flow'>
+    <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">First Response</strong>"We are the Business Loan Division. We work with multiple financial lenders and match you with the right one based on your specific situation."</div>
+    <div style="font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:6px 0;">↓ If they push back: "But that doesn't give me the name of the company"</div>
+    <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Hold Firm — Stay Calm</strong>"Like I said, Sir/Ma'am, we are the Business Loan Division. When I connect you with the senior advisor, they will go over exactly who we represent — but before I do that, I just need to ask you a few simple questions, if that's okay."</div>
+    <div class="rebuttal-tip" style="margin-bottom:10px;"><i class="fas fa-arrow-right"></i> Immediately go back into qualifying questions.</div>
+    <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">5 Ways They Might Ask — & How to Handle Each</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 1 — "What's the name of the company you're from?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're the Business Loan Division — we're the verification team that connects you with the right lender. The advisor you'll speak with will introduce themselves fully."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 2 — "Are you calling from a bank? Which one?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're not a bank — we're the Business Loan Division. We work across multiple lenders and match you to the best fit. That's exactly why we verify first."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 3 — "I need a company name before I answer anything."</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"Absolutely — the Business Loan Division. And once I get you to the senior advisor, they'll provide full company details. I just need 2 minutes to verify you qualify first."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 4 — "Can you send me your company website or email?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"The senior advisor can absolutely send that over once you're connected. Right now I just need to confirm a few details to make sure we can actually help you."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 5 — "I've never heard of you — how do I know you're legit?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"That's a fair point. We're the Business Loan Division — a licensed verification team based in California. We don't ask for money, we don't charge fees. We simply verify and connect. Your advisor will confirm everything."</p></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">First Response</strong>"We are the Business Loan Division. We work with multiple financial lenders and match you with the right one based on your specific situation."</div>
-      <div style="font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:6px 0;">↓ If they push back: "But that doesn't give me the name of the company"</div>
-      <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Hold Firm — Stay Calm</strong>"Like I said, Sir/Ma'am, we are the Business Loan Division. When I connect you with the senior advisor, they will go over exactly who we represent — but before I do that, I just need to ask you a few simple questions, if that's okay."</div>
-      <div class="rebuttal-tip" style="margin-bottom:10px;"><i class="fas fa-arrow-right"></i> Immediately go back into qualifying questions.</div>
-      <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">5 Ways They Might Ask — & How to Handle Each</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 1 — "What's the name of the company you're from?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're the Business Loan Division — we're the verification team that connects you with the right lender. The advisor you'll speak with will introduce themselves fully."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 2 — "Are you calling from a bank? Which one?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're not a bank — we're the Business Loan Division. We work across multiple lenders and match you to the best fit. That's exactly why we verify first."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 3 — "I need a company name before I answer anything."</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"Absolutely — the Business Loan Division. And once I get you to the senior advisor, they'll provide full company details. I just need 2 minutes to verify you qualify first."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 4 — "Can you send me your company website or email?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"The senior advisor can absolutely send that over once you're connected. Right now I just need to confirm a few details to make sure we can actually help you."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 5 — "I've never heard of you — how do I know you're legit?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"That's a fair point. We're the Business Loan Division — a licensed verification team based in California. We don't ask for money, we don't charge fees. We simply verify and connect. Your advisor will confirm everything."</p></div>
-      </div>
-    </div></div>
   </div>
 
   <!-- 13 -->
-  <div class="rebuttal-card" style="border-left:4px solid #10b981;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#10b981;flex-shrink:0;font-family:'JetBrains Mono',monospace;">13</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-file-invoice-dollar" style="color:#10b981;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"What type of loan is this?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Loan Type Inquiry</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="13" data-color="#10b981" data-label="Loan Type Inquiry" data-title='"What type of loan is this?"'>
+    <div class="rebuttal-script">"We deal with lines of credit and working capital. As I mentioned, we are a direct, private lender — these are not government-backed loans. The senior advisor will be able to explain everything in more detail for you. We can go ahead with the questions if you're still interested."</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
+      <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:#10b981;letter-spacing:0.08em;margin-bottom:3px;">✓ We Offer</div><div style="font-size:0.82rem;font-weight:700;color:white;">Lines of Credit</div><div style="font-size:0.82rem;font-weight:700;color:white;">Working Capital</div></div>
+      <div style="background:rgba(100,116,139,0.08);border:1px solid rgba(100,116,139,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:3px;">✗ Not This</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">Government-Backed</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">SBA / Federal Loans</div></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"We deal with lines of credit and working capital. As I mentioned, we are a direct, private lender — these are not government-backed loans. The senior advisor will be able to explain everything in more detail for you. We can go ahead with the questions if you're still interested."</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
-        <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:#10b981;letter-spacing:0.08em;margin-bottom:3px;">✓ We Offer</div><div style="font-size:0.82rem;font-weight:700;color:white;">Lines of Credit</div><div style="font-size:0.82rem;font-weight:700;color:white;">Working Capital</div></div>
-        <div style="background:rgba(100,116,139,0.08);border:1px solid rgba(100,116,139,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:3px;">✗ Not This</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">Government-Backed</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">SBA / Federal Loans</div></div>
-      </div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 14 -->
-  <div class="rebuttal-card" style="border-left:4px solid #f59e0b;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#f59e0b;flex-shrink:0;font-family:'JetBrains Mono',monospace;">14</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-clipboard-check" style="color:#f59e0b;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"If I'm already pre-qualified, why do you need more questions?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Pre-Qualification Pushback</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
-    </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div class="rebuttal-script">"I completely understand how that sounds — pre-qualified simply means you meet the general criteria based on the basic info we have. These few questions make sure we match you with the right program and the lender most likely to approve you. If we skip this step, it could lead to delays or even a mismatch, and I want to make sure you get the best possible offer without wasting your time."</div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+  <div data-rid="14" data-color="#f59e0b" data-label="Pre-Qualification Pushback" data-title='"If I\'m already pre-qualified, why do you need more questions?"'>
+    <div class="rebuttal-script">"I completely understand how that sounds — pre-qualified simply means you meet the general criteria based on the basic info we have. These few questions make sure we match you with the right program and the lender most likely to approve you. If we skip this step, it could lead to delays or even a mismatch, and I want to make sure you get the best possible offer without wasting your time."</div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 15 -->
-  <div class="rebuttal-card" style="border-left:4px solid #0ea5e9;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(14,165,233,0.2);border:1px solid rgba(14,165,233,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#0ea5e9;flex-shrink:0;font-family:'JetBrains Mono',monospace;">15</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(14,165,233,0.1);border:1px solid rgba(14,165,233,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-user-times" style="color:#0ea5e9;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"I didn't apply for a loan — who applied?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Unsolicited Outreach</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="15" data-color="#0ea5e9" data-label="Unsolicited Outreach" data-title='"I didn\'t apply for a loan — who applied?"'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"No one applied on your behalf — your business information came through one of our financial partner networks. We reach out to business owners who appear to meet our criteria. You're not obligated to proceed, but since you're on the line, can I ask a few quick questions?"</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's a great question — no application was submitted for you. We work with a network of data partners and your business details indicated you may qualify for funding. We're simply reaching out to verify eligibility."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Nobody applied — we identified your business as a potential match through our partner network and reached out directly. There's no commitment here, I just need to verify a few things."</p></div>
+      <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:9px;padding:10px 13px;display:flex;gap:8px;align-items:flex-start;"><i class="fas fa-lightbulb" style="color:#f59e0b;margin-top:2px;flex-shrink:0;"></i><div><p style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f59e0b;letter-spacing:0.08em;margin-bottom:3px;">If They Say They DID Apply Before</p><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"If you applied for a loan before, that's likely why we're reaching out to you."</p></div></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"No one applied on your behalf — your business information came through one of our financial partner networks. We reach out to business owners who appear to meet our criteria. You're not obligated to proceed, but since you're on the line, can I ask a few quick questions?"</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's a great question — no application was submitted for you. We work with a network of data partners and your business details indicated you may qualify for funding. We're simply reaching out to verify eligibility."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Nobody applied — we identified your business as a potential match through our partner network and reached out directly. There's no commitment here, I just need to verify a few things."</p></div>
-        <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:9px;padding:10px 13px;display:flex;gap:8px;align-items:flex-start;"><i class="fas fa-lightbulb" style="color:#f59e0b;margin-top:2px;flex-shrink:0;"></i><div><p style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f59e0b;letter-spacing:0.08em;margin-bottom:3px;">If They Say They DID Apply Before</p><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"If you applied for a loan before, that's likely why we're reaching out to you."</p></div></div>
-      </div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 16 -->
-  <div class="rebuttal-card" style="border-left:4px solid #d946ef;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(217,70,239,0.2);border:1px solid rgba(217,70,239,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#d946ef;flex-shrink:0;font-family:'JetBrains Mono',monospace;">16</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(217,70,239,0.1);border:1px solid rgba(217,70,239,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-voicemail" style="color:#d946ef;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Your voicemail said I'm already approved."</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Pre-Approval Confusion</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="16" data-color="#d946ef" data-label="Pre-Approval Confusion" data-title='"Your voicemail said I\'m already approved."'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"I understand how that sounds — what that means is your business profile met our general criteria, which is why we reached out. Full approval happens after the senior advisor reviews your details. These questions just help us get you to the right program."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Pre-approved simply means you cleared the first threshold based on basic info. The advisor confirms the actual offer — I just need to verify a couple of things so we match you with the right lender."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Think of it like a pre-screen — your business appeared to qualify based on initial criteria. The senior advisor locks in the real numbers once I confirm your details. Can we take 2 minutes to do that now?"</p></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"I understand how that sounds — what that means is your business profile met our general criteria, which is why we reached out. Full approval happens after the senior advisor reviews your details. These questions just help us get you to the right program."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Pre-approved simply means you cleared the first threshold based on basic info. The advisor confirms the actual offer — I just need to verify a couple of things so we match you with the right lender."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Think of it like a pre-screen — your business appeared to qualify based on initial criteria. The senior advisor locks in the real numbers once I confirm your details. Can we take 2 minutes to do that now?"</p></div>
-      </div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 17 -->
-  <div class="rebuttal-card" style="border-left:4px solid #22c55e;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#22c55e;flex-shrink:0;font-family:'JetBrains Mono',monospace;">17</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-map-marker-alt" style="color:#22c55e;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"Where is your company located?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Location Question</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="17" data-color="#22c55e" data-label="Location Question" data-title='"Where is your company located?"'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We're based in California. We operate nationally and work with lenders across the country to match business owners with the right funding programs."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Our offices are in California — we're a national operation so we work with business owners all across the U.S. through our lender network."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"California-based. We work with business owners nationwide — the senior advisor can give you the full details on our operations when you're connected."</p></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We're based in California. We operate nationally and work with lenders across the country to match business owners with the right funding programs."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Our offices are in California — we're a national operation so we work with business owners all across the U.S. through our lender network."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"California-based. We work with business owners nationwide — the senior advisor can give you the full details on our operations when you're connected."</p></div>
-      </div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 18 -->
-  <div class="rebuttal-card" style="border-left:4px solid #fb923c;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(251,146,60,0.2);border:1px solid rgba(251,146,60,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#fb923c;flex-shrink:0;font-family:'JetBrains Mono',monospace;">18</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-store" style="color:#fb923c;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"What's the name of my business / how did you approve me without knowing it?"</div><div style="font-size:0.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Business Name Challenge</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="18" data-color="#fb923c" data-label="Business Name Challenge" data-title='"What\'s the name of my business / how did you approve me without knowing it?"'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's exactly why I'm calling — we have some basic information but we need to verify the details directly with you, including your business name. That's what these questions are for, so we can confirm everything is accurate before connecting you."</p></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Great question — we pulled your contact info from our partner network, but we always verify directly with the owner to make sure everything is correct. So let's start there — what's the name of your business?"</p></div>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's exactly why I'm calling — we have some basic information but we need to verify the details directly with you, including your business name. That's what these questions are for, so we can confirm everything is accurate before connecting you."</p></div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Great question — we pulled your contact info from our partner network, but we always verify directly with the owner to make sure everything is correct. So let's start there — what's the name of your business?"</p></div>
-      </div>
-      <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-    </div></div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   <!-- 19 -->
-  <div class="rebuttal-card" style="border-left:4px solid #f43f5e;">
-    <div class="rebuttal-header" onclick="toggleR(this)">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-        <div style="width:22px;height:22px;border-radius:7px;background:rgba(244,63,94,0.2);border:1px solid rgba(244,63,94,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#f43f5e;flex-shrink:0;font-family:'JetBrains Mono',monospace;">19</div>
-        <div style="width:28px;height:28px;border-radius:8px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-dollar-sign" style="color:#f43f5e;font-size:11px;"></i></div>
-        <div style="min-width:0;"><div class="rebuttal-objection">"We don't make $20K a month."</div><div style="font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Revenue — Hard Disqualifier</div></div>
-      </div>
-      <i class="fas fa-chevron-down rebuttal-arrow"></i>
+  <div data-rid="19" data-color="#f43f5e" data-label="Revenue — Hard Disqualifier" data-title='"We don\'t make $20K a month."'>
+    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <i class="fas fa-exclamation-triangle" style="color:#f43f5e;font-size:13px;flex-shrink:0;"></i>
+      <span style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;">Hard Disqualifier — Do not push past this</span>
     </div>
-    <div class="rebuttal-body"><div class="rebuttal-inner">
-      <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-        <i class="fas fa-exclamation-triangle" style="color:#f43f5e;font-size:13px;flex-shrink:0;"></i>
-        <span style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;">Hard Disqualifier — Do not push past this</span>
-      </div>
-      <div class="rebuttal-script">"I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately the minimum threshold is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."</div>
-      <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier — wish them well and move on.</div>
-    </div></div>
+    <div class="rebuttal-script">"I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately the minimum threshold is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."</div>
+    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier — wish them well and move on.</div>
   </div>
+
+  </div><!-- end rebuttal-data -->
 
 </div>
 
@@ -1181,7 +1112,46 @@
     }
   }
 
-  // ===== REBUTTALS =====
+  // ===== REBUTTALS PILL UI =====
+  function openRebuttal(id, btn) {
+    // toggle off if already active
+    if (btn.classList.contains('active')) {
+      btn.classList.remove('active');
+      document.getElementById('rebuttal-panel').style.display = 'none';
+      return;
+    }
+    // deactivate all pills
+    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+
+    const data = document.querySelector('#rebuttal-data [data-rid="'+id+'"]');
+    const color = data.getAttribute('data-color');
+    const label = data.getAttribute('data-label');
+    const title = data.getAttribute('data-title');
+    const bodyHTML = data.innerHTML;
+
+    const panel = document.getElementById('rebuttal-panel');
+    panel.innerHTML = `
+      <div class="r-panel" style="border-left:4px solid ${color}">
+        <div class="r-panel-header" style="background:rgba(0,0,0,0.18)">
+          <div>
+            <div class="r-panel-title">${title}</div>
+            <div class="r-panel-label" style="color:${color}">${label}</div>
+          </div>
+          <button class="r-panel-close" onclick="closeRebuttal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+        <div class="r-panel-body">${bodyHTML}</div>
+      </div>`;
+    panel.style.display = 'block';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function closeRebuttal() {
+    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
+    document.getElementById('rebuttal-panel').style.display = 'none';
+  }
+
+  // ===== REBUTTALS (legacy, kept for lawyer drilldown card) =====
   function toggleR(header) {
     const body = header.nextElementSibling;
     const arrow = header.querySelector('.rebuttal-arrow');
