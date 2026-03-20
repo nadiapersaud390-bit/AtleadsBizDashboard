@@ -372,6 +372,101 @@
   .r-panel-close:hover { background: rgba(168,85,247,0.2); color: white; }
   .r-panel-body { padding: 18px 20px; }
 
+  /* REBUTTAL SEARCH */
+  .rebuttal-search-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .rebuttal-search-wrap i.search-icon {
+    position: absolute;
+    left: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 0.85rem; pointer-events: none;
+  }
+  .rebuttal-search-wrap i.clear-icon {
+    position: absolute;
+    right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 0.8rem;
+    cursor: pointer; transition: color 0.15s;
+    display: none;
+  }
+  .rebuttal-search-wrap i.clear-icon:hover { color: var(--text); }
+  .rebuttal-search-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    color: white;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    padding: 13px 44px 13px 44px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .rebuttal-search-input:focus {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.13);
+  }
+  .rebuttal-search-input::placeholder { color: var(--muted); }
+
+  .r-search-results {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .r-search-results.visible { display: flex; }
+  .r-search-result-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+  }
+  .r-search-result-card:hover {
+    border-color: var(--accent2);
+    background: rgba(168,85,247,0.04);
+  }
+  .r-search-result-header {
+    padding: 12px 18px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .r-search-result-objection {
+    font-family: 'Inter', sans-serif; font-weight: 700;
+    font-size: 0.92rem; color: white; flex: 1;
+  }
+  .r-search-result-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 3px 9px; border-radius: 20px;
+    background: rgba(168,85,247,0.12);
+    border: 1px solid rgba(168,85,247,0.25);
+    color: var(--accent3); white-space: nowrap; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .r-search-result-body { padding: 14px 18px; }
+  .r-no-results {
+    display: none;
+    text-align: center;
+    padding: 28px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 18px;
+  }
+  .r-no-results.visible { display: block; }
+  mark.r-highlight {
+    background: rgba(168,85,247,0.3);
+    color: white;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
   /* QUICK REF */
   .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
   .quick-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; }
@@ -904,7 +999,28 @@
 <div id="page-rebuttals" class="page">
   <div class="section-label">Objection Handling</div>
   <div class="section-title">Rebuttals</div>
-  <div class="section-sub">Select an objection below — the full response will appear instantly.</div>
+  <div class="section-sub">Search what the customer is saying — or tap a pill to get your response instantly.</div>
+
+  <!-- REBUTTAL SEARCH -->
+  <div class="rebuttal-search-wrap">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      class="rebuttal-search-input"
+      id="rebuttalSearchInput"
+      type="text"
+      placeholder='Type what the customer is saying… e.g. "I don\'t need a loan"'
+      autocomplete="off"
+      oninput="handleRebuttalSearch(this.value)"
+    >
+    <i class="fas fa-times clear-icon" id="rebuttalClearBtn" onclick="clearRebuttalSearch()"></i>
+  </div>
+
+  <!-- LIVE SEARCH RESULTS -->
+  <div class="r-search-results" id="rebuttalSearchResults"></div>
+  <div class="r-no-results" id="rebuttalNoResults">
+    <i class="fas fa-comment-slash" style="font-size:1.4rem;margin-bottom:10px;display:block;color:var(--accent2);opacity:0.5;"></i>
+    No matching rebuttals found. Try different keywords or browse the pills below.
+  </div>
 
   <!-- PILL SELECTOR -->
   <div id="rebuttal-pills" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
@@ -920,13 +1036,14 @@
     <button class="r-pill" onclick="openRebuttal(10,this)">Found cheaper option</button>
     <button class="r-pill" onclick="openRebuttal(11,this)">How'd you get my info?</button>
     <button class="r-pill" onclick="openRebuttal(12,this)">What's the company name?</button>
-    <button class="r-pill" onclick="openRebuttal(13,this)">What type of loan?</button>
+    <button class="r-pill" onclick="openRebuttal(13,this)">What type of loan? / MCA, SBA?</button>
     <button class="r-pill" onclick="openRebuttal(14,this)">Already pre-qualified?</button>
     <button class="r-pill" onclick="openRebuttal(15,this)">I didn't apply</button>
     <button class="r-pill" onclick="openRebuttal(16,this)">Voicemail said approved</button>
     <button class="r-pill" onclick="openRebuttal(17,this)">Where are you located?</button>
     <button class="r-pill" onclick="openRebuttal(18,this)">What's my business name?</button>
     <button class="r-pill r-pill-red" onclick="openRebuttal(19,this)">Under $20K/month</button>
+    <button class="r-pill" onclick="openRebuttal(20,this)">How am I qualified?</button>
   </div>
 
   <!-- DETAIL PANEL -->
@@ -1017,12 +1134,76 @@
   </div>
 
   <!-- 13 -->
-  <div data-rid="13" data-color="#10b981" data-label="Loan Type Inquiry" data-title='"What type of loan is this?"'>
-    <div class="rebuttal-script">"We deal with lines of credit and working capital. As I mentioned, we are a direct, private lender — these are not government-backed loans. The senior advisor will be able to explain everything in more detail for you. We can go ahead with the questions if you're still interested."</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;">
-      <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:#10b981;letter-spacing:0.08em;margin-bottom:3px;">✓ We Offer</div><div style="font-size:0.82rem;font-weight:700;color:white;">Lines of Credit</div><div style="font-size:0.82rem;font-weight:700;color:white;">Working Capital</div></div>
-      <div style="background:rgba(100,116,139,0.08);border:1px solid rgba(100,116,139,0.2);border-radius:8px;padding:9px 12px;text-align:center;"><div style="font-size:0.62rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:3px;">✗ Not This</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">Government-Backed</div><div style="font-size:0.82rem;font-weight:700;color:var(--muted2);">SBA / Federal Loans</div></div>
+  <div data-rid="13" data-color="#10b981" data-label="Loan Type Inquiry" data-title='"What type of loan is this? / Do you do MCA, SBA, etc.?"'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
+        <span style="color:#10b981;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Main Script</span>
+        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We work with every major funding type — lines of credit, working capital, merchant cash advances, business term loans, SBA loans, equipment financing, invoice factoring — really the full range. Our senior advisors match you to whichever product fits your business best. That's exactly why I need to ask a few quick questions — so we know which option to put in front of you."</p>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
+        <span style="color:#10b981;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">If They Ask About a Specific Type (e.g. "Do you do MCA?")</span>
+        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Yes, that's one of the options on the table. Whether it ends up being an MCA, a line of credit, a term loan, or something else — the senior advisor will go over all of it with you. My job right now is just to confirm you qualify so we don't waste your time."</p>
+      </div>
     </div>
+
+    <div style="margin:10px 0 8px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);">✅ All Funding Types We Cover</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Merchant Cash Advance</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">MCA — revenue-based, fast</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">SBA Loans</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">SBA 7(a), 504 — gov-backed</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Business Term Loan</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">Lump sum, fixed payments</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Line of Credit</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">Revolving, draw on demand</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Working Capital</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">Short-term operational cash</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Equipment Financing</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">Asset-backed, fixed term</div>
+        </div>
+      </div>
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;grid-column:1/-1;">
+        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:white;">Invoice Factoring / Accounts Receivable</div>
+          <div style="font-size:0.68rem;color:var(--muted2);">Advance on unpaid invoices</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:9px;padding:10px 13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;">
+      <i class="fas fa-star" style="color:#10b981;font-size:0.75rem;flex-shrink:0;margin-top:2px;"></i>
+      <p style="font-size:0.78rem;color:var(--muted2);line-height:1.55;"><strong style="color:white;">Key point:</strong> You don't need to match them to a product — that's the senior advisor's job. Your answer is always <em style="color:white;">"we cover everything, the advisor will find the right fit."</em></p>
+    </div>
+
     <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
@@ -1080,6 +1261,33 @@
     </div>
     <div class="rebuttal-script">"I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately the minimum threshold is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."</div>
     <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier — wish them well and move on.</div>
+  </div>
+
+  <!-- 20 -->
+  <div data-rid="20" data-color="#6366f1" data-label="Pre-Qualification Explanation" data-title='"How am I qualified? / How did you get my info?"'>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
+        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option E — Applied for a Loan</span>
+        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"If you've ever applied for a loan or business funding before, that's likely why we're reaching out. We work with applicants to match them with the best loan option available for their business."</p>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
+        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option G — Soft Inquiry / Pre-Screen</span>
+        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Your business was pre-screened based on general criteria — no application needed on your end. But if you have applied for financing before, that could also be why we have your info."</p>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
+        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option H — Direct & Confident</span>
+        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We only reach out to business owners who either applied for funding or whose business profile meets our criteria. Either way, you're here because something indicated you may qualify — and I just need to confirm a few details."</p>
+      </div>
+
+    </div>
+    <div style="background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.2);border-radius:9px;padding:10px 13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;">
+      <i class="fas fa-lightbulb" style="color:#6366f1;font-size:0.75rem;flex-shrink:0;margin-top:2px;"></i>
+      <p style="font-size:0.78rem;color:var(--muted2);line-height:1.55;"><strong style="color:white;">Pro tip:</strong> Option H works best when they sound skeptical but not hostile. Option E is ideal if they mention they've applied somewhere before. Option G is safest when you're not sure.</p>
+    </div>
+    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
   </div>
 
   </div><!-- end rebuttal-data -->
@@ -1212,6 +1420,193 @@
     const open = body.classList.contains('open');
     body.classList.toggle('open', !open);
     arrow.classList.toggle('open', !open);
+  }
+
+  // ===== REBUTTAL SEARCH (AI-Powered) =====
+  let searchDebounceTimer = null;
+
+  function getRebuttalData() {
+    const items = document.querySelectorAll('#rebuttal-data [data-rid]');
+    return Array.from(items).map(el => ({
+      id: el.getAttribute('data-rid'),
+      color: el.getAttribute('data-color'),
+      label: el.getAttribute('data-label'),
+      title: el.getAttribute('data-title'),
+      bodyHTML: el.innerHTML,
+      searchText: (el.getAttribute('data-title') + ' ' + el.getAttribute('data-label') + ' ' + el.textContent).toLowerCase()
+    }));
+  }
+
+  function handleRebuttalSearch(val) {
+    const q = val.trim();
+    const clearBtn = document.getElementById('rebuttalClearBtn');
+    const resultsWrap = document.getElementById('rebuttalSearchResults');
+    const noResults = document.getElementById('rebuttalNoResults');
+    const pillsWrap = document.getElementById('rebuttal-pills');
+    const panel = document.getElementById('rebuttal-panel');
+
+    clearBtn.style.display = q ? 'block' : 'none';
+
+    if (!q) {
+      resultsWrap.classList.remove('visible');
+      noResults.classList.remove('visible');
+      pillsWrap.style.opacity = '1';
+      panel.style.display = 'none';
+      document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
+      clearTimeout(searchDebounceTimer);
+      return;
+    }
+
+    panel.style.display = 'none';
+    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
+    pillsWrap.style.opacity = '0.35';
+
+    // Debounce — wait 500ms after user stops typing before calling AI
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() => runAISearch(q), 500);
+  }
+
+  async function runAISearch(query) {
+    const resultsWrap = document.getElementById('rebuttalSearchResults');
+    const noResults = document.getElementById('rebuttalNoResults');
+
+    // Show loading state
+    noResults.classList.remove('visible');
+    resultsWrap.classList.add('visible');
+    resultsWrap.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;">
+        <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent2);border-top-color:transparent;animation:spin 0.7s linear infinite;flex-shrink:0;"></div>
+        <div>
+          <div style="font-size:0.85rem;font-weight:700;color:white;margin-bottom:3px;">Reading what the customer said…</div>
+          <div style="font-size:0.75rem;color:var(--muted);">AI is matching the best rebuttals for you</div>
+        </div>
+      </div>
+    `;
+
+    const rebuttalList = getRebuttalData();
+    const rebuttalsForPrompt = rebuttalList.map(r =>
+      `ID ${r.id}: "${r.title}" [${r.label}]`
+    ).join('\n');
+
+    const prompt = `You are a rebuttal-matching assistant for a business loan call center agent.
+
+A customer just said: "${query}"
+
+Available rebuttals:
+${rebuttalsForPrompt}
+
+Rules:
+- Match ONLY rebuttals that directly address what the customer said
+- Understand synonyms and informal phrasing (e.g. "how'd you get my number" = "How did you get my info", "nah I'm good" = "I don't need a loan", "my credit is bad" = "My credit score is bad")
+- If the customer is asking HOW they qualified or why you're calling, match ID 20
+- If the customer hasn't heard of the company or asks if it's real/legit, match ID 2
+- Return 1-3 matches MAX — only the genuinely relevant ones
+- If nothing clearly matches, return empty array — do NOT guess
+- Never return a match just because one word overlaps
+
+Respond ONLY with this exact JSON, no markdown, no explanation:
+{"matches":[1,3],"reason":"one sentence explaining the match"}`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 200,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      const raw = data.content?.[0]?.text || '{"matches":[]}';
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+      const matchedIds = (parsed.matches || []).map(String);
+      const reason = parsed.reason || '';
+
+      if (matchedIds.length === 0) {
+        resultsWrap.classList.remove('visible');
+        noResults.classList.add('visible');
+        return;
+      }
+
+      const matchedRebuttals = matchedIds
+        .map(id => rebuttalList.find(r => r.id === id))
+        .filter(Boolean);
+
+      noResults.classList.remove('visible');
+      resultsWrap.innerHTML = `
+        ${reason ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);border-radius:10px;margin-bottom:6px;">
+          <i class="fas fa-brain" style="color:var(--accent2);font-size:0.8rem;flex-shrink:0;"></i>
+          <span style="font-size:0.78rem;color:var(--muted2);font-style:italic;">${reason}</span>
+        </div>` : ''}
+        ${matchedRebuttals.map(m => `
+          <div class="r-search-result-card" onclick="openRebuttalFromSearch('${m.id}', this)" style="border-left: 3px solid ${m.color}">
+            <div class="r-search-result-header">
+              <div class="r-search-result-objection">${m.title}</div>
+              <div class="r-search-result-label" style="color:${m.color};border-color:${m.color}30;background:${m.color}15">${m.label}</div>
+            </div>
+            <div class="r-search-result-body">${m.bodyHTML}</div>
+          </div>
+        `).join('')}
+      `;
+      resultsWrap.classList.add('visible');
+
+    } catch (err) {
+      // Fallback to keyword search if API fails
+      const q = query.toLowerCase();
+      const fallback = rebuttalList.filter(d => d.searchText.includes(q));
+      if (fallback.length === 0) {
+        resultsWrap.classList.remove('visible');
+        noResults.classList.add('visible');
+      } else {
+        resultsWrap.innerHTML = fallback.map(m => `
+          <div class="r-search-result-card" onclick="openRebuttalFromSearch('${m.id}', this)" style="border-left: 3px solid ${m.color}">
+            <div class="r-search-result-header">
+              <div class="r-search-result-objection">${m.title}</div>
+              <div class="r-search-result-label" style="color:${m.color};border-color:${m.color}30;background:${m.color}15">${m.label}</div>
+            </div>
+            <div class="r-search-result-body">${m.bodyHTML}</div>
+          </div>
+        `).join('');
+        resultsWrap.classList.add('visible');
+      }
+    }
+  }
+
+  function openRebuttalFromSearch(id, card) {
+    document.querySelectorAll('.r-search-result-card').forEach(c => c.style.background = '');
+    card.style.background = 'rgba(168,85,247,0.06)';
+    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
+    const matchingPill = document.querySelector(`.r-pill[onclick*="openRebuttal(${id},"]`);
+    if (matchingPill) matchingPill.classList.add('active');
+    const data = document.querySelector('#rebuttal-data [data-rid="'+id+'"]');
+    const color = data.getAttribute('data-color');
+    const label = data.getAttribute('data-label');
+    const title = data.getAttribute('data-title');
+    const bodyHTML = data.innerHTML;
+    const panel = document.getElementById('rebuttal-panel');
+    panel.innerHTML = `
+      <div class="r-panel" style="border-left:4px solid ${color}">
+        <div class="r-panel-header" style="background:rgba(0,0,0,0.18)">
+          <div>
+            <div class="r-panel-title">${title}</div>
+            <div class="r-panel-label" style="color:${color}">${label}</div>
+          </div>
+          <button class="r-panel-close" onclick="closeRebuttal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+        <div class="r-panel-body">${bodyHTML}</div>
+      </div>`;
+    panel.style.display = 'block';
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function clearRebuttalSearch() {
+    const input = document.getElementById('rebuttalSearchInput');
+    input.value = '';
+    handleRebuttalSearch('');
+    input.focus();
   }
 
   // ===== PRANK CARDS =====
