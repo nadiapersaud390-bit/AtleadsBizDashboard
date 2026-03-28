@@ -147,6 +147,9 @@
     gap: 8px;
     max-width: 860px; margin: 0 auto;
   }
+  .nav-inner.admin-mode {
+    grid-template-columns: repeat(6, 1fr);
+  }
   .nav-tab {
     padding: 13px 8px;
     font-size: 0.74rem; font-weight: 900;
@@ -490,9 +493,278 @@
     .page { padding:18px 14px; }
     .phone-row { flex-direction:column; }
   }
+
+  /* ===== ATL LOGIN SCREEN ===== */
+  #atl-login-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 60%), #07050f;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  #atl-login-overlay.hidden { display: none; }
+  .atl-login-card {
+    background: rgba(15,11,26,0.98);
+    border: 1px solid rgba(168,85,247,0.25);
+    border-radius: 24px;
+    padding: 40px 32px 32px;
+    width: 100%; max-width: 380px;
+    box-shadow: 0 0 60px rgba(124,58,237,0.2);
+    text-align: center;
+  }
+  .atl-login-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.6rem; color: #a855f7; letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .atl-login-sub {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.15em; color: #6b7280; margin-bottom: 28px;
+  }
+  .atl-login-tabs {
+    display: flex; gap: 8px; margin-bottom: 22px;
+  }
+  .atl-login-tab {
+    flex: 1; padding: 10px; border-radius: 10px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(168,85,247,0.15);
+    color: #6b7280; font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .atl-login-tab.active {
+    background: rgba(168,85,247,0.12); border-color: #a855f7; color: #c084fc;
+  }
+  .atl-login-input {
+    width: 100%; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(168,85,247,0.2); border-radius: 12px;
+    color: white; font-size: 0.95rem; padding: 14px 16px;
+    outline: none; font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
+  }
+  .atl-login-input:focus {
+    border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168,85,247,0.12);
+  }
+  .atl-login-input.shake {
+    animation: atlShake 0.4s ease; border-color: #f43f5e;
+  }
+  @keyframes atlShake {
+    0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-7px)} 40%,80%{transform:translateX(7px)}
+  }
+  .atl-login-btn {
+    width: 100%; padding: 15px; border-radius: 12px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: white; font-family: 'Inter', sans-serif;
+    font-weight: 800; font-size: 0.88rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: none; cursor: pointer; margin-top: 4px;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 0 24px rgba(168,85,247,0.3);
+  }
+  .atl-login-btn:hover { opacity: 0.9; }
+  .atl-login-btn:active { transform: scale(0.98); }
+  .atl-login-error {
+    color: #f43f5e; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.04em; min-height: 18px; margin-bottom: 8px;
+  }
+
+  /* ===== ATL AGENT BANNER ===== */
+  #atl-agent-banner {
+    display: none;
+    background: linear-gradient(135deg, rgba(8,5,20,0.99), rgba(4,3,15,0.99));
+    border-bottom: 2px solid rgba(124,58,237,0.4);
+    padding: 6px 14px;
+    position: sticky; top: 0; z-index: 9000;
+    backdrop-filter: blur(20px);
+  }
+  #atl-agent-banner.show { display: flex; align-items: center; }
+  .atl-banner-inner {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; flex-wrap: nowrap; overflow: hidden;
+  }
+  .atl-banner-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+    border: 1px solid rgba(168,85,247,0.5);
+  }
+  .atl-banner-name {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800;
+    color: white; letter-spacing: 0.06em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .atl-banner-role {
+    font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #a855f7; white-space: nowrap;
+  }
+  .atl-banner-div { width:1px; height:20px; background:rgba(255,255,255,0.1); flex-shrink:0; }
+  .atl-banner-item {
+    display: flex; align-items: center; gap: 3px; white-space: nowrap;
+  }
+  .atl-banner-label {
+    color: #6b7280; font-size: 8px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .atl-banner-value { color: white; font-size: 9px; font-weight: 700; }
+  .atl-banner-value.shift { color: #fb923c; }
+  .atl-banner-value.team  { color: #a855f7; }
+  .atl-banner-badge {
+    margin-left: auto; flex-shrink: 0;
+    display: flex; align-items: center; gap: 4px;
+    font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 2px 8px; border-radius: 20px;
+  }
+  .atl-banner-badge.present {
+    background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); color: #22c55e;
+  }
+  .atl-banner-badge.late {
+    background: rgba(251,146,60,0.12); border: 1px solid rgba(251,146,60,0.4); color: #fb923c;
+  }
+  .atl-banner-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: currentColor; animation: atlPulse 1.5s infinite;
+  }
+  @keyframes atlPulse { 0%,100%{opacity:0.45} 50%{opacity:1} }
+  .atl-logout-btn {
+    display: none; align-items: center; gap: 6px;
+    background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.25);
+    border-radius: 10px; padding: 5px 12px; cursor: pointer;
+    color: #f43f5e; font-size: 8px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
+  }
+  .atl-logout-btn:hover { background: rgba(244,63,94,0.18); }
+  .atl-logout-btn.show { display: flex; }
+
 </style>
 </head>
 <body>
+
+
+<!-- ===== ATTENDANCE PAGE ===== -->
+<div id="page-attendance" class="page">
+  <div class="section-label" style="color:#22c55e;">Admin Only</div>
+  <div class="section-title">📋 Today's Attendance</div>
+  <div class="section-sub">Live clock-in log pulled from Google Sheets. Refresh anytime to see the latest entries.</div>
+
+  <!-- Stats row -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+    <div style="background:var(--surface2);border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:16px;text-align:center;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#22c55e;line-height:1;" id="atl-stat-present">—</div>
+      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Present</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid rgba(251,146,60,0.25);border-radius:14px;padding:16px;text-align:center;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#fb923c;line-height:1;" id="atl-stat-late">—</div>
+      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Late</div>
+    </div>
+    <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:14px;padding:16px;text-align:center;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#a855f7;line-height:1;" id="atl-stat-total">—</div>
+      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Total</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+    <input id="atl-att-search" type="text" placeholder="Search name or Ytel ID…" oninput="atlFilterAttendance()"
+      style="flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border2);border-radius:11px;color:white;font-size:0.88rem;padding:11px 16px;outline:none;font-family:'Inter',sans-serif;" />
+    <button onclick="atlLoadAttendance()" id="atl-att-refresh-btn"
+      style="padding:11px 20px;background:linear-gradient(135deg,#166534,#22c55e);color:white;border:none;border-radius:11px;font-family:'Inter',sans-serif;font-weight:800;font-size:0.8rem;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;">
+      <i class="fas fa-rotate-right" id="atl-att-refresh-icon"></i> Refresh
+    </button>
+  </div>
+
+  <!-- Status message -->
+  <div id="atl-att-status" style="text-align:center;padding:32px 20px;display:none;">
+    <div style="width:36px;height:36px;border:3px solid rgba(34,197,94,0.2);border-top-color:#22c55e;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px;"></div>
+    <div style="font-size:0.85rem;color:var(--muted);">Loading attendance…</div>
+  </div>
+  <div id="atl-att-error" style="display:none;background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:12px;padding:16px 18px;color:#f43f5e;font-size:0.85rem;font-weight:600;"></div>
+  <div id="atl-att-empty" style="display:none;text-align:center;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--muted);font-size:0.9rem;">No clock-ins recorded yet today.</div>
+
+  <!-- Table -->
+  <div id="atl-att-table-wrap" style="display:none;overflow:hidden;border:1px solid var(--border2);border-radius:16px;">
+    <table style="width:100%;border-collapse:collapse;" id="atl-att-table">
+      <thead>
+        <tr style="background:var(--surface2);">
+          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">#</th>
+          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Agent</th>
+          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Ytel ID</th>
+          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Clock-In</th>
+          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Status</th>
+        </tr>
+      </thead>
+      <tbody id="atl-att-tbody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:10px;font-size:0.72rem;color:var(--muted);text-align:right;" id="atl-att-lastfetch"></div>
+</div>
+
+<!-- ===== ATL LOGIN OVERLAY ===== -->
+<div id="atl-login-overlay">
+  <div class="atl-login-card">
+    <div class="atl-login-logo">ATLeads</div>
+    <div class="atl-login-sub">Business Dashboard · Clock In</div>
+
+    <div class="atl-login-tabs">
+      <button class="atl-login-tab active" id="atl-tab-agent" onclick="atlSetTab('agent')">🎧 Agent</button>
+      <button class="atl-login-tab" id="atl-tab-admin" onclick="atlSetTab('admin')">🔐 Admin</button>
+    </div>
+
+    <!-- Agent form -->
+    <div id="atl-agent-form">
+      <input id="atl-ytel-input" class="atl-login-input" type="text"
+        placeholder="Enter Ytel ID" autocomplete="off" autocapitalize="characters"
+        oninput="this.value=this.value.toUpperCase()"
+        onkeydown="if(event.key==='Enter')atlAgentLogin()" />
+      <div class="atl-login-error" id="atl-agent-error"></div>
+      <button class="atl-login-btn" onclick="atlAgentLogin()">Clock In →</button>
+    </div>
+
+    <!-- Admin form -->
+    <div id="atl-admin-form" style="display:none;">
+      <input id="atl-admin-name" class="atl-login-input" type="text"
+        placeholder="Admin name" autocomplete="off"
+        onkeydown="if(event.key==='Enter')atlAdminLogin()" />
+      <input id="atl-admin-pass" class="atl-login-input" type="password"
+        placeholder="Password"
+        onkeydown="if(event.key==='Enter')atlAdminLogin()" />
+      <div class="atl-login-error" id="atl-admin-error"></div>
+      <button class="atl-login-btn" onclick="atlAdminLogin()">Access Dashboard →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ATL AGENT BANNER ===== -->
+<div id="atl-agent-banner">
+  <div class="atl-banner-inner">
+    <div class="atl-banner-avatar">🎧</div>
+    <div>
+      <div class="atl-banner-name" id="atl-banner-name">—</div>
+      <div class="atl-banner-role" id="atl-banner-role">ATLeads Agent</div>
+    </div>
+    <div class="atl-banner-div"></div>
+    <div class="atl-banner-item">
+      <span class="atl-banner-label">Team</span>
+      <span class="atl-banner-value team" id="atl-banner-team">—</span>
+    </div>
+    <div class="atl-banner-div"></div>
+    <div class="atl-banner-item">
+      <span class="atl-banner-label">Shift</span>
+      <span class="atl-banner-value shift" id="atl-banner-shift">—</span>
+    </div>
+    <div class="atl-banner-div"></div>
+    <div class="atl-banner-item">
+      <span class="atl-banner-label">Clocked</span>
+      <span class="atl-banner-value" id="atl-banner-time">—</span>
+    </div>
+    <div class="atl-banner-badge present" id="atl-banner-badge">
+      <div class="atl-banner-dot"></div>
+      <span id="atl-banner-badge-text">Present</span>
+    </div>
+    <button class="atl-logout-btn show" id="atl-logout-btn" onclick="atlLogout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
 
 <div class="hero-header">
   <div class="hero-title">ATLeads Business Dashboard</div>
@@ -522,6 +794,7 @@
     <button class="nav-tab" onclick="showPage('rebuttals',this)"><i class="fas fa-comments"></i>Rebuttals</button>
     <button class="nav-tab" onclick="showPage('playbook',this)"><i class="fas fa-bolt"></i>Playbook</button>
     <button class="nav-tab prank" onclick="showPage('prank',this)"><i class="fas fa-fire"></i>Prank</button>
+    <button class="nav-tab admin-only-tab" id="nav-attendance-btn" onclick="showPage('attendance',this)" style="display:none;border-color:rgba(34,197,94,0.3);color:#22c55e;background:rgba(34,197,94,0.05);"><i class="fas fa-clipboard-list"></i>Attendance</button>
   </div>
 </div>
 
@@ -1618,5 +1891,325 @@ Respond ONLY with this exact JSON, no markdown, no explanation:
     if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
   }
 </script>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ATL ATTENDANCE SYSTEM
+// ═══════════════════════════════════════════════════════
+const ATL_URL = 'https://script.google.com/macros/s/AKfycbzgqnB0cijkbZsHpVkc4EIZajZQMN6arhlCYjoX5b0g5KXsJQK0PaYVpmh6LT514fy4uA/exec';
+
+const ATL_ADMINS = [
+  { name: 'Nadia', password: 'GodisLove', level: 'super' },
+  { name: 'Admin', password: '0000',      level: 'secondary' },
+];
+
+let atlCurrentUser = null;
+
+// ── SESSION ──────────────────────────────────────────
+function atlSaveSession(user) {
+  try { sessionStorage.setItem('atl_session', JSON.stringify(user)); } catch(e){}
+}
+function atlLoadSession() {
+  try { return JSON.parse(sessionStorage.getItem('atl_session') || 'null'); } catch(e){ return null; }
+}
+function atlClearSession() {
+  try { sessionStorage.removeItem('atl_session'); } catch(e){}
+}
+
+// ── TABS ─────────────────────────────────────────────
+function atlSetTab(tab) {
+  document.getElementById('atl-tab-agent').classList.toggle('active', tab === 'agent');
+  document.getElementById('atl-tab-admin').classList.toggle('active', tab === 'admin');
+  document.getElementById('atl-agent-form').style.display = tab === 'agent' ? '' : 'none';
+  document.getElementById('atl-admin-form').style.display = tab === 'admin' ? '' : 'none';
+}
+
+// ── SHIFT LATE CHECK ─────────────────────────────────
+function atlParseShiftStart(shiftStr) {
+  if (!shiftStr) return null;
+  const m = shiftStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+  if (!m) return null;
+  let h = parseInt(m[1]), min = parseInt(m[2] || '0');
+  const ampm = m[3].toLowerCase();
+  if (ampm === 'pm' && h !== 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
+  return { h, min };
+}
+function atlIsLate(shiftStr) {
+  const start = atlParseShiftStart(shiftStr);
+  if (!start) return false;
+  const guyana = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Guyana' }));
+  const nowMin = guyana.getHours() * 60 + guyana.getMinutes();
+  const shiftMin = start.h * 60 + start.min;
+  return (nowMin - shiftMin) > 15;
+}
+
+// ── ENTER DASHBOARD ──────────────────────────────────
+function atlEnterDashboard(user) {
+  atlCurrentUser = user;
+  atlSaveSession(user);
+  document.getElementById('atl-login-overlay').classList.add('hidden');
+  showAtlBanner(user);
+
+  // Update agent name in script page
+  const agentNameEls = document.querySelectorAll('#scriptAgentName, .agent-name-ref');
+  agentNameEls.forEach(el => { el.textContent = user.name || 'your name'; });
+
+  // Show Attendance tab + widen nav grid for admins only
+  const attBtn = document.getElementById('nav-attendance-btn');
+  const navInner = document.querySelector('.nav-inner');
+  if (user.role === 'admin') {
+    attBtn.style.display = '';
+    navInner.classList.add('admin-mode');
+    atlLoadAttendance();
+  } else {
+    attBtn.style.display = 'none';
+    navInner.classList.remove('admin-mode');
+  }
+}
+
+// ── BANNER ───────────────────────────────────────────
+function showAtlBanner(user) {
+  const banner = document.getElementById('atl-agent-banner');
+  banner.classList.add('show');
+
+  document.getElementById('atl-banner-name').textContent = user.name || '—';
+  document.getElementById('atl-banner-role').textContent = user.role === 'admin' ? '🔐 Admin Access' : 'ATLeads Agent';
+  document.getElementById('atl-banner-team').textContent = user.team || '—';
+  document.getElementById('atl-banner-shift').textContent = user.shift || '—';
+  document.getElementById('atl-banner-time').textContent = user.clockTime || '—';
+
+  const badge = document.getElementById('atl-banner-badge');
+  const badgeText = document.getElementById('atl-banner-badge-text');
+  if (user.role === 'admin') {
+    badge.className = 'atl-banner-badge present';
+    badgeText.textContent = 'Admin';
+  } else if (user.late) {
+    badge.className = 'atl-banner-badge late';
+    badgeText.textContent = 'Late';
+  } else {
+    badge.className = 'atl-banner-badge present';
+    badgeText.textContent = 'Present';
+  }
+}
+
+// ── AGENT LOGIN ──────────────────────────────────────
+async function atlAgentLogin() {
+  const input = document.getElementById('atl-ytel-input');
+  const errEl = document.getElementById('atl-agent-error');
+  const ytelId = input.value.trim().toUpperCase();
+  if (!ytelId) { atlShake(input); errEl.textContent = '⚠ Enter your Ytel ID'; return; }
+
+  errEl.textContent = '';
+  input.disabled = true;
+
+  let agentName = ytelId, shift = null, team = '', rosterData = null;
+
+  try {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 6000);
+    const resp = await fetch(ATL_URL + '?action=getAgentSchedule&ytelId=' + encodeURIComponent(ytelId) + '&agentName=',
+      { method: 'GET', mode: 'cors', signal: controller.signal });
+    clearTimeout(t);
+    rosterData = await resp.json();
+    if (rosterData && rosterData.found) {
+      agentName = rosterData.name || agentName;
+      shift     = rosterData.shift || null;
+      team      = rosterData.team  || '';
+    }
+  } catch(e) { /* proceed with local id */ }
+
+  const clockTime = new Date().toLocaleTimeString('en-US', {
+    timeZone: 'America/Guyana', hour: '2-digit', minute: '2-digit'
+  });
+  const late = shift ? atlIsLate(shift) : false;
+
+  const user = { name: agentName, ytelId, role: 'agent', team, shift, late, clockTime, rosterData };
+  atlEnterDashboard(user);
+  atlMarkAttendance(ytelId, agentName, late);
+}
+
+// ── ADMIN LOGIN ───────────────────────────────────────
+function atlAdminLogin() {
+  const nameEl = document.getElementById('atl-admin-name');
+  const passEl = document.getElementById('atl-admin-pass');
+  const errEl  = document.getElementById('atl-admin-error');
+  const name = nameEl.value.trim();
+  const pass = passEl.value.trim();
+
+  if (!name || !pass) {
+    errEl.textContent = '⚠ Enter name and password';
+    atlShake(!name ? nameEl : passEl); return;
+  }
+  const admin = ATL_ADMINS.find(a => a.name.toLowerCase() === name.toLowerCase() && a.password === pass);
+  if (!admin) {
+    errEl.textContent = '⚠ Invalid credentials';
+    atlShake(passEl); passEl.value = ''; return;
+  }
+
+  const clockTime = new Date().toLocaleTimeString('en-US', {
+    timeZone: 'America/Guyana', hour: '2-digit', minute: '2-digit'
+  });
+  const user = { name: admin.name, role: 'admin', level: admin.level, team: 'Admin', shift: '—', late: false, clockTime };
+  atlEnterDashboard(user);
+}
+
+// ── LOGOUT ───────────────────────────────────────────
+function atlLogout() {
+  atlCurrentUser = null;
+  atlClearSession();
+  document.getElementById('atl-agent-banner').classList.remove('show');
+  document.getElementById('atl-login-overlay').classList.remove('hidden');
+  document.getElementById('atl-ytel-input').value = '';
+  document.getElementById('atl-ytel-input').disabled = false;
+  document.getElementById('atl-agent-error').textContent = '';
+  document.getElementById('atl-admin-name').value = '';
+  document.getElementById('atl-admin-pass').value = '';
+  document.getElementById('nav-attendance-btn').style.display = 'none';
+  document.querySelector('.nav-inner').classList.remove('admin-mode');
+  atlSetTab('agent');
+  setTimeout(() => document.getElementById('atl-ytel-input').focus(), 300);
+}
+
+// ── MARK ATTENDANCE ───────────────────────────────────
+async function atlMarkAttendance(ytelId, agentName, late) {
+  try {
+    const now = new Date();
+    const params = new URLSearchParams({
+      action: 'attendance',
+      ytelId,
+      name: agentName,
+      status: late ? 'Late' : 'Present',
+      time: now.toLocaleTimeString('en-US', { timeZone:'America/Guyana', hour:'2-digit', minute:'2-digit', second:'2-digit' }),
+      date: now.toLocaleDateString('en-US', { timeZone:'America/Guyana', weekday:'long', year:'numeric', month:'long', day:'numeric' }),
+      timestamp: now.toISOString(),
+    });
+    await fetch(ATL_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    console.log('ATL attendance marked (' + (late ? 'L' : 'P') + ') for', agentName);
+  } catch(e) { console.warn('ATL attendance failed:', e); }
+}
+
+// ── ATTENDANCE DATA ───────────────────────────────────
+let atlAttendanceData = [];
+
+async function atlLoadAttendance() {
+  const statusEl   = document.getElementById('atl-att-status');
+  const errorEl    = document.getElementById('atl-att-error');
+  const emptyEl    = document.getElementById('atl-att-empty');
+  const tableWrap  = document.getElementById('atl-att-table-wrap');
+  const refreshBtn = document.getElementById('atl-att-refresh-btn');
+  const refreshIcon= document.getElementById('atl-att-refresh-icon');
+
+  // Show loading
+  statusEl.style.display = 'block';
+  errorEl.style.display  = 'none';
+  emptyEl.style.display  = 'none';
+  tableWrap.style.display= 'none';
+  refreshIcon.classList.add('fa-spin');
+  refreshBtn.disabled = true;
+
+  try {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 10000);
+    const resp = await fetch(ATL_URL + '?action=getAttendance', {
+      method: 'GET', mode: 'cors', signal: controller.signal
+    });
+    clearTimeout(t);
+    const data = await resp.json();
+
+    statusEl.style.display = 'none';
+    if (!data || !Array.isArray(data.records)) throw new Error('Unexpected response');
+
+    atlAttendanceData = data.records;
+    atlRenderAttendance(atlAttendanceData);
+    document.getElementById('atl-att-lastfetch').textContent =
+      'Last refreshed: ' + new Date().toLocaleTimeString('en-US', { timeZone:'America/Guyana', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  } catch(e) {
+    statusEl.style.display = 'none';
+    errorEl.style.display  = 'block';
+    errorEl.textContent    = '⚠ Could not load attendance. Make sure the Google Sheet script has a getAttendance action. (' + (e.message || e) + ')';
+  } finally {
+    refreshIcon.classList.remove('fa-spin');
+    refreshBtn.disabled = false;
+  }
+}
+
+function atlRenderAttendance(records) {
+  const emptyEl   = document.getElementById('atl-att-empty');
+  const tableWrap = document.getElementById('atl-att-table-wrap');
+  const tbody     = document.getElementById('atl-att-tbody');
+
+  if (!records || records.length === 0) {
+    emptyEl.style.display   = 'block';
+    tableWrap.style.display = 'none';
+    document.getElementById('atl-stat-present').textContent = '0';
+    document.getElementById('atl-stat-late').textContent    = '0';
+    document.getElementById('atl-stat-total').textContent   = '0';
+    return;
+  }
+
+  let present = 0, late = 0;
+  tbody.innerHTML = '';
+  records.forEach((r, i) => {
+    const isLate = (r.status || '').toLowerCase() === 'late';
+    if (isLate) late++; else present++;
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-bottom:1px solid rgba(168,85,247,0.08);transition:background 0.15s;cursor:default;';
+    tr.onmouseenter = () => tr.style.background = 'rgba(168,85,247,0.04)';
+    tr.onmouseleave = () => tr.style.background = '';
+    tr.innerHTML = `
+      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);">${i + 1}</td>
+      <td style="padding:12px 16px;font-weight:700;font-size:0.92rem;color:white;">${escHtml(r.name || '—')}</td>
+      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#a855f7;">${escHtml(r.ytelId || r.ytel_id || '—')}</td>
+      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--muted2);">${escHtml(r.time || r.clockTime || '—')}</td>
+      <td style="padding:12px 16px;">
+        <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:3px 10px;border-radius:20px;
+          ${isLate
+            ? 'background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.4);color:#fb923c;'
+            : 'background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#22c55e;'}">
+          <span style="width:5px;height:5px;border-radius:50%;background:currentColor;"></span>
+          ${isLate ? 'Late' : 'Present'}
+        </span>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('atl-stat-present').textContent = present;
+  document.getElementById('atl-stat-late').textContent    = late;
+  document.getElementById('atl-stat-total').textContent   = records.length;
+  tableWrap.style.display = 'block';
+  emptyEl.style.display   = 'none';
+}
+
+function atlFilterAttendance() {
+  const q = (document.getElementById('atl-att-search').value || '').toLowerCase().trim();
+  if (!q) { atlRenderAttendance(atlAttendanceData); return; }
+  const filtered = atlAttendanceData.filter(r =>
+    (r.name || '').toLowerCase().includes(q) ||
+    (r.ytelId || r.ytel_id || '').toLowerCase().includes(q)
+  );
+  atlRenderAttendance(filtered);
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── SHAKE HELPER ─────────────────────────────────────
+function atlShake(el) {
+  el.classList.remove('shake');
+  void el.offsetWidth;
+  el.classList.add('shake');
+  setTimeout(() => el.classList.remove('shake'), 500);
+}
+
+// ── RESTORE SESSION ──────────────────────────────────
+(function() {
+  const saved = atlLoadSession();
+  if (saved) { atlEnterDashboard(saved); return; }
+  setTimeout(() => document.getElementById('atl-ytel-input').focus(), 400);
+})();
+</script>
+
 </body>
 </html>
