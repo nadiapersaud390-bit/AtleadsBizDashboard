@@ -2040,7 +2040,7 @@ Respond ONLY with this exact JSON, no markdown, no explanation:
 // ═══════════════════════════════════════════════════════
 // ATL ATTENDANCE SYSTEM
 // ═══════════════════════════════════════════════════════
-const ATL_URL = 'https://script.google.com/macros/s/AKfycbyUVOaqMKc4VWtk4zDeDha4ljbUcI_AAj_RhG1EfxeHb6bBKphGyfgy6obKMM74vKg-Vw/exec';
+const ATL_URL = 'https://script.google.com/macros/s/AKfycbzhXjM9RpczH8bTmCTCjsaUm31l4YMnmbjN5H4u4cMMQ7e5uha_IZxjLQgAut6TpAXX-w/exec';
 
 const ATL_ADMINS = [
   { name: 'Nadia', password: 'GodisLove', level: 'super' },
@@ -2144,8 +2144,6 @@ function showAtlBanner(user) {
 }
 
 // ── AGENT LOGIN ──────────────────────────────────────
-let atlPendingUser = null; // holds user data while modal is open
-
 async function atlAgentLogin() {
   const input = document.getElementById('atl-ytel-input');
   const errEl = document.getElementById('atl-agent-error');
@@ -2155,10 +2153,9 @@ async function atlAgentLogin() {
   errEl.textContent = '';
   input.disabled = true;
 
-  // Show loading state on button
   const btn = document.querySelector('#atl-agent-form .atl-login-btn');
   const origBtnText = btn.textContent;
-  btn.textContent = 'Looking up…';
+  btn.textContent = 'Clocking in…';
   btn.disabled = true;
 
   let agentName = ytelId, shift = null, team = '', rosterData = null;
@@ -2175,7 +2172,7 @@ async function atlAgentLogin() {
       shift     = rosterData.shift || null;
       team      = rosterData.team  || '';
     }
-  } catch(e) { /* proceed with local id */ }
+  } catch(e) { /* proceed with ytelId as name */ }
 
   btn.textContent = origBtnText;
   btn.disabled = false;
@@ -2184,88 +2181,19 @@ async function atlAgentLogin() {
   const clockTime = new Date().toLocaleTimeString('en-US', {
     timeZone: 'America/Guyana', hour: '2-digit', minute: '2-digit'
   });
-  const autoLate = shift ? atlIsLate(shift) : false;
 
-  atlPendingUser = { name: agentName, ytelId, role: 'agent', team, shift, late: autoLate, clockTime, rosterData };
-  atlShowStatusModal(atlPendingUser, autoLate);
-}
-
-// ── STATUS CONFIRMATION MODAL ─────────────────────────
-function atlShowStatusModal(user, autoLate) {
-  const modal     = document.getElementById('atl-status-modal');
-  const hasShift  = !!(user.shift && user.shift !== '—' && user.shift.trim());
+  // Auto-determine status from shift — no user input needed
+  const autoLate   = shift ? atlIsLate(shift) : false;
   const autoStatus = autoLate ? 'late' : 'present';
 
-  document.getElementById('atl-modal-agent-name').textContent  = user.name;
-  document.getElementById('atl-modal-agent-id').textContent    = user.ytelId;
-  document.getElementById('atl-modal-agent-team').textContent  = user.team || '—';
-  document.getElementById('atl-modal-agent-shift').textContent = user.shift || 'Not found';
+  const user = {
+    name: agentName, ytelId, role: 'agent',
+    team, shift, late: autoLate,
+    statusOverride: autoStatus, clockTime, rosterData
+  };
 
-  // Show/hide auto-detected note
-  const autoNote  = document.getElementById('atl-modal-auto-note');
-  const manualNote= document.getElementById('atl-modal-manual-note');
-  if (hasShift) {
-    autoNote.style.display  = '';
-    manualNote.style.display= 'none';
-    autoNote.innerHTML = autoLate
-      ? `⏰ <strong>Auto-detected: Late</strong> — logged in more than 15 mins after shift start`
-      : `✅ <strong>Auto-detected: Present</strong> — logged in within 15 mins of shift start`;
-    autoNote.style.color = autoLate ? '#fb923c' : '#22c55e';
-  } else {
-    autoNote.style.display  = 'none';
-    manualNote.style.display= '';
-  }
-
-  // Lock Present/Late options if shift is known — only Absent is freely selectable
-  const presentOpt = document.querySelector('.atl-modal-opt[data-status="present"]');
-  const lateOpt    = document.querySelector('.atl-modal-opt[data-status="late"]');
-  const absentOpt  = document.querySelector('.atl-modal-opt[data-status="absent"]');
-
-  if (hasShift) {
-    // Lock P/L based on shift — dim the non-matching one
-    presentOpt.style.opacity = autoLate ? '0.35' : '1';
-    presentOpt.style.pointerEvents = autoLate ? 'none' : 'auto';
-    lateOpt.style.opacity    = autoLate ? '1' : '0.35';
-    lateOpt.style.pointerEvents = autoLate ? 'auto' : 'none';
-    absentOpt.style.opacity  = '1';
-    absentOpt.style.pointerEvents = 'auto';
-    // Pre-select correct status
-    atlModalSelect(autoStatus);
-  } else {
-    // No shift — full manual selection
-    presentOpt.style.opacity = '1'; presentOpt.style.pointerEvents = 'auto';
-    lateOpt.style.opacity    = '1'; lateOpt.style.pointerEvents    = 'auto';
-    absentOpt.style.opacity  = '1'; absentOpt.style.pointerEvents  = 'auto';
-    atlModalSelect('present');
-  }
-
-  modal.classList.remove('hidden');
-}
-
-function atlModalSelect(status) {
-  document.querySelectorAll('.atl-modal-opt').forEach(el => {
-    el.classList.toggle('selected', el.dataset.status === status);
-  });
-}
-
-function atlModalConfirm() {
-  const selected = document.querySelector('.atl-modal-opt.selected');
-  if (!selected || !atlPendingUser) return;
-  const status = selected.dataset.status; // 'present', 'late', 'absent'
-
-  atlPendingUser.late = (status === 'late');
-  atlPendingUser.statusOverride = status;
-
-  document.getElementById('atl-status-modal').classList.add('hidden');
-  atlEnterDashboard(atlPendingUser);
-  atlMarkAttendance(atlPendingUser.ytelId, atlPendingUser.name, atlPendingUser.statusOverride);
-  atlPendingUser = null;
-}
-
-function atlModalCancel() {
-  document.getElementById('atl-status-modal').classList.add('hidden');
-  atlPendingUser = null;
-  setTimeout(() => document.getElementById('atl-ytel-input').focus(), 200);
+  atlEnterDashboard(user);
+  atlMarkAttendance(ytelId, agentName, autoStatus);
 }
 
 // ── ADMIN LOGIN ───────────────────────────────────────
