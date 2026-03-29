@@ -1,2385 +1,629 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATLeads Business Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800;1,900&family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<style>
-  :root {
-    --bg: #07050f;
-    --surface: #0f0b1a;
-    --surface2: #181226;
-    --border: rgba(168,85,247,0.1);
-    --border2: rgba(168,85,247,0.2);
-    --accent: #7c3aed;
-    --accent2: #a855f7;
-    --accent3: #c084fc;
-    --green: #22c55e;
-    --red: #f43f5e;
-    --amber: #fb923c;
-    --text: #ede9fe;
-    --muted: #6b7280;
-    --muted2: #a78bfa;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    background-image:
-      radial-gradient(ellipse at 15% 0%, rgba(124,58,237,0.1) 0%, transparent 55%),
-      radial-gradient(ellipse at 85% 100%, rgba(168,85,247,0.06) 0%, transparent 50%);
-  }
-
-  /* ===== HERO HEADER ===== */
-  .hero-header {
-    background: #07050f;
-    border-bottom: 1px solid rgba(168,85,247,0.18);
-    padding: 28px 20px 20px;
-    text-align: center;
-  }
-  .hero-title {
-    font-family: 'Syne', sans-serif;
-    font-style: normal;
-    font-weight: 800;
-    font-size: clamp(2rem, 6vw, 3.8rem);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    line-height: 1.1;
-    background: linear-gradient(90deg, #a855f7 0%, #c084fc 50%, #e879f9 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 22px rgba(168,85,247,0.45));
-    margin-bottom: 6px;
-  }
-  .hero-agent-row {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    margin-bottom: 20px;
-  }
-  .hero-agent-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.18em;
-    color: var(--muted);
-  }
-  .hero-agent-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--accent2);
-    cursor: pointer;
-    border-bottom: 1px dashed rgba(168,85,247,0.4);
-    padding-bottom: 1px;
-    transition: color 0.2s;
-  }
-  .hero-agent-name:hover { color: var(--accent3); }
-  .hero-agent-edit {
-    display: none; background: var(--surface2);
-    border: 1px solid var(--border2); border-radius: 8px;
-    color: var(--accent2); font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.15em; padding: 4px 10px; outline: none;
-    width: 160px; text-align: center;
-  }
-  .hero-agent-edit:focus { border-color: var(--accent2); }
-
-  /* CLOCKS */
-  .clocks-row {
-    display: flex; align-items: center; justify-content: center; gap: 14px;
-    flex-wrap: wrap;
-  }
-  .clock-card {
-    display: flex; align-items: center; gap: 12px;
-    background: var(--surface2);
-    border: 1px solid rgba(168,85,247,0.2);
-    border-radius: 14px; padding: 12px 22px;
-    min-width: 180px;
-  }
-  .clock-flag {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: rgba(168,85,247,0.15);
-    border: 1px solid rgba(168,85,247,0.25);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem; font-weight: 900;
-    color: var(--accent2); letter-spacing: 0.05em;
-    flex-shrink: 0;
-  }
-  .clock-info { text-align: left; }
-  .clock-region {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.58rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.18em;
-    color: var(--muted); margin-bottom: 2px;
-  }
-  .clock-time {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-style: italic; font-weight: 800;
-    font-size: 1.45rem; letter-spacing: 0.03em;
-    line-height: 1;
-  }
-  .clock-time.gy { color: #fb923c; text-shadow: 0 0 14px rgba(251,146,60,0.5); }
-  .clock-time.us { color: #a855f7; text-shadow: 0 0 14px rgba(168,85,247,0.5); }
-  .clock-sep {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; color: var(--muted);
-    padding: 0 2px;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
-
-  /* NAV GRID */
-  .nav-row {
-    background: rgba(7,5,15,0.96);
-    border-bottom: 1px solid rgba(168,85,247,0.1);
-    padding: 16px 20px;
-    position: sticky; top: 0; z-index: 100;
-    backdrop-filter: blur(16px);
-  }
-  .nav-inner {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    max-width: 860px; margin: 0 auto;
-  }
-  .nav-inner.admin-mode {
-    grid-template-columns: repeat(6, 1fr);
-  }
-  .nav-tab {
-    padding: 13px 8px;
-    font-size: 0.74rem; font-weight: 900;
-    text-transform: uppercase; letter-spacing: 0.12em;
-    color: var(--muted); cursor: pointer;
-    border: 1px solid rgba(168,85,247,0.15);
-    background: rgba(168,85,247,0.04);
-    border-radius: 12px;
-    transition: all 0.2s;
-    font-family: 'Inter', sans-serif;
-    white-space: nowrap;
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-  }
-  .nav-tab:hover { color: var(--accent3); border-color: rgba(168,85,247,0.35); background: rgba(168,85,247,0.09); }
-  .nav-tab.active {
-    color: white;
-    background: rgba(124,58,237,0.25);
-    border-color: var(--accent2);
-    box-shadow: 0 0 16px rgba(168,85,247,0.2);
-  }
-  .nav-tab.prank {
-    color: #f43f5e;
-    border-color: rgba(244,63,94,0.25);
-    background: rgba(244,63,94,0.05);
-  }
-  .nav-tab.prank:hover { background: rgba(244,63,94,0.1); border-color: rgba(244,63,94,0.4); }
-  .nav-tab.prank.active { background: rgba(244,63,94,0.18); border-color: #f43f5e; box-shadow: 0 0 16px rgba(244,63,94,0.2); color: white; }
-  .nav-wide { grid-column: 1 / -1; }
-
-  /* PAGES */
-  .page { display: none; padding: 28px 20px; max-width: 860px; margin: 0 auto; }
-  .page.active { display: block; animation: fadeIn 0.25s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-
-  .section-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.72rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.16em;
-    color: var(--accent2); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .section-label::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(168,85,247,0.4),transparent); }
-  .section-title { font-family:'Inter',sans-serif; font-weight:700; font-size:1.65rem; color:white; margin-bottom:6px; letter-spacing:-0.01em; }
-  .section-sub { color:var(--muted2); font-size:0.93rem; margin-bottom:24px; line-height:1.6; }
-
-  /* SCRIPT BLOCKS */
-  .script-block { background:var(--surface); border:1px solid var(--border); border-radius:16px; margin-bottom:14px; overflow:hidden; }
-  .script-block-header { padding:13px 20px; display:flex; align-items:center; gap:12px; background:var(--surface2); border-bottom:1px solid var(--border); }
-  .step-badge { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; padding:3px 10px; border-radius:20px; background:rgba(124,58,237,0.2); border:1px solid rgba(168,85,247,0.35); color:var(--accent2); white-space:nowrap; }
-  .step-badge.green { background:rgba(34,197,94,0.12); border-color:rgba(34,197,94,0.3); color:var(--green); }
-  .step-badge.amber { background:rgba(251,146,60,0.12); border-color:rgba(251,146,60,0.3); color:var(--amber); }
-  .step-badge.red   { background:rgba(244,63,94,0.12);  border-color:rgba(244,63,94,0.3);  color:var(--red); }
-  .script-block-title { font-family:'Inter',sans-serif; font-weight:700; font-size:0.92rem; color:white; letter-spacing:-0.01em; }
-  .script-block-body { padding:18px 20px; }
-  .script-line { font-size:1rem; line-height:1.75; color:var(--text); }
-  .script-line strong { color:white; font-weight:700; }
-  .script-line em { color:#c4b5fd; font-style:italic; }
-
-  .branch-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
-  .branch { border-radius:12px; padding:14px 16px; }
-  .branch.yes { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); }
-  .branch.no  { background:rgba(244,63,94,0.07);  border:1px solid rgba(244,63,94,0.2); }
-  .branch-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:6px; }
-  .branch.yes .branch-label { color:var(--green); }
-  .branch.no  .branch-label { color:var(--red); }
-  .branch-text { font-size:0.83rem; line-height:1.55; color:var(--muted2); }
-
-  .qual-q { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--border); }
-  .qual-q:last-child { border-bottom:none; }
-  .qual-num { width:24px; height:24px; border-radius:50%; background:rgba(124,58,237,0.2); border:1px solid rgba(168,85,247,0.35); color:var(--accent2); font-family:'JetBrains Mono',monospace; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
-  .qual-q-text { font-size:0.98rem; line-height:1.6; color:var(--text); flex:1; }
-  .qual-note { font-size:0.75rem; color:var(--red); margin-top:4px; font-family:'JetBrains Mono',monospace; font-weight:700; }
-  .qual-note.amber { color:var(--amber); }
-
-  .disq-box { background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.2); border-radius:12px; padding:13px 16px; margin-top:12px; display:flex; align-items:flex-start; gap:10px; }
-  .disq-box i { color:var(--red); margin-top:2px; flex-shrink:0; }
-  .disq-box p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
-
-  .handoff-box { background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(124,58,237,0.07)); border:1px solid rgba(34,197,94,0.22); border-radius:12px; padding:16px 18px; margin-top:12px; }
-  .handoff-label { font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
-  .handoff-text { font-size:0.88rem; line-height:1.7; color:var(--text); }
-
-  /* LOOKUP */
-  .lookup-input { width:100%; background:var(--surface); border:1px solid var(--border2); border-radius:12px; color:white; font-size:0.95rem; padding:14px 18px; outline:none; font-family:'Inter',sans-serif; transition:border-color 0.2s,box-shadow 0.2s; }
-  .lookup-input:focus { border-color:var(--accent2); box-shadow:0 0 0 3px rgba(168,85,247,0.12); }
-  .lookup-input::placeholder { color:var(--muted); }
-
-  .phone-row { display:flex; gap:10px; align-items:stretch; margin-bottom:10px; }
-  .phone-row .lookup-input { flex:1; }
-  .check-btn { padding:14px 22px; background:linear-gradient(135deg,#7c3aed,#a855f7); color:white; border:none; border-radius:12px; font-family:'Inter',sans-serif; font-weight:800; font-size:0.82rem; letter-spacing:0.05em; cursor:pointer; transition:all 0.2s; white-space:nowrap; box-shadow:0 0 20px rgba(168,85,247,0.25); }
-  .check-btn:hover { opacity:0.9; transform:translateY(-1px); box-shadow:0 0 28px rgba(168,85,247,0.45); }
-
-  .gemini-note { background:rgba(124,58,237,0.08); border:1px solid rgba(168,85,247,0.18); border-radius:10px; padding:11px 16px; font-size:0.78rem; color:var(--muted2); display:flex; align-items:center; gap:10px; margin-bottom:24px; }
-  .gemini-note i { color:var(--accent2); flex-shrink:0; font-size:0.95rem; }
-
-  .industry-result { margin-top:14px; border-radius:14px; padding:14px 18px; display:none; }
-  .industry-result.show { display:flex; align-items:flex-start; gap:14px; animation:fadeIn 0.3s ease; }
-  .industry-result.approved { background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.25); }
-  .industry-result.denied   { background:rgba(244,63,94,0.07);  border:1px solid rgba(244,63,94,0.25); }
-  .industry-result.unknown  { background:rgba(251,146,60,0.07); border:1px solid rgba(251,146,60,0.2); }
-  .ind-icon { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-  .approved .ind-icon { background:rgba(34,197,94,0.18); color:var(--green); }
-  .denied   .ind-icon { background:rgba(244,63,94,0.18); color:var(--red); }
-  .unknown  .ind-icon { background:rgba(251,146,60,0.18); color:var(--amber); }
-  .ind-text strong { font-family:'Inter',sans-serif; font-weight:700; font-size:0.92rem; display:block; margin-bottom:4px; }
-  .approved .ind-text strong { color:var(--green); }
-  .denied   .ind-text strong { color:var(--red); }
-  .unknown  .ind-text strong { color:var(--amber); }
-  .ind-text p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
-
-  /* CHIPS */
-  .chip-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
-  .chip { border-radius:10px; padding:8px 14px; font-size:0.79rem; display:flex; align-items:center; gap:7px; }
-  .chip.deny  { background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.2); color:var(--muted2); }
-  .chip.deny  i { color:var(--red); }
-  .chip.allow { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); color:var(--muted2); }
-  .chip.allow i { color:var(--green); }
-
-  /* REBUTTALS */
-  .rebuttal-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color 0.2s; margin-bottom:10px; }
-  .rebuttal-card:hover { border-color:rgba(168,85,247,0.3); }
-  .rebuttal-header { padding:15px 20px; cursor:pointer; user-select:none; display:flex; align-items:center; justify-content:space-between; transition:background 0.2s; }
-  .rebuttal-header:hover { background:rgba(168,85,247,0.04); }
-  .rebuttal-objection { font-family:'Inter',sans-serif; font-weight:700; font-size:0.96rem; color:white; flex:1; letter-spacing:-0.01em; }
-  .rebuttal-tag { font-size:0.64rem; font-weight:700; font-family:'JetBrains Mono',monospace; padding:3px 9px; border-radius:20px; margin-right:12px; text-transform:uppercase; letter-spacing:0.08em; background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.25); color:var(--accent3); }
-  .rebuttal-arrow { color:var(--muted); font-size:0.75rem; transition:transform 0.3s,color 0.2s; flex-shrink:0; }
-  .rebuttal-arrow.open { transform:rotate(180deg); color:var(--accent2); }
-  .rebuttal-body { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
-  .rebuttal-body.open { max-height:600px; }
-  .prank-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease; }
-  .prank-body.open { max-height:1000px; }
-  .rebuttal-inner { padding:0 20px 18px; }
-  .rebuttal-script { background:var(--surface2); border:1px solid var(--border); border-left:3px solid var(--accent2); border-radius:10px; padding:14px 16px; font-size:0.95rem; line-height:1.72; color:var(--text); margin-bottom:10px; }
-  .rebuttal-tip { font-size:0.84rem; color:var(--muted2); display:flex; align-items:flex-start; gap:8px; line-height:1.5; }
-  .rebuttal-tip i { color:var(--amber); flex-shrink:0; margin-top:2px; }
-
-  /* REBUTTAL PILLS */
-  .r-pill {
-    background: rgba(168,85,247,0.07);
-    border: 1px solid rgba(168,85,247,0.25);
-    color: var(--muted2);
-    border-radius: 30px;
-    padding: 8px 16px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.18s;
-    white-space: nowrap;
-  }
-  .r-pill:hover {
-    background: rgba(168,85,247,0.18);
-    border-color: rgba(168,85,247,0.5);
-    color: white;
-  }
-  .r-pill.active {
-    background: rgba(168,85,247,0.28);
-    border-color: var(--accent2);
-    color: white;
-    box-shadow: 0 0 14px rgba(168,85,247,0.3);
-  }
-  .r-pill-red {
-    background: rgba(244,63,94,0.07);
-    border-color: rgba(244,63,94,0.3);
-    color: #f43f5e;
-  }
-  .r-pill-red:hover {
-    background: rgba(244,63,94,0.18);
-    border-color: #f43f5e;
-    color: white;
-  }
-  .r-pill-red.active {
-    background: rgba(244,63,94,0.25);
-    border-color: #f43f5e;
-    color: white;
-    box-shadow: 0 0 14px rgba(244,63,94,0.3);
-  }
-
-  /* REBUTTAL PANEL */
-  .r-panel {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 16px;
-    overflow: hidden;
-    animation: fadeIn 0.22s ease;
-    margin-bottom: 16px;
-  }
-  .r-panel-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .r-panel-title {
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    color: white;
-    line-height: 1.4;
-    letter-spacing: -0.01em;
-  }
-  .r-panel-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
-  .r-panel-close {
-    background: rgba(168,85,247,0.1);
-    border: 1px solid rgba(168,85,247,0.25);
-    color: var(--muted2);
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .r-panel-close:hover { background: rgba(168,85,247,0.2); color: white; }
-  .r-panel-body { padding: 18px 20px; }
-
-  /* REBUTTAL SEARCH */
-  .rebuttal-search-wrap {
-    position: relative;
-    margin-bottom: 16px;
-  }
-  .rebuttal-search-wrap i.search-icon {
-    position: absolute;
-    left: 16px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); font-size: 0.85rem; pointer-events: none;
-  }
-  .rebuttal-search-wrap i.clear-icon {
-    position: absolute;
-    right: 14px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); font-size: 0.8rem;
-    cursor: pointer; transition: color 0.15s;
-    display: none;
-  }
-  .rebuttal-search-wrap i.clear-icon:hover { color: var(--text); }
-  .rebuttal-search-input {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 14px;
-    color: white;
-    font-size: 0.95rem;
-    font-family: 'Inter', sans-serif;
-    padding: 13px 44px 13px 44px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .rebuttal-search-input:focus {
-    border-color: var(--accent2);
-    box-shadow: 0 0 0 3px rgba(168,85,247,0.13);
-  }
-  .rebuttal-search-input::placeholder { color: var(--muted); }
-
-  .r-search-results {
-    display: none;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-  .r-search-results.visible { display: flex; }
-  .r-search-result-card {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 14px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.18s, background 0.18s;
-  }
-  .r-search-result-card:hover {
-    border-color: var(--accent2);
-    background: rgba(168,85,247,0.04);
-  }
-  .r-search-result-header {
-    padding: 12px 18px;
-    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .r-search-result-objection {
-    font-family: 'Inter', sans-serif; font-weight: 700;
-    font-size: 0.92rem; color: white; flex: 1;
-  }
-  .r-search-result-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.1em;
-    padding: 3px 9px; border-radius: 20px;
-    background: rgba(168,85,247,0.12);
-    border: 1px solid rgba(168,85,247,0.25);
-    color: var(--accent3); white-space: nowrap; flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .r-search-result-body { padding: 14px 18px; }
-  .r-no-results {
-    display: none;
-    text-align: center;
-    padding: 28px 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    color: var(--muted);
-    font-size: 0.88rem;
-    margin-bottom: 18px;
-  }
-  .r-no-results.visible { display: block; }
-  mark.r-highlight {
-    background: rgba(168,85,247,0.3);
-    color: white;
-    border-radius: 3px;
-    padding: 0 2px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* QUICK REF */
-  .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
-  .quick-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; }
-  .quick-card-label { font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:10px; }
-  .quick-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.92rem; line-height:1.5; }
-  .quick-item:last-child { border-bottom:none; }
-  .quick-item i { flex-shrink:0; margin-top:2px; font-size:0.78rem; }
-  .quick-item.pass i { color:var(--green); } .quick-item.pass { color:var(--text); }
-  .quick-item.fail i { color:var(--red); }   .quick-item.fail { color:var(--muted2); }
-  .submit-reminder { background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(124,58,237,0.05)); border:1px solid rgba(168,85,247,0.25); border-radius:14px; padding:17px 20px; display:flex; gap:14px; align-items:flex-start; margin-bottom:16px; }
-  .submit-reminder i { color:var(--accent2); font-size:1.2rem; flex-shrink:0; margin-top:2px; }
-  .submit-reminder h4 { font-family:'Inter',sans-serif; font-weight:700; color:white; margin-bottom:4px; letter-spacing:-0.01em; }
-  .submit-reminder p { font-size:0.83rem; color:var(--muted2); line-height:1.5; }
-
-  @media(max-width:600px){
-    .branch-row { grid-template-columns:1fr; }
-    .quick-grid { grid-template-columns:1fr; }
-    .nav-inner { grid-template-columns: repeat(5,1fr); gap:5px; }
-    .nav-tab { padding:10px 4px; font-size:0.6rem; gap:4px; }
-    .nav-tab i { display:none; }
-    .page { padding:18px 14px; }
-    .phone-row { flex-direction:column; }
-  }
-
-  /* ===== ATL LOGIN SCREEN ===== */
-  #atl-login-overlay {
-    position: fixed; inset: 0; z-index: 99999;
-    background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.18) 0%, transparent 60%), #07050f;
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-  }
-  #atl-login-overlay.hidden { display: none; }
-  .atl-login-card {
-    background: rgba(15,11,26,0.98);
-    border: 1px solid rgba(168,85,247,0.25);
-    border-radius: 24px;
-    padding: 40px 32px 32px;
-    width: 100%; max-width: 380px;
-    box-shadow: 0 0 60px rgba(124,58,237,0.2);
-    text-align: center;
-  }
-  .atl-login-logo {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 1.6rem; color: #a855f7; letter-spacing: -0.02em;
-    margin-bottom: 4px;
-  }
-  .atl-login-sub {
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.15em; color: #6b7280; margin-bottom: 28px;
-  }
-  .atl-login-tabs {
-    display: flex; gap: 8px; margin-bottom: 22px;
-  }
-  .atl-login-tab {
-    flex: 1; padding: 10px; border-radius: 10px;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(168,85,247,0.15);
-    color: #6b7280; font-size: 0.75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .atl-login-tab.active {
-    background: rgba(168,85,247,0.12); border-color: #a855f7; color: #c084fc;
-  }
-  .atl-login-input {
-    width: 100%; background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(168,85,247,0.2); border-radius: 12px;
-    color: white; font-size: 0.95rem; padding: 14px 16px;
-    outline: none; font-family: 'Inter', sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-bottom: 10px;
-  }
-  .atl-login-input:focus {
-    border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168,85,247,0.12);
-  }
-  .atl-login-input.shake {
-    animation: atlShake 0.4s ease; border-color: #f43f5e;
-  }
-  @keyframes atlShake {
-    0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-7px)} 40%,80%{transform:translateX(7px)}
-  }
-  .atl-login-btn {
-    width: 100%; padding: 15px; border-radius: 12px;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    color: white; font-family: 'Inter', sans-serif;
-    font-weight: 800; font-size: 0.88rem;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    border: none; cursor: pointer; margin-top: 4px;
-    transition: opacity 0.2s, transform 0.1s;
-    box-shadow: 0 0 24px rgba(168,85,247,0.3);
-  }
-  .atl-login-btn:hover { opacity: 0.9; }
-  .atl-login-btn:active { transform: scale(0.98); }
-  .atl-login-error {
-    color: #f43f5e; font-size: 0.78rem; font-weight: 700;
-    letter-spacing: 0.04em; min-height: 18px; margin-bottom: 8px;
-  }
-
-  /* ===== ATL AGENT BANNER ===== */
-  #atl-agent-banner {
-    display: none;
-    background: linear-gradient(135deg, rgba(8,5,20,0.99), rgba(4,3,15,0.99));
-    border-bottom: 2px solid rgba(124,58,237,0.4);
-    padding: 6px 14px;
-    position: sticky; top: 0; z-index: 9000;
-    backdrop-filter: blur(20px);
-  }
-  #atl-agent-banner.show { display: flex; align-items: center; }
-  .atl-banner-inner {
-    display: flex; align-items: center; gap: 8px;
-    width: 100%; flex-wrap: nowrap; overflow: hidden;
-  }
-  .atl-banner-avatar {
-    width: 26px; height: 26px; border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; flex-shrink: 0;
-    border: 1px solid rgba(168,85,247,0.5);
-  }
-  .atl-banner-name {
-    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 800;
-    color: white; letter-spacing: 0.06em; text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .atl-banner-role {
-    font-size: 8px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: #a855f7; white-space: nowrap;
-  }
-  .atl-banner-div { width:1px; height:20px; background:rgba(255,255,255,0.1); flex-shrink:0; }
-  .atl-banner-item {
-    display: flex; align-items: center; gap: 3px; white-space: nowrap;
-  }
-  .atl-banner-label {
-    color: #6b7280; font-size: 8px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .atl-banner-value { color: white; font-size: 9px; font-weight: 700; }
-  .atl-banner-value.shift { color: #fb923c; }
-  .atl-banner-value.team  { color: #a855f7; }
-  .atl-banner-badge {
-    margin-left: auto; flex-shrink: 0;
-    display: flex; align-items: center; gap: 4px;
-    font-size: 8px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.08em; padding: 2px 8px; border-radius: 20px;
-  }
-  .atl-banner-badge.present {
-    background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35); color: #22c55e;
-  }
-  .atl-banner-badge.late {
-    background: rgba(251,146,60,0.12); border: 1px solid rgba(251,146,60,0.4); color: #fb923c;
-  }
-  .atl-banner-badge.absent {
-    background: rgba(244,63,94,0.12); border: 1px solid rgba(244,63,94,0.4); color: #f43f5e;
-  }
-
-  /* ===== STATUS CONFIRMATION MODAL ===== */
-  #atl-status-modal {
-    position: fixed; inset: 0; z-index: 999999;
-    background: rgba(7,5,15,0.88);
-    backdrop-filter: blur(12px);
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-  }
-  #atl-status-modal.hidden { display: none; }
-  .atl-modal-card {
-    background: rgba(15,11,26,0.99);
-    border: 1px solid rgba(168,85,247,0.3);
-    border-radius: 22px;
-    padding: 32px 28px 26px;
-    width: 100%; max-width: 400px;
-    box-shadow: 0 0 60px rgba(124,58,237,0.25);
-  }
-  .atl-modal-agent-row {
-    display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
-  }
-  .atl-modal-avatar {
-    width: 46px; height: 46px; border-radius: 50%;
-    background: linear-gradient(135deg,#7c3aed,#a855f7);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-    border: 2px solid rgba(168,85,247,0.5);
-  }
-  .atl-modal-name {
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
-    color: white; letter-spacing: -0.01em; margin-bottom: 2px;
-  }
-  .atl-modal-meta {
-    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
-    color: var(--muted2); display: flex; gap: 10px; flex-wrap: wrap;
-  }
-  .atl-modal-meta span { color: var(--accent3); }
-  .atl-modal-label {
-    font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.14em; color: var(--muted); margin-bottom: 10px;
-  }
-  .atl-modal-opts {
-    display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px;
-  }
-  .atl-modal-opt {
-    border-radius: 14px; padding: 14px 8px; text-align: center;
-    cursor: pointer; transition: all 0.18s; border: 2px solid transparent;
-  }
-  .atl-modal-opt[data-status="present"] {
-    background: rgba(34,197,94,0.07); border-color: rgba(34,197,94,0.2);
-  }
-  .atl-modal-opt[data-status="present"].selected {
-    background: rgba(34,197,94,0.16); border-color: #22c55e;
-    box-shadow: 0 0 18px rgba(34,197,94,0.2);
-  }
-  .atl-modal-opt[data-status="late"] {
-    background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.2);
-  }
-  .atl-modal-opt[data-status="late"].selected {
-    background: rgba(251,146,60,0.16); border-color: #fb923c;
-    box-shadow: 0 0 18px rgba(251,146,60,0.2);
-  }
-  .atl-modal-opt[data-status="absent"] {
-    background: rgba(244,63,94,0.07); border-color: rgba(244,63,94,0.2);
-  }
-  .atl-modal-opt[data-status="absent"].selected {
-    background: rgba(244,63,94,0.16); border-color: #f43f5e;
-    box-shadow: 0 0 18px rgba(244,63,94,0.2);
-  }
-  .atl-modal-opt-icon { font-size: 1.4rem; margin-bottom: 6px; }
-  .atl-modal-opt-label {
-    font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.78rem;
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .atl-modal-opt[data-status="present"] .atl-modal-opt-label { color: #22c55e; }
-  .atl-modal-opt[data-status="late"]    .atl-modal-opt-label { color: #fb923c; }
-  .atl-modal-opt[data-status="absent"]  .atl-modal-opt-label { color: #f43f5e; }
-  .atl-modal-btns { display: flex; gap: 10px; }
-  .atl-modal-confirm {
-    flex: 1; padding: 13px; border-radius: 12px;
-    background: linear-gradient(135deg,#7c3aed,#a855f7);
-    color: white; font-family: 'Inter', sans-serif;
-    font-weight: 800; font-size: 0.85rem; letter-spacing: 0.06em;
-    text-transform: uppercase; border: none; cursor: pointer;
-    box-shadow: 0 0 20px rgba(168,85,247,0.3); transition: opacity 0.2s;
-  }
-  .atl-modal-confirm:hover { opacity: 0.9; }
-  .atl-modal-cancel {
-    padding: 13px 18px; border-radius: 12px;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-    color: var(--muted); font-family: 'Inter', sans-serif;
-    font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
-  }
-  .atl-modal-cancel:hover { color: white; border-color: rgba(255,255,255,0.2); }
-  .atl-banner-dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: currentColor; animation: atlPulse 1.5s infinite;
-  }
-  @keyframes atlPulse { 0%,100%{opacity:0.45} 50%{opacity:1} }
-  .atl-logout-btn {
-    display: none; align-items: center; gap: 6px;
-    background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.25);
-    border-radius: 10px; padding: 5px 12px; cursor: pointer;
-    color: #f43f5e; font-size: 8px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.1em;
-    white-space: nowrap; transition: all 0.2s; flex-shrink: 0;
-  }
-  .atl-logout-btn:hover { background: rgba(244,63,94,0.18); }
-  .atl-logout-btn.show { display: flex; }
-
-</style>
-</head>
-<body>
-
-
-<!-- ===== ATTENDANCE PAGE ===== -->
-<div id="page-attendance" class="page">
-  <div class="section-label" style="color:#22c55e;">Admin Only</div>
-  <div class="section-title">📋 Today's Attendance</div>
-  <div class="section-sub">Live clock-in log pulled from Google Sheets. Refresh anytime to see the latest entries.</div>
-
-  <!-- Stats row -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
-    <div style="background:var(--surface2);border:1px solid rgba(34,197,94,0.25);border-radius:14px;padding:16px;text-align:center;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#22c55e;line-height:1;" id="atl-stat-present">—</div>
-      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Present</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid rgba(251,146,60,0.25);border-radius:14px;padding:16px;text-align:center;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#fb923c;line-height:1;" id="atl-stat-late">—</div>
-      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Late</div>
-    </div>
-    <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:14px;padding:16px;text-align:center;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-style:italic;font-weight:900;font-size:2.2rem;color:#a855f7;line-height:1;" id="atl-stat-total">—</div>
-      <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-top:4px;">Total</div>
-    </div>
-  </div>
-
-  <!-- Toolbar -->
-  <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
-    <input id="atl-att-search" type="text" placeholder="Search name or Ytel ID…" oninput="atlFilterAttendance()"
-      style="flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border2);border-radius:11px;color:white;font-size:0.88rem;padding:11px 16px;outline:none;font-family:'Inter',sans-serif;" />
-    <button onclick="atlLoadAttendance()" id="atl-att-refresh-btn"
-      style="padding:11px 20px;background:linear-gradient(135deg,#166534,#22c55e);color:white;border:none;border-radius:11px;font-family:'Inter',sans-serif;font-weight:800;font-size:0.8rem;letter-spacing:0.06em;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;">
-      <i class="fas fa-rotate-right" id="atl-att-refresh-icon"></i> Refresh
-    </button>
-  </div>
-
-  <!-- Status message -->
-  <div id="atl-att-status" style="text-align:center;padding:32px 20px;display:none;">
-    <div style="width:36px;height:36px;border:3px solid rgba(34,197,94,0.2);border-top-color:#22c55e;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px;"></div>
-    <div style="font-size:0.85rem;color:var(--muted);">Loading attendance…</div>
-  </div>
-  <div id="atl-att-error" style="display:none;background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:12px;padding:16px 18px;color:#f43f5e;font-size:0.85rem;font-weight:600;"></div>
-  <div id="atl-att-empty" style="display:none;text-align:center;padding:32px;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--muted);font-size:0.9rem;">No clock-ins recorded yet today.</div>
-
-  <!-- Table -->
-  <div id="atl-att-table-wrap" style="display:none;overflow:hidden;border:1px solid var(--border2);border-radius:16px;">
-    <table style="width:100%;border-collapse:collapse;" id="atl-att-table">
-      <thead>
-        <tr style="background:var(--surface2);">
-          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">#</th>
-          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Agent</th>
-          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Ytel ID</th>
-          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Clock-In</th>
-          <th style="padding:12px 16px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);border-bottom:1px solid var(--border);">Status</th>
-        </tr>
-      </thead>
-      <tbody id="atl-att-tbody"></tbody>
-    </table>
-  </div>
-  <div style="margin-top:10px;font-size:0.72rem;color:var(--muted);text-align:right;" id="atl-att-lastfetch"></div>
-</div>
-
-<!-- ===== ATL STATUS CONFIRMATION MODAL ===== -->
-<div id="atl-status-modal" class="hidden">
-  <div class="atl-modal-card">
-    <div class="atl-modal-agent-row">
-      <div class="atl-modal-avatar">🎧</div>
-      <div>
-        <div class="atl-modal-name" id="atl-modal-agent-name">—</div>
-        <div class="atl-modal-meta">
-          <span>ID: <span id="atl-modal-agent-id">—</span></span>
-          <span>Team: <span id="atl-modal-agent-team">—</span></span>
-          <span>Shift: <span id="atl-modal-agent-shift">—</span></span>
-        </div>
-      </div>
-    </div>
-
-    <div class="atl-modal-label">Select your attendance status</div>
-
-    <!-- Auto-detected note (shown when shift is known) -->
-    <div id="atl-modal-auto-note" style="display:none;font-size:0.78rem;font-weight:600;padding:9px 13px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;line-height:1.5;"></div>
-    <!-- Manual note (shown when no shift found) -->
-    <div id="atl-modal-manual-note" style="display:none;font-size:0.75rem;color:var(--muted);padding:8px 12px;border-radius:9px;background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.15);margin-bottom:12px;">⚠ Shift not found in roster — please select your status manually.</div>
-    <div class="atl-modal-opts">
-      <div class="atl-modal-opt" data-status="present" onclick="atlModalSelect('present')">
-        <div class="atl-modal-opt-icon">✅</div>
-        <div class="atl-modal-opt-label">Present</div>
-      </div>
-      <div class="atl-modal-opt" data-status="late" onclick="atlModalSelect('late')">
-        <div class="atl-modal-opt-icon">🕐</div>
-        <div class="atl-modal-opt-label">Late</div>
-      </div>
-      <div class="atl-modal-opt" data-status="absent" onclick="atlModalSelect('absent')">
-        <div class="atl-modal-opt-icon">❌</div>
-        <div class="atl-modal-opt-label">Absent</div>
-      </div>
-    </div>
-
-    <div class="atl-modal-btns">
-      <button class="atl-modal-cancel" onclick="atlModalCancel()">Cancel</button>
-      <button class="atl-modal-confirm" onclick="atlModalConfirm()">Confirm & Clock In →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ATL LOGIN OVERLAY ===== -->
-<div id="atl-login-overlay">
-  <div class="atl-login-card">
-    <div class="atl-login-logo">ATLeads</div>
-    <div class="atl-login-sub">Business Dashboard · Clock In</div>
-
-    <div class="atl-login-tabs">
-      <button class="atl-login-tab active" id="atl-tab-agent" onclick="atlSetTab('agent')">🎧 Agent</button>
-      <button class="atl-login-tab" id="atl-tab-admin" onclick="atlSetTab('admin')">🔐 Admin</button>
-    </div>
-
-    <!-- Agent form -->
-    <div id="atl-agent-form">
-      <input id="atl-ytel-input" class="atl-login-input" type="text"
-        placeholder="Enter Ytel ID" autocomplete="off" autocapitalize="characters"
-        oninput="this.value=this.value.toUpperCase()"
-        onkeydown="if(event.key==='Enter')atlAgentLogin()" />
-      <div class="atl-login-error" id="atl-agent-error"></div>
-      <button class="atl-login-btn" onclick="atlAgentLogin()">Clock In →</button>
-    </div>
-
-    <!-- Admin form -->
-    <div id="atl-admin-form" style="display:none;">
-      <input id="atl-admin-name" class="atl-login-input" type="text"
-        placeholder="Admin name" autocomplete="off"
-        onkeydown="if(event.key==='Enter')atlAdminLogin()" />
-      <input id="atl-admin-pass" class="atl-login-input" type="password"
-        placeholder="Password"
-        onkeydown="if(event.key==='Enter')atlAdminLogin()" />
-      <div class="atl-login-error" id="atl-admin-error"></div>
-      <button class="atl-login-btn" onclick="atlAdminLogin()">Access Dashboard →</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== ATL AGENT BANNER ===== -->
-<div id="atl-agent-banner">
-  <div class="atl-banner-inner">
-    <div class="atl-banner-avatar">🎧</div>
-    <div>
-      <div class="atl-banner-name" id="atl-banner-name">—</div>
-      <div class="atl-banner-role" id="atl-banner-role">ATLeads Agent</div>
-    </div>
-    <div class="atl-banner-div"></div>
-    <div class="atl-banner-item">
-      <span class="atl-banner-label">ID</span>
-      <span class="atl-banner-value" id="atl-banner-ytelid" style="color:#e879f9;font-family:'JetBrains Mono',monospace;">—</span>
-    </div>
-    <div class="atl-banner-div"></div>
-    <div class="atl-banner-item">
-      <span class="atl-banner-label">Team</span>
-      <span class="atl-banner-value team" id="atl-banner-team">—</span>
-    </div>
-    <div class="atl-banner-div"></div>
-    <div class="atl-banner-item">
-      <span class="atl-banner-label">Shift</span>
-      <span class="atl-banner-value shift" id="atl-banner-shift">—</span>
-    </div>
-    <div class="atl-banner-div"></div>
-    <div class="atl-banner-item">
-      <span class="atl-banner-label">Clocked</span>
-      <span class="atl-banner-value" id="atl-banner-time">—</span>
-    </div>
-    <div class="atl-banner-badge present" id="atl-banner-badge">
-      <div class="atl-banner-dot"></div>
-      <span id="atl-banner-badge-text">Present</span>
-    </div>
-    <button class="atl-logout-btn show" id="atl-logout-btn" onclick="atlLogout()">
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </button>
-  </div>
-</div>
-
-<div class="hero-header">
-  <div class="hero-title">ATLeads Business Dashboard</div>
-  <div class="clocks-row">
-    <div class="clock-card">
-      <div class="clock-flag">GY</div>
-      <div class="clock-info">
-        <div class="clock-region">Guyana</div>
-        <div class="clock-time gy" id="clock-gy">--:-- --</div>
-      </div>
-    </div>
-    <div class="clock-sep">·</div>
-    <div class="clock-card">
-      <div class="clock-flag">US</div>
-      <div class="clock-info">
-        <div class="clock-region">California</div>
-        <div class="clock-time us" id="clock-us">--:-- --</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="nav-row">
-  <div class="nav-inner">
-    <button class="nav-tab active" onclick="showPage('script',this)"><i class="fas fa-scroll"></i>Script</button>
-    <button class="nav-tab" onclick="showPage('lookup',this)"><i class="fas fa-search"></i>Industry</button>
-    <button class="nav-tab" onclick="showPage('rebuttals',this)"><i class="fas fa-comments"></i>Rebuttals</button>
-    <button class="nav-tab" onclick="showPage('playbook',this)"><i class="fas fa-bolt"></i>Playbook</button>
-    <button class="nav-tab prank" onclick="showPage('prank',this)"><i class="fas fa-fire"></i>Prank</button>
-    <button class="nav-tab admin-only-tab" id="nav-attendance-btn" onclick="showPage('attendance',this)" style="display:none;border-color:rgba(34,197,94,0.3);color:#22c55e;background:rgba(34,197,94,0.05);"><i class="fas fa-clipboard-list"></i>Attendance</button>
-  </div>
-</div>
-
-<!-- PLAYBOOK PAGE = QUICK REF MIRROR -->
-<div id="page-playbook" class="page">
-  <div class="section-label">At a Glance</div>
-  <div class="section-title">Quick Reference</div>
-  <div class="section-sub">Everything that qualifies or disqualifies — at a glance.</div>
-
-  <div class="quick-grid">
-    <div class="quick-card">
-      <div class="quick-card-label"><i class="fas fa-check" style="color:var(--green);margin-right:6px"></i>Must Have — All 4</div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>In business <strong>1+ year</strong></span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Approved industry</span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span>Owns <strong>50%+</strong> of business</span></div>
-      <div class="quick-item pass"><i class="fas fa-check-circle"></i><span><strong>$20K+/month</strong> deposits</span></div>
-    </div>
-    <div class="quick-card">
-      <div class="quick-card-label"><i class="fas fa-times" style="color:var(--red);margin-right:6px"></i>Instant Disqualifiers</div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Less than 1 year in business</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Bank, lender, mortgage, church, non-profit</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Owns less than 50%</span></div>
-      <div class="quick-item fail"><i class="fas fa-times-circle"></i><span>Under $20K/month deposits</span></div>
-    </div>
-  </div>
-
-  <!-- LOAN TYPES SECTION -->
-  <div class="section-label" style="margin-top:32px;">What We Offer</div>
-  <div class="section-title">Funding Products</div>
-  <div class="section-sub">We work with every major funding type — from fast capital injections to long-term credit solutions. Know your product so you can speak to it with confidence.</div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-
-    <div style="background:var(--surface2);border:1px solid var(--border2);border-top:3px solid #a855f7;border-radius:14px;padding:16px 18px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="width:32px;height:32px;border-radius:9px;background:rgba(168,85,247,0.15);border:1px solid rgba(168,85,247,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-briefcase" style="color:#a855f7;font-size:0.85rem;"></i></div>
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Business Term Loan</div>
-      </div>
-      <p style="font-size:0.82rem;color:var(--muted2);line-height:1.6;">A lump sum of capital paid back over a fixed term with set payments. Best for owners who know exactly what they need — equipment, expansion, hiring. Structured, predictable, professional.</p>
-      <div style="margin-top:10px;padding:7px 11px;background:rgba(168,85,247,0.08);border-radius:7px;border:1px solid rgba(168,85,247,0.15);font-size:0.72rem;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:0.08em;">Fixed Term · Lump Sum · Predictable</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border2);border-top:3px solid #22c55e;border-radius:14px;padding:16px 18px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="width:32px;height:32px;border-radius:9px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-rotate" style="color:#22c55e;font-size:0.85rem;"></i></div>
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Line of Credit</div>
-      </div>
-      <p style="font-size:0.82rem;color:var(--muted2);line-height:1.6;">A revolving credit facility — draw what you need, when you need it, and only pay interest on what you use. Ideal for managing cash flow gaps, seasonal dips, or unexpected expenses without reapplying every time.</p>
-      <div style="margin-top:10px;padding:7px 11px;background:rgba(34,197,94,0.07);border-radius:7px;border:1px solid rgba(34,197,94,0.15);font-size:0.72rem;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:0.08em;">Revolving · Draw On-Demand · Flexible</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border2);border-top:3px solid #fb923c;border-radius:14px;padding:16px 18px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="width:32px;height:32px;border-radius:9px;background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-circle-dollar-to-slot" style="color:#fb923c;font-size:0.85rem;"></i></div>
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Working Capital</div>
-      </div>
-      <p style="font-size:0.82rem;color:var(--muted2);line-height:1.6;">Short-term funding designed to keep day-to-day operations moving — payroll, inventory, overhead, rent. Not for big investments; it's the fuel that keeps the engine running when cash flow gets tight.</p>
-      <div style="margin-top:10px;padding:7px 11px;background:rgba(251,146,60,0.08);border-radius:7px;border:1px solid rgba(251,146,60,0.2);font-size:0.72rem;font-weight:700;color:#fb923c;text-transform:uppercase;letter-spacing:0.08em;">Short-Term · Operational · Fast Deploy</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border2);border-top:3px solid #e879f9;border-radius:14px;padding:16px 18px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="width:32px;height:32px;border-radius:9px;background:rgba(232,121,249,0.12);border:1px solid rgba(232,121,249,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-bolt" style="color:#e879f9;font-size:0.85rem;"></i></div>
-        <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Merchant Cash Advance <span style="font-size:0.7rem;color:var(--muted);font-weight:400;">(MCA)</span></div>
-      </div>
-      <p style="font-size:0.82rem;color:var(--muted2);line-height:1.6;">Not a loan — a purchase of future revenue. We advance capital upfront and collect a small percentage of daily sales until repaid. No fixed monthly payments. Moves fast. Great for businesses with strong card volume or deposits.</p>
-      <div style="margin-top:10px;padding:7px 11px;background:rgba(232,121,249,0.07);border-radius:7px;border:1px solid rgba(232,121,249,0.2);font-size:0.72rem;font-weight:700;color:#e879f9;text-transform:uppercase;letter-spacing:0.08em;">Revenue-Based · No Fixed Payments · Speed</div>
-    </div>
-
-  </div>
-
-  <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(168,85,247,0.06));border:1px solid rgba(168,85,247,0.25);border-radius:14px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px;">
-    <div style="width:36px;height:36px;border-radius:10px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-star" style="color:#a855f7;font-size:0.9rem;"></i></div>
-    <div>
-      <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.92rem;color:white;margin-bottom:5px;">We Do It All — Let the Advisors Match Them</div>
-      <p style="font-size:0.82rem;color:var(--muted2);line-height:1.6;">Your job is to qualify the lead — not close the deal. Once you verify the criteria, our senior advisors take over and match each business to the right product. Every qualified business owner has options. Just get them on the phone.</p>
-    </div>
-  </div>
-
-</div>
-
-<!-- PRANK PAGE -->
-<div id="page-prank" class="page">
-  <div class="section-label" style="color:var(--red)">Alert System</div>
-  <div class="section-title" style="color:var(--red)">🚨 Active Prank &amp; Scam Alerts</div>
-  <div class="section-sub">Tap any alert to see the full breakdown — what to listen for and how to handle it.</div>
-
-  <!-- 2x2 GRID OF ALERT CARDS -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;">
-
-    <!-- Justin Fake Loan Portal -->
-    <div style="background:var(--surface);border:1px solid rgba(244,63,94,0.3);border-top:3px solid #f43f5e;border-radius:14px;overflow:hidden;">
-      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(244,63,94,0.06);">
-        <div>
-          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#f43f5e;margin-bottom:4px;">⚠️ Active Scam Alert</div>
-          <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">"Justin" Fake Loan Portal</div>
-        </div>
-        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
-      </div>
-      <div class="prank-body">
-        <div style="padding:14px 16px;">
-          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:12px;">A customer calls saying <strong style="color:white">"Justin"</strong> told them they have a loan and need to log into a <strong style="color:white">portal</strong> to make a payment or collect funds. This is a scam — no one named Justin works here in that capacity, and we do NOT direct customers to external portals to collect loan funds.</p>
-          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
-            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "Justin said I have a loan and need to log in"</div>
-            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "They told me to log into a portal to get my money"</div>
-            <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I need to log in to make a payment or receive funds"</div>
-          </div>
-          <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:9px 12px;font-size:0.83rem;font-weight:700;color:white;font-style:italic;margin-bottom:10px;">"I believe you have the wrong number, sir."</div>
-          <div style="font-size:0.75rem;color:#fb923c;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">🔴 If the prank number keeps calling, pass the number to your team leader.</div>
-          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Money Laundering -->
-    <div style="background:var(--surface);border:1px solid rgba(168,85,247,0.3);border-top:3px solid #a855f7;border-radius:14px;overflow:hidden;">
-      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(168,85,247,0.06);">
-        <div>
-          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#a855f7;margin-bottom:4px;">🏛️ Criminal Alert</div>
-          <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Money Laundering — Gov. Ties</div>
-        </div>
-        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
-      </div>
-      <div class="prank-body">
-        <div style="padding:14px 16px;">
-          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If a caller claims they have <strong style="color:white">ties with the government</strong>, are moving funds <strong style="color:white">"on behalf of"</strong> an agency, or the situation feels like they're trying to legitimize large suspicious transfers — this is a <strong style="color:#f43f5e">money laundering red flag</strong>. End the call and report it.</p>
-          <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
-            <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#a855f7;letter-spacing:0.08em;margin-bottom:5px;">💡 What Is Money Laundering?</div>
-            <p style="font-size:0.82rem;color:var(--muted2);line-height:1.5;">Money laundering is the process of making illegally obtained money appear legitimate. Criminals run "dirty" money through businesses, loans, or financial systems to disguise its origin. Claiming government ties is a common tactic to make the transaction seem official and bypass scrutiny.</p>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
-            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I work with the government / federal agency"</div>
-            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "These funds are authorized / government-backed"</div>
-            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Moving unusually large sums through a new or vague business</div>
-          </div>
-          <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:7px;padding:9px 12px;font-size:0.75rem;font-weight:900;color:#f43f5e;text-transform:uppercase;letter-spacing:0.07em;">🔴 This is a prank. End the call professionally and move on to the next one. If the number keeps coming in, pass it to your team leader.</div>
-          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mexico Fund Transfer -->
-    <div style="background:var(--surface);border:1px solid rgba(251,146,60,0.3);border-top:3px solid #fb923c;border-radius:14px;overflow:hidden;">
-      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(251,146,60,0.06);">
-        <div>
-          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#fb923c;margin-bottom:4px;">🇲🇽 Active Ongoing Scam</div>
-          <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">Mexico / Fund Transfer</div>
-        </div>
-        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
-      </div>
-      <div class="prank-body">
-        <div style="padding:14px 16px;">
-          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If anyone <strong style="color:white">mentions Mexico</strong>, asks to <strong style="color:white">send funds to Mexico</strong>, or requests any <strong style="color:white">international transfer</strong> — end the call professionally &amp; move on.</p>
-          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
-            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "Can you send the funds to Mexico?"</div>
-            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Mexico as business location or fund destination</div>
-            <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 Wire transfer or cash to international account</div>
-          </div>
-          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">DO NOT TRANSFER UNDER ANY CIRCUMSTANCES.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- OnlyFans -->
-    <div style="background:var(--surface);border:1px solid rgba(168,85,247,0.3);border-top:3px solid #a855f7;border-radius:14px;overflow:hidden;">
-      <div onclick="togglePrank(this)" style="padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:rgba(168,85,247,0.06);">
-        <div>
-          <div style="font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#a855f7;margin-bottom:4px;">🔞 Instant Disqualifier</div>
-          <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:white;">OnlyFans = Prank. Full Stop.</div>
-        </div>
-        <i class="fas fa-chevron-down" style="color:var(--muted);font-size:0.75rem;margin-top:4px;transition:transform 0.3s;flex-shrink:0;"></i>
-      </div>
-      <div class="prank-body">
-        <div style="padding:14px 16px;">
-          <p style="font-size:0.85rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;">If anyone gives <strong style="color:white">"OnlyFans"</strong> as their business name — end the call professionally.</p>
-          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;">
-            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "My business is OnlyFans"</div>
-            <div style="background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:7px;padding:8px 12px;font-size:0.82rem;color:var(--muted2);font-style:italic;">🚩 "I'm a content creator on OnlyFans"</div>
-          </div>
-          <div style="margin-top:10px;font-size:0.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);text-align:center;">END CALL PROFESSIONALLY &amp; MOVE ON IMMEDIATELY.</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- PRANK CALLER RED FLAGS — always visible below -->
-  <div style="margin-bottom:8px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:#f43f5e;margin-bottom:3px;">⚠️ Prank Caller Red Flags</div>
-    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:14px;">Spot these signs early — end the call professionally and move on</div>
-  </div>
-
-  <!-- Red flags 2-col grid -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">1. YES TO EVERYTHING</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Real owners push back, ask questions, or pause to think. If someone says <strong>"yes"</strong> to every question instantly — they're not real.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: ROBOTIC "YES YES YES," ZERO HESITATION ON EVERY ANSWER</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">2. GENERIC OR FAKE BUSINESS NAME</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Vague names like <strong>"My Company," "Business LLC,"</strong> or names that change when you repeat them back are fake.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "UM… IT'S LIKE… MY BUSINESS," NAME CHANGES WHEN REPEATED</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">3. ASKING FOR MONEY / REVERSING THE SCRIPT</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">If they flip the call — <strong>"So how much will YOU give me?"</strong> before you've even qualified them.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "JUST SEND IT," "HOW FAST CAN I GET IT," "I NEED IT NOW," "I NEED IT TODAY"</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">4. LAUGHING, WHISPERING, OR COACHED</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Giggling, muffled laughter, or someone <strong>whispering answers</strong> in the background means group prank.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: ECHOING, WHISPERING, COVERING THE PHONE, COACHED REPLIES</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">5. INCONSISTENT OR ABSURD DETAILS</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Revenue of <strong>$50 million</strong> but open only <strong>2 months</strong>? Real owners are consistent because they live their business every day.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: CONTRADICTORY INFO, IMPOSSIBLE NUMBERS, CHANGING THEIR STORY</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">6. REFUSES TO STAY ON TOPIC</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Prankers <strong>derail the call</strong> with jokes and random questions.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: TANGENTS, JOKES ABOUT THE CALL, REFUSING TO ANSWER DIRECTLY</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">7. SUSPICIOUS TONE &amp; ENERGY</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Real owners are <strong>slightly guarded, professional, measured</strong>. Prank callers sound <strong>too casual, overly excited, or flat and robotic</strong>.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: GIGGLING, OVERLY EAGER, ROBOTIC MONOTONE, ACTING A ROLE</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">8. "JUSTIN TOLD ME" / ASKS ABOUT PORTAL</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">If a caller says someone named <strong>"Justin"</strong> told them they have a loan and to <strong>log into a portal</strong> — this is a scam script, not a real customer.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "I WAS TOLD TO LOG IN," "WHERE'S THE PORTAL," "JUSTIN SAID I'M APPROVED"</div>
-    </div>
-
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;grid-column:1/-1;">
-      <div style="font-size:0.63rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:6px;">9. CLAIMS GOVERNMENT OR OFFICIAL TIES</div>
-      <p style="font-size:0.84rem;color:white;line-height:1.55;margin-bottom:6px;">Callers who claim <strong>government connections</strong> or say funds are "federally authorized" to pressure you into bypassing normal process are attempting fraud or <strong>money laundering</strong>.</p>
-      <div style="font-size:0.68rem;color:#fb923c;font-weight:700;font-family:'JetBrains Mono',monospace;">WATCH FOR: "FEDERAL AGENCY," "GOVERNMENT AUTHORIZED," "OFFICIAL PROGRAM," "TIES TO [AGENCY]"</div>
-    </div>
-
-  </div>
-
-  <!-- Instant Keywords -->
-  <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:8px;">🔑 Instant Prank Keywords</div>
-  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;">
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Send it to Mexico"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Wire the money"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Give me the cash"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"I need it today"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"How much can you give me?"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Yeah whatever you need"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Just approve me"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Can you skip that part?"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Justin told me I'm approved"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Where's the portal to log in?"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Government authorized"</span>
-    <span style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;padding:5px 11px;font-size:0.8rem;font-weight:700;">"Federal ties / agency"</span>
-  </div>
-
-  <!-- Tone & Voice Tells -->
-  <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-      <span style="font-size:1rem;">🎙️</span>
-      <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:0.95rem;color:#a855f7;text-transform:uppercase;letter-spacing:0.06em;">Tone &amp; Voice Tells</span>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);margin-bottom:12px;">REAL OWNER VS. PRANK CALLER — SIDE BY SIDE</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:12px 14px;">
-        <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#22c55e;letter-spacing:0.08em;margin-bottom:8px;">✅ Real Owner Sounds Like</div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Slightly busy or distracted</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Asks "what is this for exactly?"</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Pauses to recall their revenue</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• States business name confidently</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Skeptical but willing to listen</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Professional, measured tone</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Asks about process / next steps</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Background sounds like a real workplace</div>
-        </div>
-      </div>
-      <div style="background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.2);border-radius:10px;padding:12px 14px;">
-        <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;margin-bottom:8px;">🚨 Prank Caller Sounds Like</div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Too casual or overly excited</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Agrees to everything instantly</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Never hesitates on any answer</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Gives absurd or vague business name</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Giggles or sounds entertained</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Flat robotic tone, reading a script</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Keeps pushing for the money amount</div>
-          <div style="font-size:0.82rem;color:var(--muted2);line-height:1.45;">• Background sounds like a group or party</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- End call -->
-  <div style="background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.3);border-left:3px solid #f43f5e;border-radius:10px;padding:13px 15px;font-size:0.9rem;font-weight:700;color:white;font-style:italic;line-height:1.65;text-align:center;">
-    END THE CALL: "Thank you for your time, we're not able to proceed. Have a great day."
-  </div>
-
-</div>
-
-
-<!-- SCRIPT -->
-<div id="page-script" class="page active">
-  <div class="section-label">Playbook</div>
-  <div class="section-title">Call Script</div>
-  <div class="section-sub">Follow each step in order. You are <strong style="color:white" id="scriptAgentName">your name</strong> from the Business Loan Division.</div>
-
-  <div class="script-block">
-    <div class="script-block-header"><span class="step-badge">Step 1</span><span class="script-block-title">Opening — Confirm Owner</span></div>
-    <div class="script-block-body">
-      <p class="script-line"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> from the <strong>Business Loan Division</strong>. Am I speaking with the business owner?"</em></p>
-      <div class="branch-row">
-        <div class="branch yes">
-          <div class="branch-label"><i class="fas fa-check-circle" style="margin-right:5px"></i>Yes / Owner on line</div>
-          <div class="branch-text">Proceed to Step 2 — deliver the pre-qual opener.</div>
-        </div>
-        <div class="branch no">
-          <div class="branch-label"><i class="fas fa-times-circle" style="margin-right:5px"></i>Not the owner</div>
-          <div class="branch-text"><em>"Can I please speak with the owner or the managing partner — I'll hold."</em><br><br>If asked who's calling: <em>"Again I'm <span class="agent-name-ref">your name</span>, calling in regard to a personal business matter."</em></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="script-block">
-    <div class="script-block-header"><span class="step-badge">Step 2</span><span class="script-block-title">Pre-Qual Opener</span></div>
-    <div class="script-block-body">
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was already on the line:</p>
-      <p class="script-line" style="margin-bottom:16px"><em>"Perfect, I'll be quick. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified for this."</em></p>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px;">If owner was transferred:</p>
-      <p class="script-line"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> from the Business Loan Division. We're following up because you were <strong>prequalified for working capital or a business line of credit</strong>. I'm not calling to pull your credit or anything — we just ask a few questions to make sure your business is qualified."</em></p>
-    </div>
-  </div>
-
-  <div class="script-block">
-    <div class="script-block-header"><span class="step-badge amber">Step 3</span><span class="script-block-title">Qualification Questions</span></div>
-    <div class="script-block-body">
-      <div class="qual-q">
-        <div class="qual-num">1</div>
-        <div class="qual-q-text"><strong>"Have you been in business for at least 1 year?"</strong><div class="qual-note">MUST BE 1 YEAR+ — if no, does not qualify.</div></div>
-      </div>
-      <div class="qual-q">
-        <div class="qual-num">2</div>
-        <div class="qual-q-text"><strong>"What type of industry are you in?"</strong><div class="qual-note amber">❌ No Attorneys · Lawyers · Banking · Lending · Mortgage · Church · Non-Profit</div></div>
-      </div>
-      <div class="qual-q">
-        <div class="qual-num">3</div>
-        <div class="qual-q-text">
-          <strong>"Are you 100% owner, or do you have partners? If partners — do you own at least 50%?"</strong>
-          <div class="qual-note amber">Must own at least 50%.</div>
-          <div style="margin-top:7px;font-size:0.81rem;color:var(--muted2);line-height:1.55;">If less than 50%: <em style="color:var(--text)">"Is there a time we can get the majority partner on the line?"</em> — set a callback.</div>
-        </div>
-      </div>
-      <div class="qual-q">
-        <div class="qual-num">4</div>
-        <div class="qual-q-text"><strong>"Does your business average at least $20,000 per month or more in deposits?"</strong><div class="qual-note">MUST BE YES — nothing under $240K/year.</div></div>
-      </div>
-      <div class="disq-box"><i class="fas fa-ban"></i><p>If ANY disqualifying answer is given — politely end the call. They do not qualify at this time.</p></div>
-    </div>
-  </div>
-
-  <div class="script-block">
-    <div class="script-block-header"><span class="step-badge green">Step 4</span><span class="script-block-title">Qualified — Warm Handoff</span></div>
-    <div class="script-block-body">
-      <p class="script-line" style="margin-bottom:14px"><em>"<strong>Great!</strong> It looks like you meet the pre-qualification criteria. I'm going to connect you with a senior advisor who will go over your funding options. Just hang on one moment — I'm going to stay on the line with you during the handoff. I'll introduce you first when they answer."</em></p>
-      <p style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">✅ Submit the form BEFORE the handoff</p>
-      <div class="handoff-box">
-        <div class="handoff-label">🤝 Handoff Script — Slowly · Smoothly · Clearly</div>
-        <div class="handoff-text"><em>"Hi, this is <strong><span class="agent-name-ref">your name</span></strong> — I have <strong>[CLIENT NAME]</strong> on the line. Their business meets the criteria for funding and they would like to further explore their options. <strong>Go ahead when you're ready.</strong> Thanks."</em></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- INDUSTRY LOOKUP -->
-<div id="page-lookup" class="page">
-  <div class="section-label">Business Check</div>
-  <div class="section-title">Industry Lookup</div>
-  <div class="section-sub">Look up a business by phone number via Gemini, or type their industry below to check if they qualify.</div>
-
-  <div class="script-block" style="margin-bottom:22px">
-    <div class="script-block-header"><span class="step-badge"><i class="fas fa-search" style="margin-right:5px"></i>Phone Lookup</span><span class="script-block-title">Look Up Business Info — Google AI</span></div>
-    <div class="script-block-body">
-      <p style="font-size:0.83rem;color:var(--muted2);margin-bottom:14px;line-height:1.55;">Enter the caller's phone number or business name — opens <strong style="color:white">Google AI</strong> in a new tab with the business name, owner, address, and email.</p>
-      <div class="phone-row">
-        <input class="lookup-input" id="phoneInput" type="text" placeholder="e.g. (305) 123-4567 or Business Name..." autocomplete="off" onkeydown="if(event.key==='Enter')openGemini()">
-        <button class="check-btn" onclick="openGemini()"><i class="fab fa-google" style="margin-right:7px"></i>Search</button>
-      </div>
-      <div class="gemini-note">
-        <i class="fab fa-google"></i>
-        <span>Opens <strong style="color:white">Google AI</strong> — asks for business name, owner, address &amp; email for that number.</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">Industry Check</div>
-  <div style="margin-bottom:24px">
-    <input class="lookup-input" id="industryInput" type="text" placeholder="Type industry e.g. restaurant, trucking, salon..." autocomplete="off" oninput="checkIndustry()">
-    <div class="industry-result" id="industryResult">
-      <div class="ind-icon"><i id="resultIcon" class="fas fa-check"></i></div>
-      <div class="ind-text"><strong id="resultTitle">—</strong><p id="resultDesc">—</p></div>
-    </div>
-
-    <!-- Lawyer drill-down — shown only when lawyer/attorney is typed -->
-    <div id="lawyerDrilldown" style="display:none;margin-top:10px;">
-      <div class="rebuttal-card" style="border-left:4px solid #f43f5e;">
-        <div class="rebuttal-header" onclick="toggleR(this)" style="padding:14px 16px;">
-          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-            <div style="width:28px;height:28px;border-radius:8px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fas fa-gavel" style="color:#f43f5e;font-size:11px;"></i></div>
-            <div style="min-width:0;"><div class="rebuttal-objection">Attorney / Lawyer — Drill Down</div><div style="font-size:0.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">Tap to see how to handle</div></div>
-          </div>
-          <i class="fas fa-chevron-down rebuttal-arrow"></i>
-        </div>
-        <div class="rebuttal-body"><div class="rebuttal-inner">
-          <p style="font-size:0.83rem;color:var(--muted2);line-height:1.55;margin-bottom:10px;">If they say they're a lawyer or attorney — <strong style="color:white">ask if they own a separate business</strong> outside of their legal practice.</p>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;">
-            <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:0.08em;margin-bottom:5px;">Ask:</div>
-            <p style="font-size:0.9rem;font-weight:700;color:white;font-style:italic;line-height:1.6;">"Do you own any other businesses outside of your law practice?"</p>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.25);border-radius:9px;padding:10px 13px;">
-              <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--green);letter-spacing:0.08em;margin-bottom:4px;">✓ Yes — Other Business</div>
-              <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Qualify them on <strong>that business</strong> instead. Proceed with the 4 questions using the other business.</p>
-            </div>
-            <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:9px;padding:10px 13px;">
-              <div style="font-size:0.65rem;font-weight:900;text-transform:uppercase;color:var(--red);letter-spacing:0.08em;margin-bottom:4px;">✗ No — Law Only</div>
-              <p style="font-size:0.8rem;color:white;font-weight:700;line-height:1.5;">Disqualify. End the call gracefully — the legal practice itself is a hard no.</p>
-            </div>
-          </div>
-        </div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">Disqualified Industries</div>
-  <div class="chip-list">
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Attorneys / Lawyers</div>
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Banking</div>
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Lending</div>
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Mortgage</div>
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Church</div>
-    <div class="chip deny"><i class="fas fa-times-circle"></i>Non-Profit</div>
-  </div>
-
-  <div class="section-label">Approved Examples</div>
-  <div class="chip-list">
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Restaurant / Food</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Trucking / Logistics</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Retail</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Construction</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Healthcare / Medical</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Auto Repair</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Beauty / Salon</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Staffing</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Cleaning Services</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>IT / Tech Services</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Landscaping</div>
-    <div class="chip allow"><i class="fas fa-check-circle"></i>Manufacturing</div>
-  </div>
-</div>
-
-<!-- REBUTTALS -->
-<div id="page-rebuttals" class="page">
-  <div class="section-label">Objection Handling</div>
-  <div class="section-title">Rebuttals</div>
-  <div class="section-sub">Search what the customer is saying — or tap a pill to get your response instantly.</div>
-
-  <!-- REBUTTAL SEARCH -->
-  <div class="rebuttal-search-wrap">
-    <i class="fas fa-search search-icon"></i>
-    <input
-      class="rebuttal-search-input"
-      id="rebuttalSearchInput"
-      type="text"
-      placeholder='Type what the customer is saying… e.g. "I don\'t need a loan"'
-      autocomplete="off"
-      oninput="handleRebuttalSearch(this.value)"
-    >
-    <i class="fas fa-times clear-icon" id="rebuttalClearBtn" onclick="clearRebuttalSearch()"></i>
-  </div>
-
-  <!-- LIVE SEARCH RESULTS -->
-  <div class="r-search-results" id="rebuttalSearchResults"></div>
-  <div class="r-no-results" id="rebuttalNoResults">
-    <i class="fas fa-comment-slash" style="font-size:1.4rem;margin-bottom:10px;display:block;color:var(--accent2);opacity:0.5;"></i>
-    No matching rebuttals found. Try different keywords or browse the pills below.
-  </div>
-
-  <!-- PILL SELECTOR -->
-  <div id="rebuttal-pills" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
-    <button class="r-pill" onclick="openRebuttal(1,this)">Which company is this?</button>
-    <button class="r-pill" onclick="openRebuttal(2,this)">Is this a scam?</button>
-    <button class="r-pill" onclick="openRebuttal(3,this)">Email me first</button>
-    <button class="r-pill" onclick="openRebuttal(4,this)">Why calling not emailing?</button>
-    <button class="r-pill" onclick="openRebuttal(5,this)">Are you a bank?</button>
-    <button class="r-pill" onclick="openRebuttal(6,this)">Bad credit</button>
-    <button class="r-pill" onclick="openRebuttal(7,this)">Don't need a loan</button>
-    <button class="r-pill" onclick="openRebuttal(8,this)">Why no info?</button>
-    <button class="r-pill" onclick="openRebuttal(9,this)">Interest rate?</button>
-    <button class="r-pill" onclick="openRebuttal(10,this)">Found cheaper option</button>
-    <button class="r-pill" onclick="openRebuttal(11,this)">How'd you get my info?</button>
-    <button class="r-pill" onclick="openRebuttal(12,this)">What's the company name?</button>
-    <button class="r-pill" onclick="openRebuttal(13,this)">What type of loan? / MCA, SBA?</button>
-    <button class="r-pill" onclick="openRebuttal(14,this)">Already pre-qualified?</button>
-    <button class="r-pill" onclick="openRebuttal(15,this)">I didn't apply</button>
-    <button class="r-pill" onclick="openRebuttal(16,this)">Voicemail said approved</button>
-    <button class="r-pill" onclick="openRebuttal(17,this)">Where are you located?</button>
-    <button class="r-pill" onclick="openRebuttal(18,this)">What's my business name?</button>
-    <button class="r-pill r-pill-red" onclick="openRebuttal(19,this)">Under $20K/month</button>
-    <button class="r-pill" onclick="openRebuttal(20,this)">How am I qualified?</button>
-  </div>
-
-  <!-- DETAIL PANEL -->
-  <div id="rebuttal-panel" style="display:none;"></div>
-
-  <!-- ALL REBUTTAL DATA (hidden) -->
-  <div id="rebuttal-data" style="display:none;">
-
-  <!-- ALL REBUTTAL DATA (hidden) -->
-  <div id="rebuttal-data" style="display:none;">
-
-  <!-- 1 -->
-  <div data-rid="1" data-color="#14b8a6" data-label="Identity / Legitimacy" data-title='"Which company do you represent?"'>
-    <div class="rebuttal-script">"We're the Business Loan Division. We help connect business owners to the right lending programs through our partner network."</div>
-  </div>
-
-  <!-- 2 -->
-  <div data-rid="2" data-color="#ef4444" data-label="Trust / Skepticism" data-title='"Is this a scam?"'>
-    <div class="rebuttal-script">"I understand the concern. This is a legitimate outreach from the Business Loan Division in California. We work only with licensed financial institutions."</div>
-  </div>
-
-  <!-- 3 -->
-  <div data-rid="3" data-color="#f97316" data-label="Delay Tactic" data-title='"Can you email me something first?"'>
-    <div class="rebuttal-script">"Once I connect you with the senior advisor, they can send you all the information directly. I just need to confirm your business details first."</div>
-  </div>
-
-  <!-- 4 -->
-  <div data-rid="4" data-color="#eab308" data-label="Channel Objection" data-title='"Why are you calling and not emailing?"'>
-    <div class="rebuttal-script">"Phone is the quickest way to confirm eligibility and make sure the right person gets connected. It only takes a minute."</div>
-  </div>
-
-  <!-- 5 -->
-  <div data-rid="5" data-color="#3b82f6" data-label="Entity Clarification" data-title='"Are you a bank?"'>
-    <div class="rebuttal-script">"No, we're a direct private lender. We work with business-funding programs that provide working capital and lines of credit directly."</div>
-  </div>
-
-  <!-- 6 -->
-  <div data-rid="6" data-color="#a855f7" data-label="Credit Concern" data-title='"My credit score is bad."'>
-    <div class="rebuttal-script">"Totally understood — but a lower score doesn't disqualify you. We look at your full picture, not just credit. You may still qualify."</div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 7 -->
-  <div data-rid="7" data-color="#ec4899" data-label="Not Interested" data-title='"I don\'t need a loan."'>
-    <div class="rebuttal-script">"Fair enough. Do you see any cash flow gaps or growth opportunities coming up in the next 3–6 months?"</div>
-    <div class="rebuttal-script" style="margin-top:8px;border-left-color:var(--muted);">"Sometimes it helps to be pre-qualified so the funding is ready when you need it." — <em style="color:var(--muted2);">Wait, let them talk first.</em></div>
-    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> See how they respond before moving on.</div>
-  </div>
-
-  <!-- 8 -->
-  <div data-rid="8" data-color="#06b6d4" data-label="Data / Verification" data-title='"Why don\'t you have my information?"'>
-    <div class="rebuttal-script">"We pull from multiple sources, but we always verify directly with you to make sure everything is accurate. Once confirmed, we can match you with the right options."</div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 9 -->
-  <div data-rid="9" data-color="#84cc16" data-label="Rate Question" data-title='"What is the interest rate?"'>
-    <div class="rebuttal-script">"Rates depend on your specific risk and credit profile — but the real question is how fast the funding helps your business grow. Our specialist will go over all of that once we confirm you're pre-qualified."</div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 10 -->
-  <div data-rid="10" data-color="#f43f5e" data-label="Competitor / Price" data-title='"I found a cheaper option elsewhere."'>
-    <div class="rebuttal-script">"Smart to shop around. Just know that cheaper on the surface isn't always better — hidden costs and strict terms add up. Our specialist can do a side-by-side so you're truly getting the best deal. Sound fair?"</div>
-    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait for their response.</div>
-  </div>
-
-  <!-- 11 -->
-  <div data-rid="11" data-color="#8b5cf6" data-label="Privacy Concern" data-title='"How did you get my information?"'>
-    <div class="rebuttal-script">"Totally fair question. We work with a network of trusted financial partners — if you've ever inquired about business financing, your info may have been shared to match you with the best options. Your privacy is fully protected."</div>
-    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> Wait — then go back to where you left off.</div>
-  </div>
-
-  <!-- 12 -->
-  <div data-rid="12" data-color="#6366f1" data-label="Company Identity" data-title='"What is the name of the company?" — Full Flow'>
-    <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">First Response</strong>"We are the Business Loan Division. We work with multiple financial lenders and match you with the right one based on your specific situation."</div>
-    <div style="font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:6px 0;">↓ If they push back: "But that doesn't give me the name of the company"</div>
-    <div class="rebuttal-script" style="border-left-color:#6366f1;margin-bottom:8px;"><strong style="color:#818cf8;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px;">Hold Firm — Stay Calm</strong>"Like I said, Sir/Ma'am, we are the Business Loan Division. When I connect you with the senior advisor, they will go over exactly who we represent — but before I do that, I just need to ask you a few simple questions, if that's okay."</div>
-    <div class="rebuttal-tip" style="margin-bottom:10px;"><i class="fas fa-arrow-right"></i> Immediately go back into qualifying questions.</div>
-    <div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">5 Ways They Might Ask — & How to Handle Each</div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 1 — "What's the name of the company you're from?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're the Business Loan Division — we're the verification team that connects you with the right lender. The advisor you'll speak with will introduce themselves fully."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 2 — "Are you calling from a bank? Which one?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"We're not a bank — we're the Business Loan Division. We work across multiple lenders and match you to the best fit. That's exactly why we verify first."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 3 — "I need a company name before I answer anything."</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"Absolutely — the Business Loan Division. And once I get you to the senior advisor, they'll provide full company details. I just need 2 minutes to verify you qualify first."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 4 — "Can you send me your company website or email?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"The senior advisor can absolutely send that over once you're connected. Right now I just need to confirm a few details to make sure we can actually help you."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="background:rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.65rem;font-weight:900;border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:5px;">SITUATION 5 — "I've never heard of you — how do I know you're legit?"</span><p style="font-size:0.84rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"That's a fair point. We're the Business Loan Division — a licensed verification team based in California. We don't ask for money, we don't charge fees. We simply verify and connect. Your advisor will confirm everything."</p></div>
-    </div>
-  </div>
-
-  <!-- 13 -->
-  <div data-rid="13" data-color="#10b981" data-label="Loan Type Inquiry" data-title='"What type of loan is this? / Do you do MCA, SBA, etc.?"'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
-        <span style="color:#10b981;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Main Script</span>
-        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We work with every major funding type — lines of credit, working capital, merchant cash advances, business term loans, SBA loans, equipment financing, invoice factoring — really the full range. Our senior advisors match you to whichever product fits your business best. That's exactly why I need to ask a few quick questions — so we know which option to put in front of you."</p>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
-        <span style="color:#10b981;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">If They Ask About a Specific Type (e.g. "Do you do MCA?")</span>
-        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Yes, that's one of the options on the table. Whether it ends up being an MCA, a line of credit, a term loan, or something else — the senior advisor will go over all of it with you. My job right now is just to confirm you qualify so we don't waste your time."</p>
-      </div>
-    </div>
-
-    <div style="margin:10px 0 8px;font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);">✅ All Funding Types We Cover</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Merchant Cash Advance</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">MCA — revenue-based, fast</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">SBA Loans</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">SBA 7(a), 504 — gov-backed</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Business Term Loan</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">Lump sum, fixed payments</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Line of Credit</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">Revolving, draw on demand</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Working Capital</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">Short-term operational cash</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Equipment Financing</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">Asset-backed, fixed term</div>
-        </div>
-      </div>
-      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;grid-column:1/-1;">
-        <i class="fas fa-check-circle" style="color:#10b981;font-size:0.75rem;flex-shrink:0;"></i>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:white;">Invoice Factoring / Accounts Receivable</div>
-          <div style="font-size:0.68rem;color:var(--muted2);">Advance on unpaid invoices</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:9px;padding:10px 13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;">
-      <i class="fas fa-star" style="color:#10b981;font-size:0.75rem;flex-shrink:0;margin-top:2px;"></i>
-      <p style="font-size:0.78rem;color:var(--muted2);line-height:1.55;"><strong style="color:white;">Key point:</strong> You don't need to match them to a product — that's the senior advisor's job. Your answer is always <em style="color:white;">"we cover everything, the advisor will find the right fit."</em></p>
-    </div>
-
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 14 -->
-  <div data-rid="14" data-color="#f59e0b" data-label="Pre-Qualification Pushback" data-title='"If I\'m already pre-qualified, why do you need more questions?"'>
-    <div class="rebuttal-script">"I completely understand how that sounds — pre-qualified simply means you meet the general criteria based on the basic info we have. These few questions make sure we match you with the right program and the lender most likely to approve you. If we skip this step, it could lead to delays or even a mismatch, and I want to make sure you get the best possible offer without wasting your time."</div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 15 -->
-  <div data-rid="15" data-color="#0ea5e9" data-label="Unsolicited Outreach" data-title='"I didn\'t apply for a loan — who applied?"'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"No one applied on your behalf — your business information came through one of our financial partner networks. We reach out to business owners who appear to meet our criteria. You're not obligated to proceed, but since you're on the line, can I ask a few quick questions?"</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's a great question — no application was submitted for you. We work with a network of data partners and your business details indicated you may qualify for funding. We're simply reaching out to verify eligibility."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#0ea5e9;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Nobody applied — we identified your business as a potential match through our partner network and reached out directly. There's no commitment here, I just need to verify a few things."</p></div>
-      <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:9px;padding:10px 13px;display:flex;gap:8px;align-items:flex-start;"><i class="fas fa-lightbulb" style="color:#f59e0b;margin-top:2px;flex-shrink:0;"></i><div><p style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f59e0b;letter-spacing:0.08em;margin-bottom:3px;">If They Say They DID Apply Before</p><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.6;font-style:italic;">"If you applied for a loan before, that's likely why we're reaching out to you."</p></div></div>
-    </div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 16 -->
-  <div data-rid="16" data-color="#d946ef" data-label="Pre-Approval Confusion" data-title='"Your voicemail said I\'m already approved."'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"I understand how that sounds — what that means is your business profile met our general criteria, which is why we reached out. Full approval happens after the senior advisor reviews your details. These questions just help us get you to the right program."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Pre-approved simply means you cleared the first threshold based on basic info. The advisor confirms the actual offer — I just need to verify a couple of things so we match you with the right lender."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#d946ef;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Think of it like a pre-screen — your business appeared to qualify based on initial criteria. The senior advisor locks in the real numbers once I confirm your details. Can we take 2 minutes to do that now?"</p></div>
-    </div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 17 -->
-  <div data-rid="17" data-color="#22c55e" data-label="Location Question" data-title='"Where is your company located?"'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We're based in California. We operate nationally and work with lenders across the country to match business owners with the right funding programs."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Our offices are in California — we're a national operation so we work with business owners all across the U.S. through our lender network."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#22c55e;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option C</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"California-based. We work with business owners nationwide — the senior advisor can give you the full details on our operations when you're connected."</p></div>
-    </div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 18 -->
-  <div data-rid="18" data-color="#fb923c" data-label="Business Name Challenge" data-title='"What\'s the name of my business / how did you approve me without knowing it?"'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option A</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"That's exactly why I'm calling — we have some basic information but we need to verify the details directly with you, including your business name. That's what these questions are for, so we can confirm everything is accurate before connecting you."</p></div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;"><span style="color:#fb923c;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option B</span><p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Great question — we pulled your contact info from our partner network, but we always verify directly with the owner to make sure everything is correct. So let's start there — what's the name of your business?"</p></div>
-    </div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  <!-- 19 -->
-  <div data-rid="19" data-color="#f43f5e" data-label="Revenue — Hard Disqualifier" data-title='"We don\'t make $20K a month."'>
-    <div style="background:rgba(244,63,94,0.07);border:1px solid rgba(244,63,94,0.25);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-      <i class="fas fa-exclamation-triangle" style="color:#f43f5e;font-size:13px;flex-shrink:0;"></i>
-      <span style="font-size:0.72rem;font-weight:900;text-transform:uppercase;color:#f43f5e;letter-spacing:0.08em;">Hard Disqualifier — Do not push past this</span>
-    </div>
-    <div class="rebuttal-script">"I appreciate you being upfront — I want to make sure I'm only connecting you with options you actually qualify for. Unfortunately the minimum threshold is $20,000 in monthly deposits. That said, <strong>keep building</strong> — once you're there, you'll be a great fit and I'd love to reconnect."</div>
-    <div class="rebuttal-tip"><i class="fas fa-lightbulb"></i> End gracefully. Don't push past a hard disqualifier — wish them well and move on.</div>
-  </div>
-
-  <!-- 20 -->
-  <div data-rid="20" data-color="#6366f1" data-label="Pre-Qualification Explanation" data-title='"How am I qualified? / How did you get my info?"'>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;">
-
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
-        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option E — Applied for a Loan</span>
-        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"If you've ever applied for a loan or business funding before, that's likely why we're reaching out. We work with applicants to match them with the best loan option available for their business."</p>
-      </div>
-
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
-        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option G — Soft Inquiry / Pre-Screen</span>
-        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"Your business was pre-screened based on general criteria — no application needed on your end. But if you have applied for financing before, that could also be why we have your info."</p>
-      </div>
-
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;">
-        <span style="color:#6366f1;font-size:0.65rem;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:5px;">Option H — Direct & Confident</span>
-        <p style="font-size:0.87rem;font-weight:700;color:white;line-height:1.65;font-style:italic;">"We only reach out to business owners who either applied for funding or whose business profile meets our criteria. Either way, you're here because something indicated you may qualify — and I just need to confirm a few details."</p>
-      </div>
-
-    </div>
-    <div style="background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.2);border-radius:9px;padding:10px 13px;display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;">
-      <i class="fas fa-lightbulb" style="color:#6366f1;font-size:0.75rem;flex-shrink:0;margin-top:2px;"></i>
-      <p style="font-size:0.78rem;color:var(--muted2);line-height:1.55;"><strong style="color:white;">Pro tip:</strong> Option H works best when they sound skeptical but not hostile. Option E is ideal if they mention they've applied somewhere before. Option G is safest when you're not sure.</p>
-    </div>
-    <div class="rebuttal-tip"><i class="fas fa-arrow-right"></i> Go right back to qualifying questions.</div>
-  </div>
-
-  </div><!-- end rebuttal-data -->
-
-</div>
-
-<script>
-  // ===== CLOCKS =====
-  function formatTime(date, tz) {
-    return date.toLocaleTimeString('en-US', {
-      timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+// ============================================================
+//  ATLeads Dashboard — Google Apps Script  (Fixed & Complete)
+//  Deploy as Web App → Execute as: Me → Anyone can access
+//
+//  Sheet tab naming (auto-detected by visibility each month):
+//    Roster  → "Atleads Mar Biz Roster", "Atleads Apr Biz Roster" etc.
+//    BB Att  → "Atleads Mar BB Weekly Attendance" etc.
+//    PR Att  → "Atleads Mar PR Weekly Attendance" etc.
+//
+//  Weekly block layout (same for BB and PR tabs):
+//    Row N   : "March 23-28, 2026"                ← date header (col A)
+//    Row N+1 : "ATL BB General Team Business" | Week 04 | Mon | Tue | Wed | Thur | Fri | Sat | REAL TIME COMMENTS
+//    Row N+2+: agent rows  e.g. "GUY Analese Doman" | shift | P/L/A/S...
+//
+//  Status codes written to sheet:
+//    P = Present
+//    L = Late
+//    A = Absent
+//
+//  Saturday: login marks P or L — absent trigger does NOT run.
+//  Sunday  : nothing happens.
+// ============================================================
+
+
+// ══════════════════════════════════════════════════════════════
+// SHEET FINDERS  (visibility-based — auto picks up new month)
+// ══════════════════════════════════════════════════════════════
+
+function getATLRosterSheet(ss) {
+  const sheets = ss.getSheets();
+  let fallback = null;
+  for (const sheet of sheets) {
+    const name = sheet.getName();
+    if (!/Atleads/i.test(name))     continue;
+    if (!/Biz Roster$/i.test(name)) continue;
+    if (!sheet.isSheetHidden()) return sheet;
+    fallback = sheet;
+  }
+  return fallback;
+}
+
+function getATLBBWeeklySheet(ss) {
+  const sheets = ss.getSheets();
+  let fallback = null;
+  for (const sheet of sheets) {
+    const name = sheet.getName();
+    if (!/Atleads/i.test(name))   continue;
+    if (!/BB Weekly/i.test(name)) continue;
+    if (!sheet.isSheetHidden()) return sheet;
+    fallback = sheet;
+  }
+  return fallback;
+}
+
+function getATLPRWeeklySheet(ss) {
+  const sheets = ss.getSheets();
+  let fallback = null;
+  for (const sheet of sheets) {
+    const name = sheet.getName();
+    if (!/Atleads/i.test(name))   continue;
+    if (!/PR Weekly/i.test(name)) continue;
+    if (!sheet.isSheetHidden()) return sheet;
+    fallback = sheet;
+  }
+  return fallback;
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// CORS HELPER
+// ══════════════════════════════════════════════════════════════
+function corsResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// MAIN ENTRY POINT
+// ══════════════════════════════════════════════════════════════
+function doGet(e) {
+  const params = e.parameter;
+  const action = params.action || '';
+
+  if (action === 'getAgentSchedule') return handleGetAgentSchedule(params);
+  if (action === 'attendance')        return handleAttendance(params);
+  if (action === 'getAttendance')     return handleGetAttendance(params);
+
+  return corsResponse({ ok: false, error: 'Unknown action' });
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// GET AGENT SCHEDULE
+// Returns: { found, name, team, shift, status, ytelId }
+//
+// FIX: Added missing `const data = ...` and `let agentRow = null`
+// ══════════════════════════════════════════════════════════════
+function handleGetAgentSchedule(params) {
+  const ss        = SpreadsheetApp.getActiveSpreadsheet();
+  const ytelId    = (params.ytelId    || '').trim();
+  const agentName = (params.agentName || '').trim().toLowerCase();
+
+  const rosterSheet = getATLRosterSheet(ss);
+  if (!rosterSheet) return corsResponse({ found: false, error: 'No ATL roster sheet found' });
+
+  // ── FIX: These two lines were missing in the original ──
+  const data    = rosterSheet.getDataRange().getValues();
+  let agentRow  = null;
+  // ───────────────────────────────────────────────────────
+
+  // ATL Roster columns (0-indexed):
+  //   A=0 Ytel Name   B=1 Agent Name   C=2 Shift   D=3 User ID   E=4 Lunch   F=5 Status
+  for (let i = 1; i < data.length; i++) {
+    const row          = data[i];
+    const rowYtelName  = String(row[0] || '').trim();
+    const rowAgentName = String(row[1] || '').trim();
+    const rowUserId    = String(row[3] || '').trim();
+
+    const ytelIdNum = ytelId.replace(/\D/g, '');
+    if (ytelIdNum && rowUserId === ytelIdNum)                        { agentRow = row; break; }
+    if (agentName && rowAgentName.toLowerCase().includes(agentName)) { agentRow = row; break; }
+    if (agentName && rowYtelName.toLowerCase().includes(agentName))  { agentRow = row; break; }
+  }
+
+  if (!agentRow) return corsResponse({ found: false, note: 'Agent not found' });
+
+  const foundName    = String(agentRow[1] || '').trim();
+  const shift        = String(agentRow[2] || '').trim(); // col C = Shift
+  const lunch        = String(agentRow[4] || '').trim(); // col E = Lunch
+  const status       = String(agentRow[5] || '').trim(); // col F = Status
+  const ytelFullName = String(agentRow[0] || '').trim();
+  const userId       = String(agentRow[3] || '').trim(); // col D = User ID
+
+  let team = '';
+  if      (/^GUY/i.test(ytelFullName)) team = 'ATL BB Team';
+  else if (/^GYP/i.test(ytelFullName)) team = 'ATL PR Team';
+  else if (/^GYB/i.test(ytelFullName)) team = 'ATL BB Team';
+  else if (/^GY /i.test(ytelFullName)) team = 'ATL General';
+
+  return corsResponse({ found: true, name: foundName, team, shift: shift || null, lunch: lunch || null, status, ytelId: userId });
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// ATTENDANCE — mark P, L, or A in the correct weekly tab
+//
+// params.status: 'Present' | 'Late' | 'Absent'
+// Code written:   P         | L      | A
+// ══════════════════════════════════════════════════════════════
+function handleAttendance(params) {
+  const ss        = SpreadsheetApp.getActiveSpreadsheet();
+  const ytelId    = (params.ytelId || '').trim();
+  const agentName = (params.name   || '').trim();
+  const statusVal = (params.status || 'Present').trim();
+
+  // Map status to single-letter code
+  let code = 'P';
+  if (statusVal === 'Late')   code = 'L';
+  if (statusVal === 'Absent') code = 'A';
+
+  // Look up full Ytel name from roster to determine BB vs PR
+  const rosterSheet = getATLRosterSheet(ss);
+  let ytelFullName  = '';
+  let targetSheet   = null;
+
+  if (rosterSheet && ytelId) {
+    const data  = rosterSheet.getDataRange().getValues();
+    const idNum = ytelId.replace(/\D/g, '');
+    for (let i = 1; i < data.length; i++) {
+      const rowId   = String(data[i][3] || '').trim(); // col D = User ID
+      const rowName = String(data[i][1] || '').trim().toLowerCase();
+      if (idNum && rowId === idNum) {
+        ytelFullName = String(data[i][0] || '').trim(); break;
+      }
+      if (agentName && rowName.includes(agentName.toLowerCase())) {
+        ytelFullName = String(data[i][0] || '').trim(); break;
+      }
+    }
+  }
+
+  // Route to correct weekly sheet
+  if (/^GUY/i.test(ytelFullName) || /^GYB/i.test(ytelFullName)) {
+    targetSheet = getATLBBWeeklySheet(ss);
+  } else if (/^GYP/i.test(ytelFullName) || /^GY /i.test(ytelFullName)) {
+    targetSheet = getATLPRWeeklySheet(ss);
+  } else {
+    // Unknown prefix — search both sheets for agent name
+    const bbSheet = getATLBBWeeklySheet(ss);
+    const prSheet = getATLPRWeeklySheet(ss);
+    if (bbSheet && agentExistsInSheet(bbSheet, agentName)) targetSheet = bbSheet;
+    else if (prSheet && agentExistsInSheet(prSheet, agentName)) targetSheet = prSheet;
+    else targetSheet = bbSheet; // fallback
+  }
+
+  if (targetSheet) {
+    const marked = markATLWeeklyAttendance(targetSheet, agentName, code);
+    return corsResponse({ ok: true, status: statusVal, code, marked, sheet: targetSheet.getName() });
+  }
+
+  return corsResponse({ ok: false, error: 'No target sheet found' });
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// GET ATTENDANCE — returns today's records from both weekly sheets
+// Used by the Admin attendance panel in the dashboard
+// ══════════════════════════════════════════════════════════════
+function handleGetAttendance(params) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  const guyanaStr = new Date().toLocaleString('en-US', { timeZone: 'America/Guyana' });
+  const today     = new Date(guyanaStr);
+  today.setHours(0, 0, 0, 0);
+
+  const DAY_NAME_MAP = { 1:'mon', 2:'tue', 3:'wed', 4:'thur', 5:'fri', 6:'sat' };
+  const dayOfWeek   = today.getDay();
+  const todayDayStr = DAY_NAME_MAP[dayOfWeek];
+
+  const records = [];
+
+  const sheets = [
+    { sheet: getATLBBWeeklySheet(ss), team: 'ATL BB Team' },
+    { sheet: getATLPRWeeklySheet(ss), team: 'ATL PR Team' },
+  ];
+
+  for (const { sheet, team } of sheets) {
+    if (!sheet) continue;
+    const sheetRecords = getAttendanceFromSheet(sheet, today, todayDayStr, team);
+    records.push(...sheetRecords);
+  }
+
+  return corsResponse({ ok: true, records, date: today.toDateString() });
+}
+
+function getAttendanceFromSheet(sheet, today, todayDayStr, team) {
+  const data      = sheet.getDataRange().getValues();
+  const totalRows = data.length;
+  const records   = [];
+
+  if (!todayDayStr) return records; // Sunday
+
+  // Find week blocks
+  const weekBlocks = [];
+  for (let r = 0; r < totalRows; r++) {
+    const cellA = String(data[r][0] || '').trim();
+    if (!cellA) continue;
+    if (/\b20\d{2}\b/.test(cellA) && !/ATL .* General Team Business/i.test(cellA)) {
+      weekBlocks.push({ dateStr: cellA, headerRow: r });
+    }
+  }
+
+  // Enrich blocks
+  for (let b = 0; b < weekBlocks.length; b++) {
+    const block     = weekBlocks[b];
+    const nextStart = weekBlocks[b + 1] ? weekBlocks[b + 1].headerRow : totalRows;
+    let colHeaderRow = -1;
+    for (let r = block.headerRow + 1; r < Math.min(block.headerRow + 5, nextStart); r++) {
+      const a = String(data[r][0] || '');
+      if (/ATL .* General Team Business/i.test(a) || /^Mon/i.test(String(data[r][2] || ''))) {
+        colHeaderRow = r; break;
+      }
+    }
+    if (colHeaderRow === -1) continue;
+    block.colHeaderRow = colHeaderRow;
+    block.agentStart   = colHeaderRow + 1;
+    block.agentEnd     = nextStart - 1;
+    const range = parseATLDateRange(block.dateStr);
+    if (!range) continue;
+    block.startDate = range.start;
+    block.endDate   = range.end;
+  }
+
+  // Find today's block
+  let targetBlock = null;
+  for (const block of weekBlocks) {
+    if (!block.startDate || !block.endDate) continue;
+    if (today >= block.startDate && today <= block.endDate) { targetBlock = block; break; }
+  }
+  if (!targetBlock) return records;
+
+  // Find day column
+  const headerRow = data[targetBlock.colHeaderRow];
+  let dayColIdx = -1;
+  for (let c = 2; c <= 8; c++) {
+    const hdr = String(headerRow[c] || '').trim().toLowerCase();
+    if (hdr.startsWith(todayDayStr.substring(0, 3))) { dayColIdx = c; break; }
+  }
+  if (dayColIdx === -1) return records;
+
+  // Collect agent rows
+  for (let r = targetBlock.agentStart; r <= targetBlock.agentEnd; r++) {
+    if (r >= totalRows) break;
+    const rowNameRaw = String(data[r][0] || '').trim();
+    if (!rowNameRaw) continue;
+    if (/ATL .* General Team Business/i.test(rowNameRaw)) continue;
+
+    const cleanName = rowNameRaw
+      .replace(/^GUY\s+/i, '')
+      .replace(/^GY[PB]?\s+/i, '')
+      .trim();
+
+    const code  = String(data[r][dayColIdx] || '').trim().toUpperCase();
+    const shift = String(data[r][1] || '').trim();
+
+    let statusLabel = '';
+    if      (code === 'P') statusLabel = 'Present';
+    else if (code === 'L') statusLabel = 'Late';
+    else if (code === 'A') statusLabel = 'Absent';
+    else if (code === 'S') statusLabel = 'Special';
+    else                   statusLabel = code || 'Not Marked';
+
+    // Only include agents who have been marked (P, L, A, S)
+    // Remove the condition below if you want to show ALL agents including unmarked
+    if (!code) continue;
+
+    records.push({
+      name:     cleanName,
+      fullName: rowNameRaw,
+      team,
+      shift,
+      status:   statusLabel,
+      code,
     });
   }
-  function tickClocks() {
-    const now = new Date();
-    document.getElementById('clock-gy').textContent = formatTime(now, 'America/Guyana');
-    document.getElementById('clock-us').textContent = formatTime(now, 'America/Los_Angeles');
-  }
-  tickClocks();
-  setInterval(tickClocks, 1000);
 
-  // ===== NAV =====
-  function showPage(name, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    btn.classList.add('active');
-  }
+  return records;
+}
 
-  // ===== GEMINI =====
-  function isPhoneNum(q) {
-    return /^[\d\s\-\(\)\+\.]+$/.test(q) && q.replace(/\D/g,'').length >= 7;
-  }
-  function buildLookupQuery(q) {
-    if (isPhoneNum(q)) return 'For the phone number ' + q + ', give me: the business name, the name of the owner, the address, and email if possible';
-    return 'For the business "' + q + '", give me: the business name, the name of the owner, the address, and email if possible';
-  }
-  function openGemini() {
-    const input = document.getElementById('phoneInput');
-    const q = input.value.trim();
-    if (!q) {
-      input.focus();
-      input.style.borderColor = '#f43f5e';
-      input.placeholder = 'Enter a phone number first!';
-      setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Enter phone number e.g. 3051234567'; }, 2000);
-      return;
-    }
-    const query = buildLookupQuery(q);
-    const url = 'https://www.google.com/search?q=' + encodeURIComponent(query) + '&udm=50';
-    window.open(url, '_blank', 'noopener');
-  }
 
-  // ===== INDUSTRY CHECK =====
-  const DENIED = ['attorney','lawyer','banking','bank','lending','lender','mortgage','church','non-profit','nonprofit','non profit','charity','foundation'];
-  const APPROVED = ['restaurant','food','cafe','catering','trucking','logistics','freight','hauling','retail','store','shop','boutique','construction','contractor','builder','plumbing','electrical','roofing','hvac','medical','healthcare','clinic','dental','chiro','therapy','auto','mechanic','car','vehicle','salon','beauty','barber','nail','spa','staffing','employment','cleaning','janitorial','tech','software','landscaping','lawn','garden','manufacturing','warehouse','distribution','daycare','childcare','fitness','gym','hotel','motel','hospitality','security','printing','marketing','agency','media','accounting','tax','bookkeeping','insurance','real estate','property'];
+// ══════════════════════════════════════════════════════════════
+// QUICK CHECK — does agent appear in this sheet?
+// ══════════════════════════════════════════════════════════════
+function agentExistsInSheet(sheet, agentName) {
+  const agentLower = agentName.toLowerCase().replace(/\s+/g, ' ').trim();
+  const data = sheet.getDataRange().getValues();
+  for (let r = 0; r < data.length; r++) {
+    const raw = String(data[r][0] || '').trim();
+    if (!raw) continue;
+    const stripped = raw.replace(/^GU?Y[PB]?\s+/i, '').toLowerCase().trim();
+    if (stripped.includes(agentLower) || agentLower.includes(stripped)) return true;
+  }
+  return false;
+}
 
-  function checkIndustry() {
-    const val = document.getElementById('industryInput').value.trim().toLowerCase();
-    const el = document.getElementById('industryResult');
-    const lawyerDD = document.getElementById('lawyerDrilldown');
-    if (!val) { el.className = 'industry-result'; lawyerDD.style.display = 'none'; return; }
-    const isLawyer = ['attorney','lawyer'].some(d => val.includes(d));
-    const isDenied = DENIED.some(d => val.includes(d));
-    const isApproved = APPROVED.some(a => val.includes(a));
-    el.className = 'industry-result show';
-    lawyerDD.style.display = isLawyer ? 'block' : 'none';
-    if (isDenied) {
-      el.classList.add('denied');
-      document.getElementById('resultIcon').className = 'fas fa-ban';
-      document.getElementById('resultTitle').textContent = '❌ Does Not Qualify';
-      document.getElementById('resultDesc').textContent = isLawyer
-        ? 'Legal practice is disqualified — but tap the card below to see if they own another business that may qualify.'
-        : 'This industry is on the disqualified list. Politely end the call — they do not meet the criteria for this program.';
-    } else if (isApproved) {
-      el.classList.add('approved');
-      document.getElementById('resultIcon').className = 'fas fa-check';
-      document.getElementById('resultTitle').textContent = '✅ Looks Good — Continue';
-      document.getElementById('resultDesc').textContent = 'This industry appears to be approved. Proceed with the remaining qualification questions.';
-    } else {
-      el.classList.add('unknown');
-      document.getElementById('resultIcon').className = 'fas fa-circle-question';
-      document.getElementById('resultTitle').textContent = '⚠️ Not Listed — Use Judgment';
-      document.getElementById('resultDesc').textContent = "Not on the blocked list — likely okay. If unsure, check with your team and continue with the other qualifiers.";
+
+// ══════════════════════════════════════════════════════════════
+// MARK ATTENDANCE IN WEEKLY SHEET
+// Returns true if agent was found and marked, false otherwise
+// ══════════════════════════════════════════════════════════════
+function markATLWeeklyAttendance(sheet, agentName, code) {
+  const guyanaStr = new Date().toLocaleString('en-US', { timeZone: 'America/Guyana' });
+  const today     = new Date(guyanaStr);
+  today.setHours(0, 0, 0, 0);
+
+  const data      = sheet.getDataRange().getValues();
+  const totalRows = data.length;
+
+  // Collect week blocks
+  const weekBlocks = [];
+  for (let r = 0; r < totalRows; r++) {
+    const cellA = String(data[r][0] || '').trim();
+    if (!cellA) continue;
+    if (/\b20\d{2}\b/.test(cellA) && !/ATL .* General Team Business/i.test(cellA)) {
+      weekBlocks.push({ dateStr: cellA, headerRow: r });
     }
   }
 
-  // ===== REBUTTALS PILL UI =====
-  function openRebuttal(id, btn) {
-    // toggle off if already active
-    if (btn.classList.contains('active')) {
-      btn.classList.remove('active');
-      document.getElementById('rebuttal-panel').style.display = 'none';
-      return;
-    }
-    // deactivate all pills
-    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-
-    const data = document.querySelector('#rebuttal-data [data-rid="'+id+'"]');
-    const color = data.getAttribute('data-color');
-    const label = data.getAttribute('data-label');
-    const title = data.getAttribute('data-title');
-    const bodyHTML = data.innerHTML;
-
-    const panel = document.getElementById('rebuttal-panel');
-    panel.innerHTML = `
-      <div class="r-panel" style="border-left:4px solid ${color}">
-        <div class="r-panel-header" style="background:rgba(0,0,0,0.18)">
-          <div>
-            <div class="r-panel-title">${title}</div>
-            <div class="r-panel-label" style="color:${color}">${label}</div>
-          </div>
-          <button class="r-panel-close" onclick="closeRebuttal()"><i class="fas fa-times"></i> Close</button>
-        </div>
-        <div class="r-panel-body">${bodyHTML}</div>
-      </div>`;
-    panel.style.display = 'block';
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  function closeRebuttal() {
-    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
-    document.getElementById('rebuttal-panel').style.display = 'none';
-  }
-
-  // ===== REBUTTALS (legacy, kept for lawyer drilldown card) =====
-  function toggleR(header) {
-    const body = header.nextElementSibling;
-    const arrow = header.querySelector('.rebuttal-arrow');
-    const open = body.classList.contains('open');
-    body.classList.toggle('open', !open);
-    arrow.classList.toggle('open', !open);
-  }
-
-  // ===== REBUTTAL SEARCH (AI-Powered) =====
-  let searchDebounceTimer = null;
-
-  function getRebuttalData() {
-    const items = document.querySelectorAll('#rebuttal-data [data-rid]');
-    return Array.from(items).map(el => ({
-      id: el.getAttribute('data-rid'),
-      color: el.getAttribute('data-color'),
-      label: el.getAttribute('data-label'),
-      title: el.getAttribute('data-title'),
-      bodyHTML: el.innerHTML,
-      searchText: (el.getAttribute('data-title') + ' ' + el.getAttribute('data-label') + ' ' + el.textContent).toLowerCase()
-    }));
-  }
-
-  function handleRebuttalSearch(val) {
-    const q = val.trim();
-    const clearBtn = document.getElementById('rebuttalClearBtn');
-    const resultsWrap = document.getElementById('rebuttalSearchResults');
-    const noResults = document.getElementById('rebuttalNoResults');
-    const pillsWrap = document.getElementById('rebuttal-pills');
-    const panel = document.getElementById('rebuttal-panel');
-
-    clearBtn.style.display = q ? 'block' : 'none';
-
-    if (!q) {
-      resultsWrap.classList.remove('visible');
-      noResults.classList.remove('visible');
-      pillsWrap.style.opacity = '1';
-      panel.style.display = 'none';
-      document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
-      clearTimeout(searchDebounceTimer);
-      return;
-    }
-
-    panel.style.display = 'none';
-    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
-    pillsWrap.style.opacity = '0.35';
-
-    // Debounce — wait 500ms after user stops typing before calling AI
-    clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = setTimeout(() => runAISearch(q), 500);
-  }
-
-  async function runAISearch(query) {
-    const resultsWrap = document.getElementById('rebuttalSearchResults');
-    const noResults = document.getElementById('rebuttalNoResults');
-
-    // Show loading state
-    noResults.classList.remove('visible');
-    resultsWrap.classList.add('visible');
-    resultsWrap.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;">
-        <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent2);border-top-color:transparent;animation:spin 0.7s linear infinite;flex-shrink:0;"></div>
-        <div>
-          <div style="font-size:0.85rem;font-weight:700;color:white;margin-bottom:3px;">Reading what the customer said…</div>
-          <div style="font-size:0.75rem;color:var(--muted);">AI is matching the best rebuttals for you</div>
-        </div>
-      </div>
-    `;
-
-    const rebuttalList = getRebuttalData();
-    const rebuttalsForPrompt = rebuttalList.map(r =>
-      `ID ${r.id}: "${r.title}" [${r.label}]`
-    ).join('\n');
-
-    const prompt = `You are a rebuttal-matching assistant for a business loan call center agent.
-
-A customer just said: "${query}"
-
-Available rebuttals:
-${rebuttalsForPrompt}
-
-Rules:
-- Match ONLY rebuttals that directly address what the customer said
-- Understand synonyms and informal phrasing (e.g. "how'd you get my number" = "How did you get my info", "nah I'm good" = "I don't need a loan", "my credit is bad" = "My credit score is bad")
-- If the customer is asking HOW they qualified or why you're calling, match ID 20
-- If the customer hasn't heard of the company or asks if it's real/legit, match ID 2
-- Return 1-3 matches MAX — only the genuinely relevant ones
-- If nothing clearly matches, return empty array — do NOT guess
-- Never return a match just because one word overlaps
-
-Respond ONLY with this exact JSON, no markdown, no explanation:
-{"matches":[1,3],"reason":"one sentence explaining the match"}`;
-
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 200,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-
-      const data = await response.json();
-      const raw = data.content?.[0]?.text || '{"matches":[]}';
-      const clean = raw.replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(clean);
-      const matchedIds = (parsed.matches || []).map(String);
-      const reason = parsed.reason || '';
-
-      if (matchedIds.length === 0) {
-        resultsWrap.classList.remove('visible');
-        noResults.classList.add('visible');
-        return;
-      }
-
-      const matchedRebuttals = matchedIds
-        .map(id => rebuttalList.find(r => r.id === id))
-        .filter(Boolean);
-
-      noResults.classList.remove('visible');
-      resultsWrap.innerHTML = `
-        ${reason ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(168,85,247,0.07);border:1px solid rgba(168,85,247,0.2);border-radius:10px;margin-bottom:6px;">
-          <i class="fas fa-brain" style="color:var(--accent2);font-size:0.8rem;flex-shrink:0;"></i>
-          <span style="font-size:0.78rem;color:var(--muted2);font-style:italic;">${reason}</span>
-        </div>` : ''}
-        ${matchedRebuttals.map(m => `
-          <div class="r-search-result-card" onclick="openRebuttalFromSearch('${m.id}', this)" style="border-left: 3px solid ${m.color}">
-            <div class="r-search-result-header">
-              <div class="r-search-result-objection">${m.title}</div>
-              <div class="r-search-result-label" style="color:${m.color};border-color:${m.color}30;background:${m.color}15">${m.label}</div>
-            </div>
-            <div class="r-search-result-body">${m.bodyHTML}</div>
-          </div>
-        `).join('')}
-      `;
-      resultsWrap.classList.add('visible');
-
-    } catch (err) {
-      // Fallback to keyword search if API fails
-      const q = query.toLowerCase();
-      const fallback = rebuttalList.filter(d => d.searchText.includes(q));
-      if (fallback.length === 0) {
-        resultsWrap.classList.remove('visible');
-        noResults.classList.add('visible');
-      } else {
-        resultsWrap.innerHTML = fallback.map(m => `
-          <div class="r-search-result-card" onclick="openRebuttalFromSearch('${m.id}', this)" style="border-left: 3px solid ${m.color}">
-            <div class="r-search-result-header">
-              <div class="r-search-result-objection">${m.title}</div>
-              <div class="r-search-result-label" style="color:${m.color};border-color:${m.color}30;background:${m.color}15">${m.label}</div>
-            </div>
-            <div class="r-search-result-body">${m.bodyHTML}</div>
-          </div>
-        `).join('');
-        resultsWrap.classList.add('visible');
+  // Enrich blocks
+  for (let b = 0; b < weekBlocks.length; b++) {
+    const block     = weekBlocks[b];
+    const nextStart = weekBlocks[b + 1] ? weekBlocks[b + 1].headerRow : totalRows;
+    let colHeaderRow = -1;
+    for (let r = block.headerRow + 1; r < Math.min(block.headerRow + 5, nextStart); r++) {
+      const a = String(data[r][0] || '');
+      if (/ATL .* General Team Business/i.test(a) || /^Mon/i.test(String(data[r][2] || ''))) {
+        colHeaderRow = r; break;
       }
     }
+    if (colHeaderRow === -1) continue;
+    block.colHeaderRow = colHeaderRow;
+    block.agentStart   = colHeaderRow + 1;
+    block.agentEnd     = nextStart - 1;
+    const range = parseATLDateRange(block.dateStr);
+    if (!range) continue;
+    block.startDate = range.start;
+    block.endDate   = range.end;
   }
 
-  function openRebuttalFromSearch(id, card) {
-    document.querySelectorAll('.r-search-result-card').forEach(c => c.style.background = '');
-    card.style.background = 'rgba(168,85,247,0.06)';
-    document.querySelectorAll('.r-pill').forEach(p => p.classList.remove('active'));
-    const matchingPill = document.querySelector(`.r-pill[onclick*="openRebuttal(${id},"]`);
-    if (matchingPill) matchingPill.classList.add('active');
-    const data = document.querySelector('#rebuttal-data [data-rid="'+id+'"]');
-    const color = data.getAttribute('data-color');
-    const label = data.getAttribute('data-label');
-    const title = data.getAttribute('data-title');
-    const bodyHTML = data.innerHTML;
-    const panel = document.getElementById('rebuttal-panel');
-    panel.innerHTML = `
-      <div class="r-panel" style="border-left:4px solid ${color}">
-        <div class="r-panel-header" style="background:rgba(0,0,0,0.18)">
-          <div>
-            <div class="r-panel-title">${title}</div>
-            <div class="r-panel-label" style="color:${color}">${label}</div>
-          </div>
-          <button class="r-panel-close" onclick="closeRebuttal()"><i class="fas fa-times"></i> Close</button>
-        </div>
-        <div class="r-panel-body">${bodyHTML}</div>
-      </div>`;
-    panel.style.display = 'block';
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Find today's block
+  let targetBlock = null;
+  for (const block of weekBlocks) {
+    if (!block.startDate || !block.endDate) continue;
+    if (today >= block.startDate && today <= block.endDate) { targetBlock = block; break; }
   }
-
-  function clearRebuttalSearch() {
-    const input = document.getElementById('rebuttalSearchInput');
-    input.value = '';
-    handleRebuttalSearch('');
-    input.focus();
-  }
-
-  // ===== PRANK CARDS =====
-  function togglePrank(header) {
-    const body = header.nextElementSibling;
-    const arrow = header.querySelector('i.fa-chevron-down');
-    const open = body.classList.contains('open');
-    body.classList.toggle('open', !open);
-    if (arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
-  }
-</script>
-
-<script>
-// ═══════════════════════════════════════════════════════
-// ATL ATTENDANCE SYSTEM
-// ═══════════════════════════════════════════════════════
-const ATL_URL = 'https://script.google.com/macros/s/AKfycbxbFAS5I4i3g7T6O8bEltJ6uytZ5Nomcyv6fRCbnQ442680Q1vhk7ZkDcBs8zaWbWq_mg/exec';
-
-const ATL_ADMINS = [
-  { name: 'Nadia', password: 'GodisLove', level: 'super' },
-  { name: 'Admin', password: '0000',      level: 'secondary' },
-];
-
-let atlCurrentUser = null;
-
-// ── SESSION ──────────────────────────────────────────
-function atlSaveSession(user) {
-  try { sessionStorage.setItem('atl_session', JSON.stringify(user)); } catch(e){}
-}
-function atlLoadSession() {
-  try { return JSON.parse(sessionStorage.getItem('atl_session') || 'null'); } catch(e){ return null; }
-}
-function atlClearSession() {
-  try { sessionStorage.removeItem('atl_session'); } catch(e){}
-}
-
-// ── TABS ─────────────────────────────────────────────
-function atlSetTab(tab) {
-  document.getElementById('atl-tab-agent').classList.toggle('active', tab === 'agent');
-  document.getElementById('atl-tab-admin').classList.toggle('active', tab === 'admin');
-  document.getElementById('atl-agent-form').style.display = tab === 'agent' ? '' : 'none';
-  document.getElementById('atl-admin-form').style.display = tab === 'admin' ? '' : 'none';
-}
-
-// ── SHIFT LATE CHECK ─────────────────────────────────
-function atlParseShiftStart(shiftStr) {
-  if (!shiftStr) return null;
-  const m = shiftStr.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
-  if (!m) return null;
-  let h = parseInt(m[1]), min = parseInt(m[2] || '0');
-  const ampm = m[3].toLowerCase();
-  if (ampm === 'pm' && h !== 12) h += 12;
-  if (ampm === 'am' && h === 12) h = 0;
-  return { h, min };
-}
-function atlIsLate(shiftStr) {
-  const start = atlParseShiftStart(shiftStr);
-  if (!start) return false;
-  const guyana = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Guyana' }));
-  const nowMin = guyana.getHours() * 60 + guyana.getMinutes();
-  const shiftMin = start.h * 60 + start.min;
-  return (nowMin - shiftMin) > 15;
-}
-
-// ── ENTER DASHBOARD ──────────────────────────────────
-function atlEnterDashboard(user) {
-  atlCurrentUser = user;
-  atlSaveSession(user);
-  document.getElementById('atl-login-overlay').classList.add('hidden');
-  showAtlBanner(user);
-
-  // Update agent name in script page
-  const agentNameEls = document.querySelectorAll('#scriptAgentName, .agent-name-ref');
-  agentNameEls.forEach(el => { el.textContent = user.name || 'your name'; });
-
-  // Show Attendance tab + widen nav grid for admins only
-  const attBtn = document.getElementById('nav-attendance-btn');
-  const navInner = document.querySelector('.nav-inner');
-  if (user.role === 'admin') {
-    attBtn.style.display = '';
-    navInner.classList.add('admin-mode');
-    atlLoadAttendance();
-  } else {
-    attBtn.style.display = 'none';
-    navInner.classList.remove('admin-mode');
-  }
-}
-
-// ── BANNER ───────────────────────────────────────────
-function showAtlBanner(user) {
-  const banner = document.getElementById('atl-agent-banner');
-  banner.classList.add('show');
-
-  document.getElementById('atl-banner-name').textContent  = user.name || '—';
-  document.getElementById('atl-banner-ytelid').textContent = user.ytelId || '—';
-  document.getElementById('atl-banner-role').textContent  = user.role === 'admin' ? '🔐 Admin Access' : 'ATLeads Agent';
-  document.getElementById('atl-banner-team').textContent  = user.team || '—';
-  document.getElementById('atl-banner-shift').textContent = user.shift || '—';
-  document.getElementById('atl-banner-time').textContent  = user.clockTime || '—';
-
-  const badge     = document.getElementById('atl-banner-badge');
-  const badgeText = document.getElementById('atl-banner-badge-text');
-  const status    = user.statusOverride || (user.late ? 'late' : 'present');
-
-  if (user.role === 'admin') {
-    badge.className = 'atl-banner-badge present';
-    badgeText.textContent = 'Admin';
-  } else if (status === 'absent') {
-    badge.className = 'atl-banner-badge absent';
-    badgeText.textContent = 'Absent';
-  } else if (status === 'late') {
-    badge.className = 'atl-banner-badge late';
-    badgeText.textContent = 'Late';
-  } else {
-    badge.className = 'atl-banner-badge present';
-    badgeText.textContent = 'Present';
-  }
-}
-
-// ── AGENT LOGIN ──────────────────────────────────────
-async function atlAgentLogin() {
-  const input = document.getElementById('atl-ytel-input');
-  const errEl = document.getElementById('atl-agent-error');
-  const ytelId = input.value.trim().toUpperCase();
-  if (!ytelId) { atlShake(input); errEl.textContent = '⚠ Enter your Ytel ID'; return; }
-
-  errEl.textContent = '';
-  input.disabled = true;
-
-  const btn = document.querySelector('#atl-agent-form .atl-login-btn');
-  const origBtnText = btn.textContent;
-  btn.textContent = 'Clocking in…';
-  btn.disabled = true;
-
-  let agentName = ytelId, shift = null, team = '', rosterData = null;
-
-  try {
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 8000);
-    const resp = await fetch(ATL_URL + '?action=getAgentSchedule&ytelId=' + encodeURIComponent(ytelId) + '&agentName=',
-      { method: 'GET', mode: 'cors', signal: controller.signal });
-    clearTimeout(t);
-    rosterData = await resp.json();
-    if (rosterData && rosterData.found) {
-      agentName = rosterData.name || agentName;
-      shift     = rosterData.shift || null;
-      team      = rosterData.team  || '';
+  // Fallback: most recent past block
+  if (!targetBlock) {
+    let closest = null;
+    for (const block of weekBlocks) {
+      if (!block.startDate) continue;
+      if (block.startDate <= today) {
+        if (!closest || block.startDate > closest.startDate) closest = block;
+      }
     }
-  } catch(e) { /* proceed with ytelId as name */ }
+    targetBlock = closest;
+  }
+  if (!targetBlock) { Logger.log('ATL: No matching week block for today'); return false; }
 
-  btn.textContent = origBtnText;
-  btn.disabled = false;
-  input.disabled = false;
+  // Find today's day column
+  const dayOfWeek   = today.getDay();
+  const DAY_NAME_MAP = { 1:'mon', 2:'tue', 3:'wed', 4:'thur', 5:'fri', 6:'sat' };
+  const todayDayStr = DAY_NAME_MAP[dayOfWeek];
+  if (!todayDayStr) { Logger.log('ATL: Sunday — not marking'); return false; }
 
-  const clockTime = new Date().toLocaleTimeString('en-US', {
-    timeZone: 'America/Guyana', hour: '2-digit', minute: '2-digit'
-  });
+  const headerRow = data[targetBlock.colHeaderRow];
+  let dayColIdx   = -1;
+  for (let c = 2; c <= 8; c++) {
+    const hdr = String(headerRow[c] || '').trim().toLowerCase();
+    if (hdr.startsWith(todayDayStr.substring(0, 3))) { dayColIdx = c; break; }
+  }
+  if (dayColIdx === -1) { Logger.log('ATL: Day column not found for ' + todayDayStr); return false; }
 
-  // Auto-determine status from shift — no user input needed
-  const autoLate   = shift ? atlIsLate(shift) : false;
-  const autoStatus = autoLate ? 'late' : 'present';
+  // Find agent row and write code
+  const agentLower = agentName.toLowerCase().replace(/\s+/g, ' ').trim();
 
-  const user = {
-    name: agentName, ytelId, role: 'agent',
-    team, shift, late: autoLate,
-    statusOverride: autoStatus, clockTime, rosterData
+  for (let r = targetBlock.agentStart; r <= targetBlock.agentEnd; r++) {
+    if (r >= totalRows) break;
+    const rowNameRaw = String(data[r][0] || '').trim();
+    if (!rowNameRaw) continue;
+    if (/ATL .* General Team Business/i.test(rowNameRaw)) continue;
+
+    const rowName = rowNameRaw
+      .replace(/^GUY\s+/i, '')
+      .replace(/^GY[PB]?\s+/i, '')
+      .toLowerCase().trim();
+
+    const match =
+      agentLower.includes(rowName) ||
+      rowName.includes(agentLower) ||
+      atlFuzzyLastName(agentLower, rowName);
+
+    if (match) {
+      sheet.getRange(r + 1, dayColIdx + 1).setValue(code);
+      Logger.log('ATL marked ' + code + ' for ' + agentName + ' → col ' + (dayColIdx + 1) + ' row ' + (r + 1) + ' in ' + sheet.getName());
+      return true;
+    }
+  }
+
+  Logger.log('ATL: Agent not found in sheet — ' + agentName + ' in ' + sheet.getName());
+  return false;
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// MARK ABSENT FOR DAY  (Time-based trigger at 7 PM Guyana)
+// Set up: Triggers → markATLAbsentForDay → Day timer 7pm–8pm
+// ══════════════════════════════════════════════════════════════
+function markATLAbsentForDay() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  const guyanaStr = new Date().toLocaleString('en-US', { timeZone: 'America/Guyana' });
+  const today     = new Date(guyanaStr);
+  today.setHours(0, 0, 0, 0);
+
+  const dayOfWeek   = today.getDay();
+  const DAY_NAME_MAP = { 1:'mon', 2:'tue', 3:'wed', 4:'thur', 5:'fri' }; // NO Saturday
+  const todayDayStr = DAY_NAME_MAP[dayOfWeek];
+  if (!todayDayStr) { Logger.log('markATLAbsentForDay: Weekend — skipping.'); return; }
+
+  const sheets = [getATLBBWeeklySheet(ss), getATLPRWeeklySheet(ss)];
+  for (const sheet of sheets) {
+    if (!sheet) continue;
+    markAbsentInSheet(sheet, today, todayDayStr);
+  }
+}
+
+function markAbsentInSheet(sheet, today, todayDayStr) {
+  const data      = sheet.getDataRange().getValues();
+  const totalRows = data.length;
+
+  const weekBlocks = [];
+  for (let r = 0; r < totalRows; r++) {
+    const cellA = String(data[r][0] || '').trim();
+    if (!cellA) continue;
+    if (/\b20\d{2}\b/.test(cellA) && !/ATL .* General Team Business/i.test(cellA)) {
+      weekBlocks.push({ dateStr: cellA, headerRow: r });
+    }
+  }
+
+  for (let b = 0; b < weekBlocks.length; b++) {
+    const block     = weekBlocks[b];
+    const nextStart = weekBlocks[b + 1] ? weekBlocks[b + 1].headerRow : totalRows;
+    let colHeaderRow = -1;
+    for (let r = block.headerRow + 1; r < Math.min(block.headerRow + 5, nextStart); r++) {
+      const a = String(data[r][0] || '');
+      if (/ATL .* General Team Business/i.test(a) || /^Mon/i.test(String(data[r][2] || ''))) {
+        colHeaderRow = r; break;
+      }
+    }
+    if (colHeaderRow === -1) continue;
+    block.colHeaderRow = colHeaderRow;
+    block.agentStart   = colHeaderRow + 1;
+    block.agentEnd     = nextStart - 1;
+    const range = parseATLDateRange(block.dateStr);
+    if (!range) continue;
+    block.startDate = range.start;
+    block.endDate   = range.end;
+  }
+
+  let targetBlock = null;
+  for (const block of weekBlocks) {
+    if (!block.startDate || !block.endDate) continue;
+    if (today >= block.startDate && today <= block.endDate) { targetBlock = block; break; }
+  }
+  if (!targetBlock) { Logger.log('markATLAbsentForDay: No block for today in ' + sheet.getName()); return; }
+
+  const headerRow = data[targetBlock.colHeaderRow];
+  let dayColIdx = -1;
+  for (let c = 2; c <= 8; c++) {
+    const hdr = String(headerRow[c] || '').trim().toLowerCase();
+    if (hdr.startsWith(todayDayStr.substring(0, 3))) { dayColIdx = c; break; }
+  }
+  if (dayColIdx === -1) return;
+
+  let count = 0;
+  for (let r = targetBlock.agentStart; r <= targetBlock.agentEnd; r++) {
+    if (r >= totalRows) break;
+    const rowNameRaw = String(data[r][0] || '').trim();
+    if (!rowNameRaw) continue;
+    if (/ATL .* General Team Business/i.test(rowNameRaw)) continue;
+    const currentVal = String(data[r][dayColIdx] || '').trim();
+    if (currentVal === '') {
+      sheet.getRange(r + 1, dayColIdx + 1).setValue('A');
+      count++;
+    }
+  }
+  Logger.log('markATLAbsentForDay: ' + count + ' marked absent in ' + sheet.getName());
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// FUZZY HELPERS
+// ══════════════════════════════════════════════════════════════
+function atlFuzzyLastName(a, b) {
+  const lastA = a.split(/\s+/).pop();
+  const lastB = b.split(/\s+/).pop();
+  if (lastA.length < 3 || lastB.length < 3) return false;
+  return atlLevenshtein(lastA, lastB) <= 1;
+}
+
+function atlLevenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => j === 0 ? i : 0)
+  );
+  for (let j = 1; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+  return dp[m][n];
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// DATE RANGE PARSER
+// Handles: "March 23-28, 2026"
+//          "March 30, 2026 - April 04, 2026"  (cross-month)
+//          "March 30-31, 2026"                 (end of month)
+// ══════════════════════════════════════════════════════════════
+function parseATLDateRange(str) {
+  if (!str) return null;
+  str = str.trim();
+
+  const MONTHS = {
+    jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
+    jul:6, aug:7, sep:8, oct:9, nov:10, dec:11,
+    january:0, february:1, march:2, april:3, june:5, july:6,
+    august:7, september:8, october:9, november:10, december:11
   };
 
-  atlEnterDashboard(user);
-  atlMarkAttendance(ytelId, agentName, autoStatus);
-}
-
-// ── ADMIN LOGIN ───────────────────────────────────────
-function atlAdminLogin() {
-  const nameEl = document.getElementById('atl-admin-name');
-  const passEl = document.getElementById('atl-admin-pass');
-  const errEl  = document.getElementById('atl-admin-error');
-  const name = nameEl.value.trim();
-  const pass = passEl.value.trim();
-
-  if (!name || !pass) {
-    errEl.textContent = '⚠ Enter name and password';
-    atlShake(!name ? nameEl : passEl); return;
-  }
-  const admin = ATL_ADMINS.find(a => a.name.toLowerCase() === name.toLowerCase() && a.password === pass);
-  if (!admin) {
-    errEl.textContent = '⚠ Invalid credentials';
-    atlShake(passEl); passEl.value = ''; return;
+  // Pattern A: "Month D1-D2, YYYY"  (e.g. "March 23-28, 2026" or "March 30-31, 2026")
+  let m = str.match(/^([A-Za-z]+)\s+(\d{1,2})\s*[-–]\s*(\d{1,2}),?\s*(\d{4})/);
+  if (m) {
+    const mo = MONTHS[m[1].toLowerCase()];
+    if (mo === undefined) return null;
+    const yr    = parseInt(m[4]);
+    const start = new Date(yr, mo, parseInt(m[2])); start.setHours(0,0,0,0);
+    const end   = new Date(yr, mo, parseInt(m[3])); end.setHours(0,0,0,0);
+    return { start, end };
   }
 
-  const clockTime = new Date().toLocaleTimeString('en-US', {
-    timeZone: 'America/Guyana', hour: '2-digit', minute: '2-digit'
-  });
-  const user = { name: admin.name, role: 'admin', level: admin.level, team: 'Admin', shift: '—', late: false, clockTime };
-  atlEnterDashboard(user);
-}
-
-// ── LOGOUT ───────────────────────────────────────────
-function atlLogout() {
-  atlCurrentUser = null;
-  atlClearSession();
-  document.getElementById('atl-agent-banner').classList.remove('show');
-  document.getElementById('atl-login-overlay').classList.remove('hidden');
-  document.getElementById('atl-ytel-input').value = '';
-  document.getElementById('atl-ytel-input').disabled = false;
-  document.getElementById('atl-agent-error').textContent = '';
-  document.getElementById('atl-admin-name').value = '';
-  document.getElementById('atl-admin-pass').value = '';
-  document.getElementById('nav-attendance-btn').style.display = 'none';
-  document.querySelector('.nav-inner').classList.remove('admin-mode');
-  atlSetTab('agent');
-  setTimeout(() => document.getElementById('atl-ytel-input').focus(), 300);
-}
-
-// ── MARK ATTENDANCE ───────────────────────────────────
-async function atlMarkAttendance(ytelId, agentName, status) {
-  // status is 'present', 'late', or 'absent'
-  const statusStr = status === 'late' ? 'Late' : status === 'absent' ? 'Absent' : 'Present';
-  try {
-    const now = new Date();
-    const params = new URLSearchParams({
-      action:    'attendance',
-      ytelId:    ytelId,
-      name:      agentName,
-      status:    statusStr,
-      time:      now.toLocaleTimeString('en-US', { timeZone:'America/Guyana', hour:'2-digit', minute:'2-digit', second:'2-digit' }),
-      date:      now.toLocaleDateString('en-US', { timeZone:'America/Guyana', weekday:'long', year:'numeric', month:'long', day:'numeric' }),
-      timestamp: now.toISOString(),
-    });
-    // no-cors is required for Google Apps Script POST from browser
-    await fetch(ATL_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
-    console.log('ATL attendance sent:', statusStr, 'for', agentName, '(', ytelId, ')');
-  } catch(e) { console.warn('ATL attendance failed:', e); }
-}
-
-// ── ATTENDANCE DATA ───────────────────────────────────
-let atlAttendanceData = [];
-
-async function atlLoadAttendance() {
-  const statusEl   = document.getElementById('atl-att-status');
-  const errorEl    = document.getElementById('atl-att-error');
-  const emptyEl    = document.getElementById('atl-att-empty');
-  const tableWrap  = document.getElementById('atl-att-table-wrap');
-  const refreshBtn = document.getElementById('atl-att-refresh-btn');
-  const refreshIcon= document.getElementById('atl-att-refresh-icon');
-
-  // Show loading
-  statusEl.style.display = 'block';
-  errorEl.style.display  = 'none';
-  emptyEl.style.display  = 'none';
-  tableWrap.style.display= 'none';
-  refreshIcon.classList.add('fa-spin');
-  refreshBtn.disabled = true;
-
-  try {
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 10000);
-    const resp = await fetch(ATL_URL + '?action=getAttendance', {
-      method: 'GET', mode: 'cors', signal: controller.signal
-    });
-    clearTimeout(t);
-    const data = await resp.json();
-
-    statusEl.style.display = 'none';
-    if (!data || !Array.isArray(data.records)) throw new Error('Unexpected response');
-
-    atlAttendanceData = data.records;
-    atlRenderAttendance(atlAttendanceData);
-    document.getElementById('atl-att-lastfetch').textContent =
-      'Last refreshed: ' + new Date().toLocaleTimeString('en-US', { timeZone:'America/Guyana', hour:'2-digit', minute:'2-digit', second:'2-digit' });
-  } catch(e) {
-    statusEl.style.display = 'none';
-    errorEl.style.display  = 'block';
-    errorEl.textContent    = '⚠ Could not load attendance. Make sure the Google Sheet script has a getAttendance action. (' + (e.message || e) + ')';
-  } finally {
-    refreshIcon.classList.remove('fa-spin');
-    refreshBtn.disabled = false;
-  }
-}
-
-function atlRenderAttendance(records) {
-  const emptyEl   = document.getElementById('atl-att-empty');
-  const tableWrap = document.getElementById('atl-att-table-wrap');
-  const tbody     = document.getElementById('atl-att-tbody');
-
-  if (!records || records.length === 0) {
-    emptyEl.style.display   = 'block';
-    tableWrap.style.display = 'none';
-    document.getElementById('atl-stat-present').textContent = '0';
-    document.getElementById('atl-stat-late').textContent    = '0';
-    document.getElementById('atl-stat-total').textContent   = '0';
-    return;
+  // Pattern B: "Month D1, YYYY - Month D2, YYYY"  (cross-month)
+  m = str.match(/^([A-Za-z]+)\s+(\d{1,2}),?\s*(\d{4})\s*[-–]\s*([A-Za-z]+)\s+(\d{1,2}),?\s*(\d{4})/);
+  if (m) {
+    const mo1 = MONTHS[m[1].toLowerCase()], mo2 = MONTHS[m[4].toLowerCase()];
+    if (mo1 === undefined || mo2 === undefined) return null;
+    const start = new Date(parseInt(m[3]), mo1, parseInt(m[2])); start.setHours(0,0,0,0);
+    const end   = new Date(parseInt(m[6]), mo2, parseInt(m[5])); end.setHours(0,0,0,0);
+    return { start, end };
   }
 
-  let present = 0, late = 0;
-  tbody.innerHTML = '';
-  records.forEach((r, i) => {
-    const isLate = (r.status || '').toLowerCase() === 'late';
-    if (isLate) late++; else present++;
-    const tr = document.createElement('tr');
-    tr.style.cssText = 'border-bottom:1px solid rgba(168,85,247,0.08);transition:background 0.15s;cursor:default;';
-    tr.onmouseenter = () => tr.style.background = 'rgba(168,85,247,0.04)';
-    tr.onmouseleave = () => tr.style.background = '';
-    tr.innerHTML = `
-      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--muted);">${i + 1}</td>
-      <td style="padding:12px 16px;font-weight:700;font-size:0.92rem;color:white;">${escHtml(r.name || '—')}</td>
-      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#a855f7;">${escHtml(r.ytelId || r.ytel_id || '—')}</td>
-      <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--muted2);">${escHtml(r.time || r.clockTime || '—')}</td>
-      <td style="padding:12px 16px;">
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:3px 10px;border-radius:20px;
-          ${isLate
-            ? 'background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.4);color:#fb923c;'
-            : 'background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35);color:#22c55e;'}">
-          <span style="width:5px;height:5px;border-radius:50%;background:currentColor;"></span>
-          ${isLate ? 'Late' : 'Present'}
-        </span>
-      </td>`;
-    tbody.appendChild(tr);
-  });
-
-  document.getElementById('atl-stat-present').textContent = present;
-  document.getElementById('atl-stat-late').textContent    = late;
-  document.getElementById('atl-stat-total').textContent   = records.length;
-  tableWrap.style.display = 'block';
-  emptyEl.style.display   = 'none';
+  return null;
 }
 
-function atlFilterAttendance() {
-  const q = (document.getElementById('atl-att-search').value || '').toLowerCase().trim();
-  if (!q) { atlRenderAttendance(atlAttendanceData); return; }
-  const filtered = atlAttendanceData.filter(r =>
-    (r.name || '').toLowerCase().includes(q) ||
-    (r.ytelId || r.ytel_id || '').toLowerCase().includes(q)
-  );
-  atlRenderAttendance(filtered);
+
+// ══════════════════════════════════════════════════════════════
+// TEST HELPERS — run from Apps Script editor
+// ══════════════════════════════════════════════════════════════
+function testATLSchedule() {
+  // Replace '1234' with a real User ID from your roster (col D)
+  const result = handleGetAgentSchedule({ ytelId: '1234', agentName: '' });
+  Logger.log(result.getContent());
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function testATLAttendance() {
+  // Replace name/id with a real agent from your roster
+  const result = handleAttendance({ ytelId: '1234', name: 'Test Agent', status: 'Present' });
+  Logger.log(result.getContent());
 }
 
-// ── SHAKE HELPER ─────────────────────────────────────
-function atlShake(el) {
-  el.classList.remove('shake');
-  void el.offsetWidth;
-  el.classList.add('shake');
-  setTimeout(() => el.classList.remove('shake'), 500);
+function testATLGetAttendance() {
+  const result = handleGetAttendance({});
+  Logger.log(result.getContent());
 }
 
-// ── RESTORE SESSION ──────────────────────────────────
-(function() {
-  const saved = atlLoadSession();
-  if (saved) { atlEnterDashboard(saved); return; }
-  setTimeout(() => document.getElementById('atl-ytel-input').focus(), 400);
-})();
-</script>
-
-</body>
-</html>
+function testATLAbsent() {
+  markATLAbsentForDay();
+}
