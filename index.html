@@ -2126,16 +2126,13 @@ function showAtlBanner(user) {
   const banner = document.getElementById('atl-agent-banner');
   banner.classList.add('show');
 
-  // Pull lunch from rosterData col E (index 4)
-  const lunch = (user.rosterData && user.rosterData.lunch) ? user.rosterData.lunch : (user.lunch || '—');
-
-  document.getElementById('atl-banner-name').textContent  = user.name || '—';
-  document.getElementById('atl-banner-ytelid').textContent = user.ytelId || '—';
-  document.getElementById('atl-banner-role').textContent  = user.role === 'admin' ? '🔐 Admin Access' : 'ATLeads Agent';
-  document.getElementById('atl-banner-team').textContent  = user.team || '—';
-  document.getElementById('atl-banner-shift').textContent = user.shift || '—';
-  document.getElementById('atl-banner-lunch').textContent = lunch;
-  document.getElementById('atl-banner-time').textContent  = user.clockTime || '—';
+  document.getElementById('atl-banner-name').textContent   = user.name || '—';
+  document.getElementById('atl-banner-ytelid').textContent  = user.ytelId || '—';
+  document.getElementById('atl-banner-role').textContent   = user.role === 'admin' ? '🔐 Admin Access' : 'ATLeads Agent';
+  document.getElementById('atl-banner-team').textContent   = user.team || '—';
+  document.getElementById('atl-banner-shift').textContent  = user.shift || '—';
+  document.getElementById('atl-banner-lunch').textContent  = user.lunch || '—';
+  document.getElementById('atl-banner-time').textContent   = user.clockTime || '—';
 
   const badge     = document.getElementById('atl-banner-badge');
   const badgeText = document.getElementById('atl-banner-badge-text');
@@ -2171,7 +2168,7 @@ async function atlAgentLogin() {
   btn.textContent = 'Clocking in…';
   btn.disabled = true;
 
-  let agentName = ytelId, shift = null, team = '', rosterData = null;
+  let agentName = ytelId, shift = null, lunch = null, team = '', rosterData = null;
 
   try {
     const controller = new AbortController();
@@ -2180,12 +2177,22 @@ async function atlAgentLogin() {
       { method: 'GET', mode: 'cors', signal: controller.signal });
     clearTimeout(t);
     rosterData = await resp.json();
+    console.log('ATL roster response:', JSON.stringify(rosterData));
     if (rosterData && rosterData.found) {
       agentName = rosterData.name  || agentName;
       shift     = rosterData.shift || null;
+      lunch     = rosterData.lunch || null;
       team      = rosterData.team  || '';
+    } else {
+      console.warn('ATL: Agent not found in roster:', JSON.stringify(rosterData));
+      errEl.textContent = '⚠ ID not found in roster — check your Ytel ID';
+      setTimeout(() => { errEl.textContent = ''; }, 4000);
     }
-  } catch(e) { /* proceed with ytelId as name */ }
+  } catch(e) {
+    console.warn('ATL roster fetch failed:', e);
+    errEl.textContent = '⚠ Could not reach roster — check connection';
+    setTimeout(() => { errEl.textContent = ''; }, 4000);
+  }
 
   btn.textContent = origBtnText;
   btn.disabled = false;
@@ -2201,7 +2208,7 @@ async function atlAgentLogin() {
 
   const user = {
     name: agentName, ytelId, role: 'agent',
-    team, shift, late: autoLate,
+    team, shift, lunch, late: autoLate,
     statusOverride: autoStatus, clockTime, rosterData
   };
 
