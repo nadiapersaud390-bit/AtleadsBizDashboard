@@ -2174,17 +2174,19 @@ async function atlAgentLogin() {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 8000);
     const resp = await fetch(ATL_URL + '?action=getAgentSchedule&ytelId=' + encodeURIComponent(ytelId) + '&agentName=',
-      { method: 'GET', mode: 'cors', signal: controller.signal });
+      { method: 'GET', redirect: 'follow', signal: controller.signal });
     clearTimeout(t);
-    rosterData = await resp.json();
-    console.log('ATL roster response:', JSON.stringify(rosterData));
+    const text = await resp.text();
+    console.log('ATL raw response:', text);
+    try { rosterData = JSON.parse(text); } catch(pe) { console.warn('ATL parse error:', pe, text); }
     if (rosterData && rosterData.found) {
       agentName = rosterData.name  || agentName;
       shift     = rosterData.shift || null;
       lunch     = rosterData.lunch || null;
       team      = rosterData.team  || '';
+      console.log('ATL found:', agentName, '| shift:', shift, '| lunch:', lunch, '| team:', team);
     } else {
-      console.warn('ATL: Agent not found in roster:', JSON.stringify(rosterData));
+      console.warn('ATL: Agent not found:', JSON.stringify(rosterData));
       errEl.textContent = '⚠ ID not found in roster — check your Ytel ID';
       setTimeout(() => { errEl.textContent = ''; }, 4000);
     }
@@ -2302,10 +2304,11 @@ async function atlLoadAttendance() {
     const controller = new AbortController();
     const t = setTimeout(() => controller.abort(), 10000);
     const resp = await fetch(ATL_URL + '?action=getAttendance', {
-      method: 'GET', mode: 'cors', signal: controller.signal
+      method: 'GET', redirect: 'follow', signal: controller.signal
     });
     clearTimeout(t);
-    const data = await resp.json();
+    const text = await resp.text();
+    const data = JSON.parse(text);
 
     statusEl.style.display = 'none';
     if (!data || !Array.isArray(data.records)) throw new Error('Unexpected response');
